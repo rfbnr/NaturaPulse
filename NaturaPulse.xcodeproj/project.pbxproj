@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		6DC0CB3F304F0245006C7F97 /* Alamofire in Frameworks */ = {isa = PBXBuildFile; productRef = 6DC0CB3E304F0245006C7F97 /* Alamofire */; };
 		6DC0CB47304F06AA006C7F97 /* RealmSwift in Frameworks */ = {isa = PBXBuildFile; productRef = 6DC0CB46304F06AA006C7F97 /* RealmSwift */; };
+		354A0FB2CDAD2827657225FA /* RealmSwift in Frameworks */ = {isa = PBXBuildFile; productRef = 8F42F787DAE7CD7209CD2F36 /* RealmSwift */; };
 		6DF23C2A304F0A4700A3742B /* Kingfisher in Frameworks */ = {isa = PBXBuildFile; productRef = 6DF23C29304F0A4700A3742B /* Kingfisher */; };
 		6DF23C2C304F0A5400A3742B /* Swinject in Frameworks */ = {isa = PBXBuildFile; productRef = 6DF23C2B304F0A5400A3742B /* Swinject */; };
 /* End PBXBuildFile section */
@@ -70,6 +71,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				354A0FB2CDAD2827657225FA /* RealmSwift in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -158,6 +160,7 @@
 			);
 			name = NaturaPulseTests;
 			packageProductDependencies = (
+				8F42F787DAE7CD7209CD2F36 /* RealmSwift */,
 			);
 			productName = NaturaPulseTests;
 			productReference = 6DC0CB1E304F001E006C7F97 /* NaturaPulseTests.xctest */;
@@ -648,6 +651,11 @@
 			productName = Alamofire;
 		};
 		6DC0CB46304F06AA006C7F97 /* RealmSwift */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 6DC0CB45304F06AA006C7F97 /* XCRemoteSwiftPackageReference "realm-swift" */;
+			productName = RealmSwift;
+		};
+		8F42F787DAE7CD7209CD2F36 /* RealmSwift */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = 6DC0CB45304F06AA006C7F97 /* XCRemoteSwiftPackageReference "realm-swift" */;
 			productName = RealmSwift;
