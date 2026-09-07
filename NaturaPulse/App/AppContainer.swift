@@ -18,7 +18,8 @@ final class AppContainer {
         assembler = Assembler([
             NetworkAssembly(),
             DatabaseAssembly(),
-            AppAssembly()
+            AppAssembly(),
+            ExploreAssembly()
         ])
     }
 }

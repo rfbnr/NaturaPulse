@@ -13,7 +13,8 @@ struct NaturaPulseApp: App {
 
     var body: some Scene {
         WindowGroup {
-            ContentView()
+            AppRootView()
+                .environment(\.resolver, container.resolver)
         }
     }
 }
