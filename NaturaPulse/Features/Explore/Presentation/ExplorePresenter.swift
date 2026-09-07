@@ -55,6 +55,13 @@ final class ExplorePresenter {
         load()
     }
 
+    /// Exposes location search to the presentation layer (e.g.
+    /// `LocationPickerView`) without letting views reach into use cases
+    /// directly.
+    func searchLocations(_ query: String) -> AnyPublisher<[Location], AppError> {
+        searchLocation(query: query)
+    }
+
     private func load() {
         loadSpecies()
         loadWeather()
