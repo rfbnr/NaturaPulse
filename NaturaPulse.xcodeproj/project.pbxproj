@@ -7,11 +7,12 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		354A0FB2CDAD2827657225FA /* RealmSwift in Frameworks */ = {isa = PBXBuildFile; productRef = 8F42F787DAE7CD7209CD2F36 /* RealmSwift */; };
 		6DC0CB3F304F0245006C7F97 /* Alamofire in Frameworks */ = {isa = PBXBuildFile; productRef = 6DC0CB3E304F0245006C7F97 /* Alamofire */; };
 		6DC0CB47304F06AA006C7F97 /* RealmSwift in Frameworks */ = {isa = PBXBuildFile; productRef = 6DC0CB46304F06AA006C7F97 /* RealmSwift */; };
-		354A0FB2CDAD2827657225FA /* RealmSwift in Frameworks */ = {isa = PBXBuildFile; productRef = 8F42F787DAE7CD7209CD2F36 /* RealmSwift */; };
 		6DF23C2A304F0A4700A3742B /* Kingfisher in Frameworks */ = {isa = PBXBuildFile; productRef = 6DF23C29304F0A4700A3742B /* Kingfisher */; };
 		6DF23C2C304F0A5400A3742B /* Swinject in Frameworks */ = {isa = PBXBuildFile; productRef = 6DF23C2B304F0A5400A3742B /* Swinject */; };
+		BE615A9499560FA0B192CA64 /* Swinject in Frameworks */ = {isa = PBXBuildFile; productRef = A3B760134D7E327DA7CE5654 /* Swinject */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -72,6 +73,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				354A0FB2CDAD2827657225FA /* RealmSwift in Frameworks */,
+				BE615A9499560FA0B192CA64 /* Swinject in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -161,6 +163,7 @@
 			name = NaturaPulseTests;
 			packageProductDependencies = (
 				8F42F787DAE7CD7209CD2F36 /* RealmSwift */,
+				A3B760134D7E327DA7CE5654 /* Swinject */,
 			);
 			productName = NaturaPulseTests;
 			productReference = 6DC0CB1E304F001E006C7F97 /* NaturaPulseTests.xctest */;
@@ -655,11 +658,6 @@
 			package = 6DC0CB45304F06AA006C7F97 /* XCRemoteSwiftPackageReference "realm-swift" */;
 			productName = RealmSwift;
 		};
-		8F42F787DAE7CD7209CD2F36 /* RealmSwift */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 6DC0CB45304F06AA006C7F97 /* XCRemoteSwiftPackageReference "realm-swift" */;
-			productName = RealmSwift;
-		};
 		6DF23C29304F0A4700A3742B /* Kingfisher */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = 6DC0CB3B304F006D006C7F97 /* XCRemoteSwiftPackageReference "Kingfisher" */;
@@ -669,6 +667,16 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 6DC0CB3C304F00BC006C7F97 /* XCRemoteSwiftPackageReference "Swinject" */;
 			productName = Swinject;
+		};
+		A3B760134D7E327DA7CE5654 /* Swinject */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 6DC0CB3C304F00BC006C7F97 /* XCRemoteSwiftPackageReference "Swinject" */;
+			productName = Swinject;
+		};
+		8F42F787DAE7CD7209CD2F36 /* RealmSwift */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 6DC0CB45304F06AA006C7F97 /* XCRemoteSwiftPackageReference "realm-swift" */;
+			productName = RealmSwift;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};
