@@ -27,7 +27,7 @@ final class AlamofireAPIClient: APIClient {
         do {
             urlRequest = try endpoint.urlRequest()
         } catch {
-            return Fail(error: NetworkError.invalidURL).eraseToAnyPublisher()
+            return Fail(error: (error as? NetworkError) ?? .invalidURL).eraseToAnyPublisher()
         }
 
         return session.request(urlRequest)
