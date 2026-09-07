@@ -49,7 +49,7 @@ final class DTODecodingTests: XCTestCase {
         XCTAssertEqual(dto.current.pm25, 23.5)
     }
 
-    func testDecodesGeocodingAndTolveratesMissingResults() throws {
+    func testDecodesGeocodingAndToleratesMissingResults() throws {
         let withResults = try decode(GeocodingResponseDTO.self, #"{"results":[{"name":"Jakarta","latitude":-6.2,"longitude":106.8,"admin1":"Jakarta","country":"Indonesia","country_code":"ID"}]}"#)
         XCTAssertEqual(withResults.results?.first?.name, "Jakarta")
         XCTAssertEqual(withResults.results?.first?.admin1, "Jakarta")

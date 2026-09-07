@@ -29,7 +29,7 @@ struct ExploreView: View {
                 VStack(alignment: .leading, spacing: AppSpacing.lg) {
                     header
 
-                    if case .loaded(let weather) = presenter.weatherState {
+                    if let weather = displayedWeather {
                         WeatherContextCardView(weather: weather)
                     }
 
@@ -43,6 +43,19 @@ struct ExploreView: View {
             .sheet(isPresented: $isLocationPickerPresented) {
                 LocationPickerView(presenter: presenter)
             }
+        }
+    }
+
+    /// The weather value to render: the loaded value, or — while a reload
+    /// is in flight — the previous value so the card doesn't blank out.
+    private var displayedWeather: WeatherContext? {
+        switch presenter.weatherState {
+        case .loaded(let weather):
+            weather
+        case .loading(let previous):
+            previous
+        default:
+            nil
         }
     }
 
@@ -82,6 +95,11 @@ struct ExploreView: View {
                     .font(AppTypography.headline())
                     .foregroundStyle(AppColor.primaryText)
 
+                if isReloadingSpecies {
+                    ProgressView()
+                        .controlSize(.small)
+                }
+
                 Spacer()
 
                 if case .loaded(let species) = presenter.speciesState {
@@ -96,17 +114,29 @@ struct ExploreView: View {
         }
     }
 
+    /// Whether a species reload is in flight while stale-while-loading
+    /// content (the previous list) is still on screen.
+    private var isReloadingSpecies: Bool {
+        if case .loading(let previous) = presenter.speciesState {
+            return previous != nil
+        }
+        return false
+    }
+
     @ViewBuilder
     private var speciesContent: some View {
         switch presenter.speciesState {
-        case .idle, .loading:
+        case .idle:
             LoadingStateView()
-        case .loaded(let species):
-            VStack(spacing: AppSpacing.md) {
-                ForEach(species) { item in
-                    SpeciesCardView(species: item)
-                }
+        case .loading(let previous):
+            if let previous {
+                speciesList(previous)
+                    .opacity(0.6)
+            } else {
+                LoadingStateView()
             }
+        case .loaded(let species):
+            speciesList(species)
         case .empty:
             EmptyStateView(
                 title: "Your area is quiet",
@@ -119,37 +149,20 @@ struct ExploreView: View {
         }
     }
 
+    private func speciesList(_ species: [Species]) -> some View {
+        VStack(spacing: AppSpacing.md) {
+            ForEach(species) { item in
+                SpeciesCardView(species: item)
+            }
+        }
+    }
+
     private func nextRadius() -> Distance {
         let options: [Double] = [5, 10, 25, 50]
         guard let index = options.firstIndex(of: presenter.radius.kilometers), index < options.count - 1 else {
             return .km(options[options.count - 1])
         }
         return .km(options[index + 1])
-    }
-}
-
-/// A human-readable, non-technical message for surfacing an `AppError`
-/// in the UI (e.g. `ErrorStateView`).
-extension AppError {
-    var userMessage: String {
-        switch self {
-        case .networkUnavailable:
-            "You're offline. Check your connection and try again."
-        case .server:
-            "Something went wrong on our end. Please try again."
-        case .decoding:
-            "We had trouble reading that response. Please try again."
-        case .notFound:
-            "We couldn't find what you were looking for."
-        case .persistence:
-            "We couldn't save your data. Please try again."
-        case .locationDenied:
-            "Location access is turned off. You can still search for a place."
-        case .permissionRestricted:
-            "This feature isn't available due to device restrictions."
-        case .unknown:
-            "Something went wrong. Please try again."
-        }
     }
 }
 
