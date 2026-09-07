@@ -6,6 +6,13 @@
 	objectVersion = 77;
 	objects = {
 
+/* Begin PBXBuildFile section */
+		6DC0CB3F304F0245006C7F97 /* Alamofire in Frameworks */ = {isa = PBXBuildFile; productRef = 6DC0CB3E304F0245006C7F97 /* Alamofire */; };
+		6DC0CB47304F06AA006C7F97 /* RealmSwift in Frameworks */ = {isa = PBXBuildFile; productRef = 6DC0CB46304F06AA006C7F97 /* RealmSwift */; };
+		6DF23C2A304F0A4700A3742B /* Kingfisher in Frameworks */ = {isa = PBXBuildFile; productRef = 6DF23C29304F0A4700A3742B /* Kingfisher */; };
+		6DF23C2C304F0A5400A3742B /* Swinject in Frameworks */ = {isa = PBXBuildFile; productRef = 6DF23C2B304F0A5400A3742B /* Swinject */; };
+/* End PBXBuildFile section */
+
 /* Begin PBXContainerItemProxy section */
 		6DC0CB1F304F001E006C7F97 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
@@ -52,6 +59,10 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				6DF23C2A304F0A4700A3742B /* Kingfisher in Frameworks */,
+				6DC0CB47304F06AA006C7F97 /* RealmSwift in Frameworks */,
+				6DC0CB3F304F0245006C7F97 /* Alamofire in Frameworks */,
+				6DF23C2C304F0A5400A3742B /* Swinject in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -78,6 +89,7 @@
 				6DC0CB13304F001C006C7F97 /* NaturaPulse */,
 				6DC0CB21304F001E006C7F97 /* NaturaPulseTests */,
 				6DC0CB2B304F001E006C7F97 /* NaturaPulseUITests */,
+				6DF23C28304F0A4700A3742B /* Frameworks */,
 				6DC0CB12304F001C006C7F97 /* Products */,
 			);
 			sourceTree = "<group>";
@@ -90,6 +102,13 @@
 				6DC0CB28304F001E006C7F97 /* NaturaPulseUITests.xctest */,
 			);
 			name = Products;
+			sourceTree = "<group>";
+		};
+		6DF23C28304F0A4700A3742B /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = Frameworks;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -112,6 +131,10 @@
 			);
 			name = NaturaPulse;
 			packageProductDependencies = (
+				6DC0CB3E304F0245006C7F97 /* Alamofire */,
+				6DC0CB46304F06AA006C7F97 /* RealmSwift */,
+				6DF23C29304F0A4700A3742B /* Kingfisher */,
+				6DF23C2B304F0A5400A3742B /* Swinject */,
 			);
 			productName = NaturaPulse;
 			productReference = 6DC0CB11304F001C006C7F97 /* NaturaPulse.app */;
@@ -195,6 +218,12 @@
 			);
 			mainGroup = 6DC0CB08304F001C006C7F97;
 			minimizedProjectReferenceProxies = 1;
+			packageReferences = (
+				6DC0CB3B304F006D006C7F97 /* XCRemoteSwiftPackageReference "Kingfisher" */,
+				6DC0CB3C304F00BC006C7F97 /* XCRemoteSwiftPackageReference "Swinject" */,
+				6DC0CB3D304F0244006C7F97 /* XCRemoteSwiftPackageReference "alamofire" */,
+				6DC0CB45304F06AA006C7F97 /* XCRemoteSwiftPackageReference "realm-swift" */,
+			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = 6DC0CB12304F001C006C7F97 /* Products */;
 			projectDirPath = "";
@@ -403,8 +432,7 @@
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -435,8 +463,7 @@
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -578,6 +605,64 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		6DC0CB3B304F006D006C7F97 /* XCRemoteSwiftPackageReference "Kingfisher" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/onevcat/Kingfisher.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 8.12.0;
+			};
+		};
+		6DC0CB3C304F00BC006C7F97 /* XCRemoteSwiftPackageReference "Swinject" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/Swinject/Swinject";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 2.10.0;
+			};
+		};
+		6DC0CB3D304F0244006C7F97 /* XCRemoteSwiftPackageReference "alamofire" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/alamofire/alamofire";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 5.12.0;
+			};
+		};
+		6DC0CB45304F06AA006C7F97 /* XCRemoteSwiftPackageReference "realm-swift" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/realm/realm-swift";
+			requirement = {
+				branch = community;
+				kind = branch;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		6DC0CB3E304F0245006C7F97 /* Alamofire */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 6DC0CB3D304F0244006C7F97 /* XCRemoteSwiftPackageReference "alamofire" */;
+			productName = Alamofire;
+		};
+		6DC0CB46304F06AA006C7F97 /* RealmSwift */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 6DC0CB45304F06AA006C7F97 /* XCRemoteSwiftPackageReference "realm-swift" */;
+			productName = RealmSwift;
+		};
+		6DF23C29304F0A4700A3742B /* Kingfisher */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 6DC0CB3B304F006D006C7F97 /* XCRemoteSwiftPackageReference "Kingfisher" */;
+			productName = Kingfisher;
+		};
+		6DF23C2B304F0A5400A3742B /* Swinject */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 6DC0CB3C304F00BC006C7F97 /* XCRemoteSwiftPackageReference "Swinject" */;
+			productName = Swinject;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = 6DC0CB09304F001C006C7F97 /* Project object */;
 }
