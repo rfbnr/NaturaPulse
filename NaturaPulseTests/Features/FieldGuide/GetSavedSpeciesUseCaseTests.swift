@@ -1,3 +1,10 @@
+//
+//  GetSavedSpeciesUseCaseTests.swift
+//  NaturaPulse
+//
+//  Created by Ridwan Febnur AR on 07/09/26.
+//
+
 import XCTest
 import Combine
 @testable import NaturaPulse
