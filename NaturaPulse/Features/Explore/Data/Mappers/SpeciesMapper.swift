@@ -46,16 +46,19 @@ enum SpeciesMapper {
 
     private static func usableImage(from dto: GBIFOccurrenceDTO) -> SpeciesImage? {
         guard let media = dto.media else { return nil }
-        for item in media {
-            guard let identifier = item.identifier, let url = URL(string: identifier) else { continue }
-            return SpeciesImage(
-                url: url,
-                creator: item.creator,
-                license: item.license,
-                sourceURL: item.references.flatMap(URL.init(string:))
-            )
+        let candidates = media.compactMap { item -> (item: GBIFMediaDTO, url: URL)? in
+            guard let identifier = item.identifier, let url = URL(string: identifier) else { return nil }
+            return (item, url)
         }
-        return nil
+        // Prefer an explicitly StillImage-typed item; tolerate a nil/other type as fallback.
+        let preferred = candidates.first { $0.item.type == "StillImage" } ?? candidates.first
+        guard let match = preferred else { return nil }
+        return SpeciesImage(
+            url: match.url,
+            creator: match.item.creator,
+            license: match.item.license,
+            sourceURL: match.item.references.flatMap(URL.init(string:))
+        )
     }
 
     private static func source(from dto: GBIFOccurrenceDTO) -> ObservationSource? {

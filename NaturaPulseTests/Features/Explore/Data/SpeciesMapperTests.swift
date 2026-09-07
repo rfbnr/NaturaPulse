@@ -26,6 +26,21 @@ final class SpeciesMapperTests: XCTestCase {
         )
     }
 
+    private func occWithMedia(key: Int, speciesKey: Int?, media: [GBIFMediaDTO]?) -> GBIFOccurrenceDTO {
+        GBIFOccurrenceDTO(
+            key: key, speciesKey: speciesKey, taxonKey: speciesKey, scientificName: "Sci name", vernacularName: nil,
+            kingdom: nil, phylum: nil, className: nil, order: nil, family: nil, genus: nil,
+            eventDate: nil, country: nil, datasetName: nil, media: media
+        )
+    }
+
+    private func media(type: String?, identifier: String?) -> GBIFMediaDTO {
+        GBIFMediaDTO(
+            type: type, format: nil, identifier: identifier, creator: "c", license: "l",
+            references: nil, publisher: nil, rightsHolder: nil
+        )
+    }
+
     func testDedupesBySpeciesKeyAndCountsOccurrences() {
         let dtos = [
             occ(key: 1, speciesKey: 100),
@@ -71,5 +86,51 @@ final class SpeciesMapperTests: XCTestCase {
         XCTAssertEqual(named.first?.commonName, "Robin")
         let unnamed = SpeciesMapper.map([occ(key: 2, speciesKey: 200, vernacular: nil)])
         XCTAssertNil(unnamed.first?.commonName)
+    }
+
+    func testPrefersStillImageOverOtherMediaTypes() {
+        let occurrence = occWithMedia(key: 1, speciesKey: 100, media: [
+            media(type: "Sound", identifier: "https://media/sound.mp3"),
+            media(type: "StillImage", identifier: "https://media/still.jpg")
+        ])
+        let species = SpeciesMapper.map([occurrence])
+        XCTAssertEqual(species.first?.image?.url.absoluteString, "https://media/still.jpg")
+    }
+
+    func testFallsBackToNilTypedMediaWhenNoStillImagePresent() {
+        let occurrence = occWithMedia(key: 1, speciesKey: 100, media: [
+            media(type: nil, identifier: "https://media/untyped.jpg")
+        ])
+        let species = SpeciesMapper.map([occurrence])
+        XCTAssertEqual(species.first?.image?.url.absoluteString, "https://media/untyped.jpg")
+    }
+
+    func testLastObservedAtIsTheLaterOfTwoEventDates() throws {
+        let dtos = [
+            occ(key: 1, speciesKey: 100, eventDate: "2026-01-03T08:57"),
+            occ(key: 2, speciesKey: 100, eventDate: "2026-06-15T10:00")
+        ]
+        let species = SpeciesMapper.map(dtos)
+        let lastObserved = try XCTUnwrap(species.first?.lastObservedAt)
+        let expected = try XCTUnwrap(GBIFDateParser.date(from: "2026-06-15T10:00"))
+        XCTAssertEqual(lastObserved, expected)
+    }
+
+    func testGroupsUnderBareKeyWhenSpeciesKeyAndTaxonKeyAreNil() {
+        let dto = GBIFOccurrenceDTO(
+            key: 42, speciesKey: nil, taxonKey: nil, scientificName: "X", vernacularName: nil,
+            kingdom: nil, phylum: nil, className: nil, order: nil, family: nil, genus: nil,
+            eventDate: nil, country: nil, datasetName: nil, media: nil
+        )
+        let species = SpeciesMapper.map([dto])
+        XCTAssertEqual(species.first?.id, 42)
+    }
+
+    func testInvalidIdentifierDoesNotCrashAndYieldsNilImage() {
+        let occurrence = occWithMedia(key: 1, speciesKey: 100, media: [
+            media(type: "StillImage", identifier: "")
+        ])
+        let species = SpeciesMapper.map([occurrence])
+        XCTAssertNil(species.first?.image)
     }
 }
