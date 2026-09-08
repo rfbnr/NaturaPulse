@@ -90,7 +90,7 @@ final class SearchPresenterTests: XCTestCase {
     func testSelectSpeciesAppendsRoute() {
         let presenter = makePresenter(FakeSpeciesRepository())
         presenter.select(species: Species.stub(id: 7))
-        XCTAssertEqual(presenter.path, [AppRoute.speciesDetail(id: 7)])
+        XCTAssertEqual(presenter.path, [AppRoute.speciesDetail(Species.stub(id: 7))])
     }
 
     func testDuplicateQueryDoesNotRetrigger() {

@@ -65,7 +65,7 @@ final class SearchPresenter {
     }
 
     func select(species: Species) {
-        path.append(.speciesDetail(id: species.id))
+        path.append(.speciesDetail(species))
     }
 
     private func apply(_ outcome: SearchOutcome) {

@@ -6,12 +6,14 @@
 //
 
 import Combine
+import Swinject
 import SwiftUI
 
 /// The Search tab: a search field over species by name, with results
-/// navigating to a (placeholder) detail screen.
+/// navigating to the species detail screen.
 struct SearchView: View {
     @State var presenter: SearchPresenter
+    @Environment(\.resolver) private var resolver
 
     var body: some View {
         NavigationStack(path: $presenter.path) {
@@ -76,40 +78,23 @@ struct SearchView: View {
     @ViewBuilder
     private func destination(for route: AppRoute) -> some View {
         switch route {
-        case .speciesDetail(let id):
-            if let species = speciesInResults(id: id) {
-                SpeciesDetailPlaceholderView(species: species)
-            } else {
-                SpeciesDetailFallbackView(id: id)
-            }
+        case .speciesDetail(let species):
+            let factory = resolver.resolveRequired(SpeciesDetailPresenterFactory.self)
+            SpeciesDetailView(presenter: factory.make(species: species))
         case .locationSearch:
             EmptyView()
         }
     }
-
-    /// Resolves the tapped species from the currently loaded results, since
-    /// the route only carries the species id. A future increment (M4) will
-    /// fetch the species by id instead of relying on this lookup.
-    private func speciesInResults(id: Species.ID) -> Species? {
-        guard case .loaded(let list) = presenter.state else { return nil }
-        return list.first(where: { $0.id == id })
-    }
 }
 
-/// Minimal fallback shown when a species can't be resolved from the current
-/// results (e.g. the results changed while navigating).
-private struct SpeciesDetailFallbackView: View {
-    let id: Species.ID
-
-    var body: some View {
-        EmptyStateView(
-            title: "Species #\(id)",
-            message: "Full species details arrive in a later update.",
-            actionTitle: nil,
-            action: nil
-        )
-        .background(AppColor.background)
-        .navigationTitle("Species #\(id)")
+/// Composition-root helper for resolving a required dependency from the
+/// environment's resolver without a force-unwrap.
+private extension Resolver {
+    func resolveRequired<Service>(_ serviceType: Service.Type) -> Service {
+        guard let resolved = resolve(serviceType) else {
+            preconditionFailure("SearchView: failed to resolve \(Service.self). Check DI registration.")
+        }
+        return resolved
     }
 }
 

@@ -6,6 +6,7 @@
 //
 
 import Combine
+import Swinject
 import SwiftUI
 
 /// The Explore tab: a greeting, the current location and search radius,
@@ -13,6 +14,7 @@ import SwiftUI
 struct ExploreView: View {
     @State var presenter: ExplorePresenter
     @State private var isLocationPickerPresented = false
+    @Environment(\.resolver) private var resolver
 
     private var greeting: String {
         switch Calendar.current.component(.hour, from: .now) {
@@ -24,7 +26,7 @@ struct ExploreView: View {
     }
 
     var body: some View {
-        NavigationStack {
+        NavigationStack(path: $presenter.path) {
             ScrollView {
                 VStack(alignment: .leading, spacing: AppSpacing.lg) {
                     header
@@ -43,6 +45,20 @@ struct ExploreView: View {
             .sheet(isPresented: $isLocationPickerPresented) {
                 LocationPickerView(presenter: presenter)
             }
+            .navigationDestination(for: AppRoute.self) { route in
+                destination(for: route)
+            }
+        }
+    }
+
+    @ViewBuilder
+    private func destination(for route: AppRoute) -> some View {
+        switch route {
+        case .speciesDetail(let species):
+            let factory = resolver.resolveRequired(SpeciesDetailPresenterFactory.self)
+            SpeciesDetailView(presenter: factory.make(species: species))
+        case .locationSearch:
+            EmptyView()
         }
     }
 
@@ -152,7 +168,13 @@ struct ExploreView: View {
     private func speciesList(_ species: [Species]) -> some View {
         VStack(spacing: AppSpacing.md) {
             ForEach(species) { item in
-                SpeciesCardView(species: item)
+                Button {
+                    presenter.select(species: item)
+                } label: {
+                    SpeciesCardView(species: item)
+                }
+                .buttonStyle(.plain)
+                .accessibilityLabel(item.commonName ?? item.scientificName)
             }
         }
     }
@@ -163,6 +185,17 @@ struct ExploreView: View {
             return .km(options[options.count - 1])
         }
         return .km(options[index + 1])
+    }
+}
+
+/// Composition-root helper for resolving a required dependency from the
+/// environment's resolver without a force-unwrap.
+private extension Resolver {
+    func resolveRequired<Service>(_ serviceType: Service.Type) -> Service {
+        guard let resolved = resolve(serviceType) else {
+            preconditionFailure("ExploreView: failed to resolve \(Service.self). Check DI registration.")
+        }
+        return resolved
     }
 }
 

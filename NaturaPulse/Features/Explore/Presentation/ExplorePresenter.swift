@@ -16,6 +16,7 @@ final class ExplorePresenter {
     private(set) var radius: Distance
     private(set) var speciesState: LoadState<[Species]> = .idle
     private(set) var weatherState: LoadState<WeatherContext> = .idle
+    var path: [AppRoute] = []
 
     @ObservationIgnored private let getNearbySpecies: GetNearbySpeciesUseCase
     @ObservationIgnored private let getWeatherContext: GetWeatherContextUseCase
@@ -53,6 +54,10 @@ final class ExplorePresenter {
     func select(radius: Distance) {
         self.radius = radius
         load()
+    }
+
+    func select(species: Species) {
+        path.append(.speciesDetail(species))
     }
 
     /// Exposes location search to the presentation layer (e.g.
