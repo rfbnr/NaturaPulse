@@ -28,18 +28,24 @@ final class FieldGuideRepositoryImpl: FieldGuideRepository {
             // updated whenever Realm reports a change. Only value types (`[Species]`) ever leave this
             // method — the thread-confined `Results`/`Object` stay inside the observation closure.
             let subject = CurrentValueSubject<[Species], AppError>(results.map(SavedSpeciesMapper.domain(from:)))
-            let token = results.observe { change in
+            var token: NotificationToken?
+            token = results.observe { change in
                 switch change {
                 case let .initial(collection):
                     subject.send(collection.map(SavedSpeciesMapper.domain(from:)))
                 case let .update(collection, _, _, _):
                     subject.send(collection.map(SavedSpeciesMapper.domain(from:)))
                 case .error:
+                    // The stream is terminating via completion (not cancellation), so
+                    // `handleEvents(receiveCancel:)` below will not fire — invalidate here
+                    // to avoid leaking the NotificationToken and its captured subject.
+                    token?.invalidate()
                     subject.send(completion: .failure(.persistence))
                 }
             }
             return subject
-                .handleEvents(receiveCancel: { token.invalidate() })
+                .removeDuplicates()
+                .handleEvents(receiveCancel: { token?.invalidate() })
                 .eraseToAnyPublisher()
         } catch {
             return Fail(error: AppError.persistence).eraseToAnyPublisher()
