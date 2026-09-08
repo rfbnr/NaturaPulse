@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct ObservationSource: Equatable {
+struct ObservationSource: Equatable, Hashable {
     let datasetName: String?
     let publisher: String?
     let referenceURL: URL?

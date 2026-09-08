@@ -13,7 +13,8 @@ extension Species {
         id: Int = 1,
         scientificName: String = "Copsychus saularis",
         commonName: String? = "Oriental Magpie Robin",
-        lastObservedAt: Date? = nil
+        lastObservedAt: Date? = nil,
+        coordinate: Coordinate? = nil
     ) -> Species {
         Species(
             id: id,
@@ -29,7 +30,8 @@ extension Species {
             image: nil,
             localObservationCount: 3,
             lastObservedAt: lastObservedAt,
-            source: nil
+            source: nil,
+            coordinate: coordinate
         )
     }
 }

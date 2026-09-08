@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct SpeciesImage: Equatable {
+struct SpeciesImage: Equatable, Hashable {
     let url: URL
     let creator: String?
     let license: String?
