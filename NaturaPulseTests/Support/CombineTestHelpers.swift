@@ -18,16 +18,23 @@ extension XCTestCase {
         line: UInt = #line
     ) throws -> P.Output {
         var result: Result<P.Output, Error>?
+        var didFulfill = false
         let expectation = expectation(description: "awaitPublisher")
+        let fulfillOnce = {
+            guard !didFulfill else { return }
+            didFulfill = true
+            expectation.fulfill()
+        }
         let cancellable = publisher.sink(
             receiveCompletion: { completion in
                 if case let .failure(error) = completion {
                     result = .failure(error)
                 }
-                expectation.fulfill()
+                fulfillOnce()
             },
             receiveValue: { value in
                 result = .success(value)
+                fulfillOnce()
             }
         )
         waitForExpectations(timeout: timeout)
