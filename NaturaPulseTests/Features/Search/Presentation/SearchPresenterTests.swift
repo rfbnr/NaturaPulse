@@ -92,4 +92,39 @@ final class SearchPresenterTests: XCTestCase {
         presenter.select(species: Species.stub(id: 7))
         XCTAssertEqual(presenter.path, [AppRoute.speciesDetail(id: 7)])
     }
+
+    func testDuplicateQueryDoesNotRetrigger() {
+        let repo = FakeSpeciesRepository()
+        repo.searchResult = .success([Species.stub(id: 1)])
+        let presenter = makePresenter(repo)
+        presenter.query = "Robin"
+        waitMillis(60)
+        XCTAssertEqual(repo.searchCallCount, 1)
+        presenter.query = "Robin"   // identical -> removeDuplicates drops it
+        waitMillis(60)
+        XCTAssertEqual(repo.searchCallCount, 1)
+    }
+
+    func testStaleSearchDoesNotOverwriteNewerResult() {
+        let repo = FakeSpeciesRepository()
+        let older = PassthroughSubject<[Species], AppError>()
+        let newer = PassthroughSubject<[Species], AppError>()
+        repo.searchHandler = { query in
+            (query == "aaaa" ? older : newer).eraseToAnyPublisher()
+        }
+        let presenter = makePresenter(repo)
+        presenter.query = "aaaa"     // starts older (subscribed after debounce, loading)
+        waitMillis(60)
+        presenter.query = "bbbb"     // starts newer; switchToLatest cancels older's subscription
+        waitMillis(60)
+        newer.send([Species.stub(id: 2)])
+        newer.send(completion: .finished)
+        waitMillis(40)
+        XCTAssertEqual(presenter.state, .loaded([Species.stub(id: 2)]))
+        // Stale older result arrives late; its subscription was cancelled, so it must be ignored.
+        older.send([Species.stub(id: 1)])
+        older.send(completion: .finished)
+        waitMillis(40)
+        XCTAssertEqual(presenter.state, .loaded([Species.stub(id: 2)]))
+    }
 }

@@ -19,7 +19,6 @@ struct SearchView: View {
                 .background(AppColor.background)
                 .navigationTitle("Search")
                 .searchable(text: $presenter.query, prompt: "Search species by name")
-                .accessibilityLabel("Search species by name")
                 .navigationDestination(for: AppRoute.self) { route in
                     destination(for: route)
                 }
