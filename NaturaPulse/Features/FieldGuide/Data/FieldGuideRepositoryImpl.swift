@@ -70,6 +70,7 @@ final class FieldGuideRepositoryImpl: FieldGuideRepository {
                 }
             }
             return subject
+                .removeDuplicates()
                 .handleEvents(receiveCancel: { token.invalidate() })
                 .eraseToAnyPublisher()
         } catch {

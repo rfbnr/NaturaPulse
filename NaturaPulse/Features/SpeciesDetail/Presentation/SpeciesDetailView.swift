@@ -45,7 +45,7 @@ struct SpeciesDetailView: View {
                 } label: {
                     Image(systemName: presenter.isSaved ? "heart.fill" : "heart")
                 }
-                .tint(AppColor.accent)
+                .tint(presenter.isSaved ? AppColor.accent : nil)
                 .accessibilityLabel(presenter.isSaved ? "Remove from Field Guide" : "Add to Field Guide")
             }
         }
