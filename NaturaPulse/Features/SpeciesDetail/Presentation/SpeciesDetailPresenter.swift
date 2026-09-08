@@ -37,8 +37,8 @@ final class SpeciesDetailPresenter {
     }
 
     func retry() {
-        loadProfile()
-        loadWeather()
+        if case .failed = profileState { loadProfile() }
+        if case .failed = weatherState { loadWeather() }
     }
 
     private func loadProfile() {

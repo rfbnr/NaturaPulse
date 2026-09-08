@@ -21,7 +21,10 @@ final class FakeWeatherRepository: WeatherRepository {
         )
     )
 
+    var contextCallCount = 0
+
     func context(at location: Location) -> AnyPublisher<WeatherContext, AppError> {
-        result.publisher.eraseToAnyPublisher()
+        contextCallCount += 1
+        return result.publisher.eraseToAnyPublisher()
     }
 }

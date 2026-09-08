@@ -59,4 +59,28 @@ final class SpeciesDetailPresenterTests: XCTestCase {
         settle()
         XCTAssertEqual(presenter.profileState, .failed(.server))
     }
+
+    func testRetryReRunsOnlyFailedProfileNotLoadedWeather() {
+        let speciesRepo = FakeSpeciesRepository()
+        speciesRepo.profileResult = .failure(.server)
+        let weatherRepo = FakeWeatherRepository()
+        weatherRepo.result = .success(WeatherContext(temperatureCelsius: 28, relativeHumidity: 60, precipitation: 0, weatherCode: 0, pm25: 20, capturedAt: Date()))
+        let presenter = SpeciesDetailPresenter(
+            species: Species.stub(id: 1, coordinate: Coordinate(latitude: -6.2, longitude: 106.8)),
+            getSpeciesProfile: GetSpeciesProfileUseCase(repository: speciesRepo),
+            getWeatherContext: GetWeatherContextUseCase(repository: weatherRepo)
+        )
+        presenter.onAppear()
+        settle()
+        XCTAssertEqual(presenter.profileState, .failed(.server))
+        if case .loaded = presenter.weatherState {} else { XCTFail("expected weather loaded") }
+        XCTAssertEqual(weatherRepo.contextCallCount, 1)
+
+        // Profile now succeeds; retry must re-run profile only, NOT weather.
+        speciesRepo.profileResult = .success(SpeciesProfile(summary: "About.", summarySource: "src"))
+        presenter.retry()
+        settle()
+        XCTAssertEqual(presenter.profileState, .loaded(SpeciesProfile(summary: "About.", summarySource: "src")))
+        XCTAssertEqual(weatherRepo.contextCallCount, 1) // weather was NOT re-run
+    }
 }
