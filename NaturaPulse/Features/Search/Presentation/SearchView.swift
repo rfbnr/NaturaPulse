@@ -131,11 +131,8 @@ private struct PreviewSpeciesRepository: SpeciesRepository {
         return Just(species).setFailureType(to: AppError.self).eraseToAnyPublisher()
     }
 
-    func getSpeciesDetail(id: Species.ID) -> AnyPublisher<Species, AppError> {
-        guard let match = species.first(where: { $0.id == id }) else {
-            return Fail(error: .notFound).eraseToAnyPublisher()
-        }
-        return Just(match).setFailureType(to: AppError.self).eraseToAnyPublisher()
+    func getSpeciesProfile(id: Species.ID) -> AnyPublisher<SpeciesProfile, AppError> {
+        Just(SpeciesProfile(summary: nil, summarySource: nil)).setFailureType(to: AppError.self).eraseToAnyPublisher()
     }
 }
 

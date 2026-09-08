@@ -11,14 +11,15 @@ import XCTest
 
 private final class FakeGBIFDataSource: GBIFRemoteDataSource {
     var nearbyResult: Result<GBIFOccurrenceResponseDTO, NetworkError> = .success(.init(count: 0, results: []))
+    var descriptionsResult: Result<GBIFDescriptionsResponseDTO, NetworkError> = .success(.init(results: []))
     func nearby(latitude: Double, longitude: Double, radiusKm: Int, limit: Int) -> AnyPublisher<GBIFOccurrenceResponseDTO, NetworkError> {
         nearbyResult.publisher.eraseToAnyPublisher()
     }
     func search(query: String, limit: Int) -> AnyPublisher<GBIFOccurrenceResponseDTO, NetworkError> {
         nearbyResult.publisher.eraseToAnyPublisher()
     }
-    func occurrence(id: Int) -> AnyPublisher<GBIFOccurrenceDTO, NetworkError> {
-        Fail(error: NetworkError.statusCode(404)).eraseToAnyPublisher()
+    func speciesDescriptions(speciesKey: Int) -> AnyPublisher<GBIFDescriptionsResponseDTO, NetworkError> {
+        descriptionsResult.publisher.eraseToAnyPublisher()
     }
 }
 
@@ -78,6 +79,26 @@ final class RepositoryImplTests: XCTestCase {
         let repo = WeatherRepositoryImpl(dataSource: source)
         XCTAssertThrowsError(try awaitPublisher(repo.context(at: .jakarta))) { error in
             XCTAssertEqual(error as? AppError, .networkUnavailable)
+        }
+    }
+
+    func testGetSpeciesProfileMapsDescriptions() throws {
+        let source = FakeGBIFDataSource()
+        source.descriptionsResult = .success(.init(results: [
+            GBIFDescriptionDTO(type: "Habitat", language: "eng", description: "Open woodland.", source: "IOC")
+        ]))
+        let repo = SpeciesRepositoryImpl(dataSource: source)
+        let profile = try awaitPublisher(repo.getSpeciesProfile(id: 6_101_224))
+        XCTAssertEqual(profile.summary, "Open woodland.")
+        XCTAssertEqual(profile.summarySource, "IOC")
+    }
+
+    func testGetSpeciesProfileMapsNetworkErrorToAppError() {
+        let source = FakeGBIFDataSource()
+        source.descriptionsResult = .failure(.statusCode(500))
+        let repo = SpeciesRepositoryImpl(dataSource: source)
+        XCTAssertThrowsError(try awaitPublisher(repo.getSpeciesProfile(id: 6_101_224))) { error in
+            XCTAssertEqual(error as? AppError, .server)
         }
     }
 }

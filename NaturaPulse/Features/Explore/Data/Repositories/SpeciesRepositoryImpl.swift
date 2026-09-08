@@ -32,19 +32,11 @@ final class SpeciesRepositoryImpl: SpeciesRepository {
             .eraseToAnyPublisher()
     }
 
-    func getSpeciesDetail(id: Species.ID) -> AnyPublisher<Species, AppError> {
+    func getSpeciesProfile(id: Species.ID) -> AnyPublisher<SpeciesProfile, AppError> {
         dataSource
-            .occurrence(id: id)
-            .map { SpeciesMapper.map([$0]) }
-            .tryMap { species -> Species in
-                guard let first = species.first else { throw AppError.notFound }
-                return first
-            }
-            .mapError { error -> AppError in
-                if let appError = error as? AppError { return appError }
-                if let networkError = error as? NetworkError { return networkError.toAppError() }
-                return .unknown
-            }
+            .speciesDescriptions(speciesKey: id)
+            .map { SpeciesProfileMapper.map($0) }
+            .mapError { $0.toAppError() }
             .eraseToAnyPublisher()
     }
 }

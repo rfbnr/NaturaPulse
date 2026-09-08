@@ -11,7 +11,8 @@ import Combine
 final class FakeSpeciesRepository: SpeciesRepository {
     var nearbyResult: Result<[Species], AppError> = .success([])
     var searchResult: Result<[Species], AppError> = .success([])
-    var detailResult: Result<Species, AppError> = .success(.stub())
+    var profileID: Int?
+    var profileResult: Result<SpeciesProfile, AppError> = .success(SpeciesProfile(summary: nil, summarySource: nil))
 
     /// When set, returned in place of `nearbyResult.publisher` — lets a test
     /// control the timing of a `getNearbySpecies` call (e.g. with a
@@ -44,7 +45,8 @@ final class FakeSpeciesRepository: SpeciesRepository {
         return searchResult.publisher.eraseToAnyPublisher()
     }
 
-    func getSpeciesDetail(id: Species.ID) -> AnyPublisher<Species, AppError> {
-        detailResult.publisher.eraseToAnyPublisher()
+    func getSpeciesProfile(id: Species.ID) -> AnyPublisher<SpeciesProfile, AppError> {
+        profileID = id
+        return profileResult.publisher.eraseToAnyPublisher()
     }
 }

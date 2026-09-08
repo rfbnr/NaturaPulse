@@ -13,7 +13,7 @@ private final class FakeSpeciesRepo: SpeciesRepository {
     var nearby: Result<[Species], AppError> = .success([])
     func getNearbySpecies(at location: Location, radius: Distance) -> AnyPublisher<[Species], AppError> { nearby.publisher.eraseToAnyPublisher() }
     func searchSpecies(query: String) -> AnyPublisher<[Species], AppError> { nearby.publisher.eraseToAnyPublisher() }
-    func getSpeciesDetail(id: Species.ID) -> AnyPublisher<Species, AppError> { Fail(error: .notFound).eraseToAnyPublisher() }
+    func getSpeciesProfile(id: Species.ID) -> AnyPublisher<SpeciesProfile, AppError> { Fail(error: .notFound).eraseToAnyPublisher() }
 }
 
 private final class FakeLocationRepo: LocationRepository {
