@@ -133,4 +133,15 @@ final class SpeciesMapperTests: XCTestCase {
         let species = SpeciesMapper.map([occurrence])
         XCTAssertNil(species.first?.image)
     }
+
+    func testMapsCoordinateFromRepresentativeOccurrence() {
+        let occ = GBIFOccurrenceDTO(
+            key: 1, speciesKey: 100, taxonKey: 100, scientificName: "X", vernacularName: nil,
+            kingdom: nil, phylum: nil, className: nil, order: nil, family: nil, genus: nil,
+            eventDate: nil, country: nil, datasetName: nil, media: nil,
+            decimalLatitude: -6.2, decimalLongitude: 106.8
+        )
+        let species = SpeciesMapper.map([occ])
+        XCTAssertEqual(species.first?.coordinate, Coordinate(latitude: -6.2, longitude: 106.8))
+    }
 }

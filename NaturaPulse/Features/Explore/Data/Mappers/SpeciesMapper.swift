@@ -25,6 +25,10 @@ enum SpeciesMapper {
             let lastObserved = occurrences
                 .compactMap { GBIFDateParser.date(from: $0.eventDate) }
                 .max()
+            let coordinate: Coordinate? = {
+                guard let lat = representative.decimalLatitude, let lon = representative.decimalLongitude else { return nil }
+                return Coordinate(latitude: lat, longitude: lon)
+            }()
             return Species(
                 id: groupKey,
                 scientificName: representative.scientificName ?? "Unknown species",
@@ -39,7 +43,8 @@ enum SpeciesMapper {
                 image: usableImage(from: imageSource),
                 localObservationCount: occurrences.count,
                 lastObservedAt: lastObserved,
-                source: source(from: representative)
+                source: source(from: representative),
+                coordinate: coordinate
             )
         }
     }
