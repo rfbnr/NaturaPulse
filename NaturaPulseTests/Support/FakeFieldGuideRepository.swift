@@ -10,20 +10,25 @@ import Combine
 
 final class FakeFieldGuideRepository: FieldGuideRepository {
     var savedResult: Result<[Species], AppError> = .success([])
+    var savedFlag = false
+    var savedSpeciesArgID: Int?
+    var removedID: Int?
 
     func savedSpecies() -> AnyPublisher<[Species], AppError> {
         savedResult.publisher.eraseToAnyPublisher()
     }
 
     func isSaved(_ id: Species.ID) -> AnyPublisher<Bool, Never> {
-        Just(false).eraseToAnyPublisher()
+        Just(savedFlag).eraseToAnyPublisher()
     }
 
     func save(_ species: Species) -> AnyPublisher<Void, AppError> {
-        Just(()).setFailureType(to: AppError.self).eraseToAnyPublisher()
+        savedSpeciesArgID = species.id
+        return Just(()).setFailureType(to: AppError.self).eraseToAnyPublisher()
     }
 
     func remove(id: Species.ID) -> AnyPublisher<Void, AppError> {
-        Just(()).setFailureType(to: AppError.self).eraseToAnyPublisher()
+        removedID = id
+        return Just(()).setFailureType(to: AppError.self).eraseToAnyPublisher()
     }
 }
