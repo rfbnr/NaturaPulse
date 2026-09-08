@@ -38,6 +38,17 @@ struct SpeciesDetailView: View {
         .background(AppColor.background)
         .navigationTitle(displayName)
         .onAppear { presenter.onAppear() }
+        .toolbar {
+            ToolbarItem(placement: .topBarTrailing) {
+                Button {
+                    presenter.toggleFavorite()
+                } label: {
+                    Image(systemName: presenter.isSaved ? "heart.fill" : "heart")
+                }
+                .tint(AppColor.accent)
+                .accessibilityLabel(presenter.isSaved ? "Remove from Field Guide" : "Add to Field Guide")
+            }
+        }
     }
 
     // MARK: - Header

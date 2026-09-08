@@ -40,7 +40,7 @@ struct AppRootView: View {
                     Label("Search", systemImage: "magnifyingglass")
                 }
 
-            FieldGuidePlaceholderView()
+            FieldGuideView(presenter: resolver.resolveRequired(FieldGuidePresenter.self))
                 .tabItem {
                     Label("Field Guide", systemImage: "book.closed.fill")
                 }
