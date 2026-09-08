@@ -19,6 +19,9 @@ final class FakeSpeciesRepository: SpeciesRepository {
     var nearbyPublisher: AnyPublisher<[Species], AppError>?
     private(set) var nearbyCallCount = 0
 
+    var searchQuery: String?
+    var searchCallCount = 0
+
     func getNearbySpecies(at location: Location, radius: Distance) -> AnyPublisher<[Species], AppError> {
         nearbyCallCount += 1
         if let nearbyPublisher {
@@ -28,7 +31,9 @@ final class FakeSpeciesRepository: SpeciesRepository {
     }
 
     func searchSpecies(query: String) -> AnyPublisher<[Species], AppError> {
-        searchResult.publisher.eraseToAnyPublisher()
+        searchCallCount += 1
+        searchQuery = query
+        return searchResult.publisher.eraseToAnyPublisher()
     }
 
     func getSpeciesDetail(id: Species.ID) -> AnyPublisher<Species, AppError> {
