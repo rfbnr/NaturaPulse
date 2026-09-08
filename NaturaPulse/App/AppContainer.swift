@@ -20,7 +20,8 @@ final class AppContainer {
             DatabaseAssembly(),
             AppAssembly(),
             ExploreAssembly(),
-            SearchAssembly()
+            SearchAssembly(),
+            SpeciesDetailAssembly()
         ])
     }
 }
