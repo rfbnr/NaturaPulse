@@ -14,7 +14,8 @@ final class SpeciesDetailPresenterTests: XCTestCase {
     private func makePresenter(
         species: Species,
         profile: Result<SpeciesProfile, AppError> = .success(SpeciesProfile(summary: "About.", summarySource: "src")),
-        weather: Result<WeatherContext, AppError> = .success(WeatherContext(temperatureCelsius: 28, relativeHumidity: 60, precipitation: 0, weatherCode: 0, pm25: 20, capturedAt: Date()))
+        weather: Result<WeatherContext, AppError> = .success(WeatherContext(temperatureCelsius: 28, relativeHumidity: 60, precipitation: 0, weatherCode: 0, pm25: 20, capturedAt: Date())),
+        fieldGuideRepo: FakeFieldGuideRepository = FakeFieldGuideRepository()
     ) -> SpeciesDetailPresenter {
         let speciesRepo = FakeSpeciesRepository()
         speciesRepo.profileResult = profile
@@ -23,7 +24,9 @@ final class SpeciesDetailPresenterTests: XCTestCase {
         return SpeciesDetailPresenter(
             species: species,
             getSpeciesProfile: GetSpeciesProfileUseCase(repository: speciesRepo),
-            getWeatherContext: GetWeatherContextUseCase(repository: weatherRepo)
+            getWeatherContext: GetWeatherContextUseCase(repository: weatherRepo),
+            toggleFavorite: ToggleFavoriteUseCase(repository: fieldGuideRepo),
+            observeIsSaved: ObserveIsSavedUseCase(repository: fieldGuideRepo)
         )
     }
 
@@ -65,10 +68,13 @@ final class SpeciesDetailPresenterTests: XCTestCase {
         speciesRepo.profileResult = .failure(.server)
         let weatherRepo = FakeWeatherRepository()
         weatherRepo.result = .success(WeatherContext(temperatureCelsius: 28, relativeHumidity: 60, precipitation: 0, weatherCode: 0, pm25: 20, capturedAt: Date()))
+        let fieldGuideRepo = FakeFieldGuideRepository()
         let presenter = SpeciesDetailPresenter(
             species: Species.stub(id: 1, coordinate: Coordinate(latitude: -6.2, longitude: 106.8)),
             getSpeciesProfile: GetSpeciesProfileUseCase(repository: speciesRepo),
-            getWeatherContext: GetWeatherContextUseCase(repository: weatherRepo)
+            getWeatherContext: GetWeatherContextUseCase(repository: weatherRepo),
+            toggleFavorite: ToggleFavoriteUseCase(repository: fieldGuideRepo),
+            observeIsSaved: ObserveIsSavedUseCase(repository: fieldGuideRepo)
         )
         presenter.onAppear()
         settle()
@@ -82,5 +88,28 @@ final class SpeciesDetailPresenterTests: XCTestCase {
         settle()
         XCTAssertEqual(presenter.profileState, .loaded(SpeciesProfile(summary: "About.", summarySource: "src")))
         XCTAssertEqual(weatherRepo.contextCallCount, 1) // weather was NOT re-run
+    }
+
+    func testToggleFavoriteCallsUseCase() {
+        let fieldGuideRepo = FakeFieldGuideRepository()
+        fieldGuideRepo.savedFlag = false
+        let presenter = makePresenter(species: Species.stub(id: 1), fieldGuideRepo: fieldGuideRepo)
+
+        presenter.toggleFavorite()
+        settle()
+
+        XCTAssertEqual(fieldGuideRepo.savedSpeciesArgID, 1)
+        XCTAssertNil(fieldGuideRepo.removedID)
+    }
+
+    func testIsSavedReflectsObservedStream() {
+        let fieldGuideRepo = FakeFieldGuideRepository()
+        fieldGuideRepo.savedFlag = true
+        let presenter = makePresenter(species: Species.stub(id: 1), fieldGuideRepo: fieldGuideRepo)
+
+        presenter.onAppear()
+        settle()
+
+        XCTAssertTrue(presenter.isSaved)
     }
 }

@@ -255,6 +255,24 @@ private struct PreviewWeatherRepository: WeatherRepository {
     }
 }
 
+private struct PreviewFieldGuideRepository: FieldGuideRepository {
+    func savedSpecies() -> AnyPublisher<[Species], AppError> {
+        Just([]).setFailureType(to: AppError.self).eraseToAnyPublisher()
+    }
+
+    func isSaved(_ id: Species.ID) -> AnyPublisher<Bool, Never> {
+        Just(false).eraseToAnyPublisher()
+    }
+
+    func save(_ species: Species) -> AnyPublisher<Void, AppError> {
+        Just(()).setFailureType(to: AppError.self).eraseToAnyPublisher()
+    }
+
+    func remove(id: Species.ID) -> AnyPublisher<Void, AppError> {
+        Just(()).setFailureType(to: AppError.self).eraseToAnyPublisher()
+    }
+}
+
 private extension SpeciesDetailPresenter {
     static func preview(
         species: Species,
@@ -262,12 +280,15 @@ private extension SpeciesDetailPresenter {
         weather: WeatherContext,
         profileError: AppError? = nil
     ) -> SpeciesDetailPresenter {
-        SpeciesDetailPresenter(
+        let fieldGuideRepository = PreviewFieldGuideRepository()
+        return SpeciesDetailPresenter(
             species: species,
             getSpeciesProfile: GetSpeciesProfileUseCase(
                 repository: PreviewSpeciesRepository(profile: profile, profileError: profileError)
             ),
-            getWeatherContext: GetWeatherContextUseCase(repository: PreviewWeatherRepository(weather: weather))
+            getWeatherContext: GetWeatherContextUseCase(repository: PreviewWeatherRepository(weather: weather)),
+            toggleFavorite: ToggleFavoriteUseCase(repository: fieldGuideRepository),
+            observeIsSaved: ObserveIsSavedUseCase(repository: fieldGuideRepository)
         )
     }
 }

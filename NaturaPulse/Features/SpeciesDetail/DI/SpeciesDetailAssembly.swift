@@ -17,8 +17,9 @@ import Swinject
 /// isolation; the factory struct itself carries no actor isolation, so
 /// resolving it does not require `MainActor.assumeIsolated`.
 ///
-/// `GetWeatherContextUseCase` is registered by `ExploreAssembly` and resolved
-/// here from the shared container.
+/// `GetWeatherContextUseCase` is registered by `ExploreAssembly`, and
+/// `ToggleFavoriteUseCase`/`ObserveIsSavedUseCase` are registered by
+/// `FieldGuideAssembly`; all are resolved here from the shared container.
 final class SpeciesDetailAssembly: Assembly {
     func assemble(container: Container) {
         container.register(GetSpeciesProfileUseCase.self) { r in
@@ -28,7 +29,9 @@ final class SpeciesDetailAssembly: Assembly {
         container.register(SpeciesDetailPresenterFactory.self) { r in
             SpeciesDetailPresenterFactory(
                 getSpeciesProfile: r.resolveRequired(GetSpeciesProfileUseCase.self),
-                getWeatherContext: r.resolveRequired(GetWeatherContextUseCase.self)
+                getWeatherContext: r.resolveRequired(GetWeatherContextUseCase.self),
+                toggleFavorite: r.resolveRequired(ToggleFavoriteUseCase.self),
+                observeIsSaved: r.resolveRequired(ObserveIsSavedUseCase.self)
             )
         }
         .inObjectScope(.transient)

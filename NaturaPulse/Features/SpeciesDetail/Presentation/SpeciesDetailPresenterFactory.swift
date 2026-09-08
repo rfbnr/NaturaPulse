@@ -17,13 +17,19 @@ import Foundation
 struct SpeciesDetailPresenterFactory {
     private let getSpeciesProfile: GetSpeciesProfileUseCase
     private let getWeatherContext: GetWeatherContextUseCase
+    private let toggleFavorite: ToggleFavoriteUseCase
+    private let observeIsSaved: ObserveIsSavedUseCase
 
     init(
         getSpeciesProfile: GetSpeciesProfileUseCase,
-        getWeatherContext: GetWeatherContextUseCase
+        getWeatherContext: GetWeatherContextUseCase,
+        toggleFavorite: ToggleFavoriteUseCase,
+        observeIsSaved: ObserveIsSavedUseCase
     ) {
         self.getSpeciesProfile = getSpeciesProfile
         self.getWeatherContext = getWeatherContext
+        self.toggleFavorite = toggleFavorite
+        self.observeIsSaved = observeIsSaved
     }
 
     @MainActor
@@ -31,7 +37,9 @@ struct SpeciesDetailPresenterFactory {
         SpeciesDetailPresenter(
             species: species,
             getSpeciesProfile: getSpeciesProfile,
-            getWeatherContext: getWeatherContext
+            getWeatherContext: getWeatherContext,
+            toggleFavorite: toggleFavorite,
+            observeIsSaved: observeIsSaved
         )
     }
 }
