@@ -20,6 +20,7 @@ final class SearchPresenter {
 
     @ObservationIgnored private let searchSpecies: SearchSpeciesUseCase
     @ObservationIgnored private let querySubject = PassthroughSubject<String, Never>()
+    @ObservationIgnored private let retrySubject = PassthroughSubject<String, Never>()
     @ObservationIgnored private var cancellables = Set<AnyCancellable>()
 
     init(
@@ -29,11 +30,19 @@ final class SearchPresenter {
     ) {
         self.searchSpecies = searchSpecies
 
-        querySubject
+        let debouncedQueries = querySubject
             .debounce(for: debounceInterval, scheduler: scheduler)
             .removeDuplicates()
+            .eraseToAnyPublisher()
+
+        // retrySubject bypasses debounce + removeDuplicates so retry() re-runs the
+        // CURRENT query even when it is textually identical to the last one searched.
+        Publishers.Merge(debouncedQueries, retrySubject.eraseToAnyPublisher())
             .map { [searchSpecies] rawQuery -> AnyPublisher<SearchOutcome, Never> in
                 let trimmed = rawQuery.trimmingCharacters(in: .whitespacesAndNewlines)
+                // Re-checked here (in addition to the use case's own guard) so a
+                // sub-2-char query never reaches the network at all and maps to
+                // `.idle` rather than `.empty` — keeps searchCallCount at 0.
                 guard trimmed.count >= 2 else {
                     return Just(SearchOutcome.idle).eraseToAnyPublisher()
                 }
@@ -52,7 +61,7 @@ final class SearchPresenter {
     }
 
     func retry() {
-        querySubject.send(query)
+        retrySubject.send(query)
     }
 
     func select(species: Species) {

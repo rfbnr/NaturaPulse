@@ -71,6 +71,22 @@ final class SearchPresenterTests: XCTestCase {
         XCTAssertEqual(presenter.state, .loaded([Species.stub(id: 2)]))
     }
 
+    func testRetryReRunsSameQueryAfterFailure() {
+        let repo = FakeSpeciesRepository()
+        repo.searchResult = .failure(.server)
+        let presenter = makePresenter(repo)
+        presenter.query = "Robin"
+        waitMillis(120)
+        XCTAssertEqual(presenter.state, .failed(.server))
+        XCTAssertEqual(repo.searchCallCount, 1)
+
+        repo.searchResult = .success([Species.stub(id: 9)])
+        presenter.retry()
+        waitMillis(120)
+        XCTAssertEqual(repo.searchCallCount, 2)
+        XCTAssertEqual(presenter.state, .loaded([Species.stub(id: 9)]))
+    }
+
     func testSelectSpeciesAppendsRoute() {
         let presenter = makePresenter(FakeSpeciesRepository())
         presenter.select(species: Species.stub(id: 7))
