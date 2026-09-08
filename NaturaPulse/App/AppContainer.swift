@@ -21,7 +21,8 @@ final class AppContainer {
             AppAssembly(),
             ExploreAssembly(),
             SearchAssembly(),
-            SpeciesDetailAssembly()
+            SpeciesDetailAssembly(),
+            FieldGuideAssembly()
         ])
     }
 }
