@@ -19,7 +19,8 @@ final class AppContainer {
             NetworkAssembly(),
             DatabaseAssembly(),
             AppAssembly(),
-            ExploreAssembly()
+            ExploreAssembly(),
+            SearchAssembly()
         ])
     }
 }

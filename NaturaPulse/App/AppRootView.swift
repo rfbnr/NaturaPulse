@@ -35,7 +35,7 @@ struct AppRootView: View {
                     Label("Explore", systemImage: "leaf.fill")
                 }
 
-            SearchPlaceholderView()
+            SearchView(presenter: resolver.resolveRequired(SearchPresenter.self))
                 .tabItem {
                     Label("Search", systemImage: "magnifyingglass")
                 }
