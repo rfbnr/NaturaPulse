@@ -42,7 +42,7 @@ struct FieldGuideView: View {
                 action: nil
             )
         case .failed(let error):
-            ErrorStateView(message: error.userMessage, retry: { presenter.onAppear() })
+            ErrorStateView(message: error.userMessage, retry: presenter.retry)
         }
     }
 

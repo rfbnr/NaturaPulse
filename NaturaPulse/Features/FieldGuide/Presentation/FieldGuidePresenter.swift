@@ -27,6 +27,12 @@ final class FieldGuidePresenter {
 
     func onAppear() {
         guard case .idle = state else { return }
+        load()
+    }
+
+    func retry() { load() }
+
+    private func load() {
         state = .loading(previous: nil)
         savedCancellable = getSavedSpecies()
             .receive(on: DispatchQueue.main)

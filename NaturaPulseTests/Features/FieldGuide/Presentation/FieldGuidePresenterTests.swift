@@ -58,4 +58,17 @@ final class FieldGuidePresenterTests: XCTestCase {
         presenter.select(species: Species.stub(id: 5))
         XCTAssertEqual(presenter.path, [AppRoute.speciesDetail(Species.stub(id: 5))])
     }
+
+    func testRetryReloadsFromFailedState() {
+        let repo = FakeFieldGuideRepository()
+        repo.savedResult = .failure(.persistence)
+        let presenter = makePresenter(repo)
+        presenter.onAppear()
+        settle()
+        XCTAssertEqual(presenter.state, .failed(.persistence))
+        repo.savedResult = .success([Species.stub(id: 1)])
+        presenter.retry()
+        settle()
+        XCTAssertEqual(presenter.state, .loaded([Species.stub(id: 1)]))
+    }
 }
