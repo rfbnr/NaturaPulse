@@ -641,8 +641,8 @@
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/realm/realm-swift";
 			requirement = {
-				branch = community;
-				kind = branch;
+				kind = upToNextMajorVersion;
+				minimumVersion = 20.0.5;
 			};
 		};
 /* End XCRemoteSwiftPackageReference section */
@@ -668,15 +668,15 @@
 			package = 6DC0CB3C304F00BC006C7F97 /* XCRemoteSwiftPackageReference "Swinject" */;
 			productName = Swinject;
 		};
-		A3B760134D7E327DA7CE5654 /* Swinject */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 6DC0CB3C304F00BC006C7F97 /* XCRemoteSwiftPackageReference "Swinject" */;
-			productName = Swinject;
-		};
 		8F42F787DAE7CD7209CD2F36 /* RealmSwift */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = 6DC0CB45304F06AA006C7F97 /* XCRemoteSwiftPackageReference "realm-swift" */;
 			productName = RealmSwift;
+		};
+		A3B760134D7E327DA7CE5654 /* Swinject */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 6DC0CB3C304F00BC006C7F97 /* XCRemoteSwiftPackageReference "Swinject" */;
+			productName = Swinject;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};
