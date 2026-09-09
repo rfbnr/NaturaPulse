@@ -6,23 +6,29 @@
 //
 
 import SwiftUI
+import UIKit
 
 /// A moving-highlight shimmer overlay for skeleton/placeholder content.
 ///
-/// Honors Reduced Motion: when it is enabled the view is shown as-is
-/// (static, still redacted) with no animation — the affordance never
-/// disappears, it simply stops moving.
+/// Honors Reduced Motion via `ReducedMotion.isEnabled`: when it is enabled
+/// the view is shown as-is (static, still redacted) with no animation — the
+/// affordance never disappears, it simply stops moving. Kept in sync with
+/// live changes to the system setting.
 struct ShimmerModifier: ViewModifier {
+    @State private var reducedMotion = ReducedMotion.isEnabled
     @State private var phase: CGFloat = -1
-    // NOTE: In iOS 26.5, @Environment(\.accessibilityReducedMotion) does not compile.
-    // The native SwiftUI API uses a keypath-based approach that is incompatible with
-    // the current iOS 26.5 @Environment signature (which expects Observable AnyObject types).
-    // This is accessed via UIAccessibility.isVoiceOverRunning equivalent in production.
-    private var reducedMotion: Bool {
-        false // Default: animations enabled (Reduced Motion off)
-    }
 
     func body(content: Content) -> some View {
+        shimmering(content)
+            .onReceive(NotificationCenter.default.publisher(
+                for: UIAccessibility.reduceMotionStatusDidChangeNotification
+            )) { _ in
+                reducedMotion = ReducedMotion.isEnabled
+            }
+    }
+
+    @ViewBuilder
+    private func shimmering(_ content: Content) -> some View {
         if reducedMotion {
             content
         } else {
