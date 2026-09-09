@@ -12,8 +12,11 @@ import XCTest
 @MainActor
 final class SearchPresenterTests: XCTestCase {
     private func makePresenter(_ repo: FakeSpeciesRepository) -> SearchPresenter {
-        SearchPresenter(
+        let fieldGuide = FakeFieldGuideRepository()
+        return SearchPresenter(
             searchSpecies: SearchSpeciesUseCase(repository: repo),
+            toggleFavorite: ToggleFavoriteUseCase(repository: fieldGuide),
+            observeSavedIDs: ObserveSavedSpeciesIDsUseCase(repository: fieldGuide),
             debounceInterval: .milliseconds(20),
             scheduler: DispatchQueue.main
         )
@@ -126,5 +129,39 @@ final class SearchPresenterTests: XCTestCase {
         older.send(completion: .finished)
         waitMillis(40)
         XCTAssertEqual(presenter.state, .loaded([Species.stub(id: 2)]))
+    }
+
+    func testSavedIDsReflectStream() {
+        let fieldGuide = FakeFieldGuideRepository()
+        fieldGuide.savedResult = .success([Species.stub(id: 5)])
+        let presenter = SearchPresenter(
+            searchSpecies: SearchSpeciesUseCase(repository: FakeSpeciesRepository()),
+            toggleFavorite: ToggleFavoriteUseCase(repository: fieldGuide),
+            observeSavedIDs: ObserveSavedSpeciesIDsUseCase(repository: fieldGuide)
+        )
+
+        let done = expectation(description: "savedIDs")
+        DispatchQueue.main.async { done.fulfill() }
+        wait(for: [done], timeout: 2)
+
+        XCTAssertTrue(presenter.isSaved(5))
+        XCTAssertFalse(presenter.isSaved(6))
+    }
+
+    func testToggleFavoriteSavesUnsavedSpecies() {
+        let fieldGuide = FakeFieldGuideRepository()
+        fieldGuide.savedFlag = false
+        let presenter = SearchPresenter(
+            searchSpecies: SearchSpeciesUseCase(repository: FakeSpeciesRepository()),
+            toggleFavorite: ToggleFavoriteUseCase(repository: fieldGuide),
+            observeSavedIDs: ObserveSavedSpeciesIDsUseCase(repository: fieldGuide)
+        )
+
+        presenter.toggleFavorite(Species.stub(id: 5))
+        let done = expectation(description: "toggle")
+        DispatchQueue.main.async { done.fulfill() }
+        wait(for: [done], timeout: 2)
+
+        XCTAssertEqual(fieldGuide.savedSpeciesArgID, 5)
     }
 }

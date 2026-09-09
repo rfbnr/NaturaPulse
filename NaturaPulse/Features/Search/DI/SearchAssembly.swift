@@ -24,7 +24,11 @@ final class SearchAssembly: Assembly {
 
         container.register(SearchPresenter.self) { r in
             MainActor.assumeIsolated {
-                SearchPresenter(searchSpecies: r.resolveRequired(SearchSpeciesUseCase.self))
+                SearchPresenter(
+                    searchSpecies: r.resolveRequired(SearchSpeciesUseCase.self),
+                    toggleFavorite: r.resolveRequired(ToggleFavoriteUseCase.self),
+                    observeSavedIDs: r.resolveRequired(ObserveSavedSpeciesIDsUseCase.self)
+                )
             }
         }
         .inObjectScope(.transient)

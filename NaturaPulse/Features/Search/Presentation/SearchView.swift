@@ -65,7 +65,15 @@ struct SearchView: View {
                     Button {
                         presenter.select(species: item)
                     } label: {
-                        SpeciesCardView(species: item)
+                        SpeciesCardView(
+                            species: item,
+                            isSaved: presenter.isSaved(item.id),
+                            onToggleFavorite: {
+                                let wasSaved = presenter.isSaved(item.id)
+                                presenter.toggleFavorite(item)
+                                Haptics.favoriteToggle(wasSaved: wasSaved)
+                            }
+                        )
                     }
                     .buttonStyle(.plain)
                     .accessibilityLabel(item.commonName ?? item.scientificName)
@@ -121,14 +129,30 @@ private struct PreviewSpeciesRepository: SpeciesRepository {
     }
 }
 
+private struct PreviewFieldGuideRepository: FieldGuideRepository {
+    func savedSpecies() -> AnyPublisher<[Species], AppError> {
+        Just([]).setFailureType(to: AppError.self).eraseToAnyPublisher()
+    }
+    func isSaved(_ id: Species.ID) -> AnyPublisher<Bool, Never> { Just(false).eraseToAnyPublisher() }
+    func save(_ species: Species) -> AnyPublisher<Void, AppError> {
+        Just(()).setFailureType(to: AppError.self).eraseToAnyPublisher()
+    }
+    func remove(id: Species.ID) -> AnyPublisher<Void, AppError> {
+        Just(()).setFailureType(to: AppError.self).eraseToAnyPublisher()
+    }
+}
+
 private extension SearchPresenter {
     /// Builds a presenter for previews. Passing `query` seeds `query` after
     /// construction so the debounced search pipeline runs and the preview
     /// settles into `.loaded`/`.empty`/`.failed` shortly after appearing;
     /// omit it to preview the initial `.idle` state.
     static func preview(query: String = "", species: [Species], error: AppError? = nil) -> SearchPresenter {
+        let fieldGuide = PreviewFieldGuideRepository()
         let presenter = SearchPresenter(
-            searchSpecies: SearchSpeciesUseCase(repository: PreviewSpeciesRepository(species: species, error: error))
+            searchSpecies: SearchSpeciesUseCase(repository: PreviewSpeciesRepository(species: species, error: error)),
+            toggleFavorite: ToggleFavoriteUseCase(repository: fieldGuide),
+            observeSavedIDs: ObserveSavedSpeciesIDsUseCase(repository: fieldGuide)
         )
         if !query.isEmpty {
             presenter.query = query

@@ -16,19 +16,25 @@ final class SearchPresenter {
         didSet { querySubject.send(query) }
     }
     private(set) var state: LoadState<[Species]> = .idle
+    private(set) var savedIDs: Set<Species.ID> = []
     var path: [AppRoute] = []
 
     @ObservationIgnored private let searchSpecies: SearchSpeciesUseCase
+    @ObservationIgnored private let toggleFavoriteUseCase: ToggleFavoriteUseCase
     @ObservationIgnored private let querySubject = PassthroughSubject<String, Never>()
     @ObservationIgnored private let retrySubject = PassthroughSubject<String, Never>()
     @ObservationIgnored private var cancellables = Set<AnyCancellable>()
+    @ObservationIgnored private var toggleCancellable: AnyCancellable?
 
     init(
         searchSpecies: SearchSpeciesUseCase,
+        toggleFavorite: ToggleFavoriteUseCase,
+        observeSavedIDs: ObserveSavedSpeciesIDsUseCase,
         debounceInterval: DispatchQueue.SchedulerTimeType.Stride = .milliseconds(300),
         scheduler: DispatchQueue = .main
     ) {
         self.searchSpecies = searchSpecies
+        self.toggleFavoriteUseCase = toggleFavorite
 
         let debouncedQueries = querySubject
             .debounce(for: debounceInterval, scheduler: scheduler)
@@ -58,6 +64,11 @@ final class SearchPresenter {
                 self?.apply(outcome)
             }
             .store(in: &cancellables)
+
+        observeSavedIDs()
+            .receive(on: scheduler)
+            .sink { [weak self] ids in self?.savedIDs = ids }
+            .store(in: &cancellables)
     }
 
     func retry() {
@@ -66,6 +77,16 @@ final class SearchPresenter {
 
     func select(species: Species) {
         path.append(.speciesDetail(species))
+    }
+
+    func isSaved(_ id: Species.ID) -> Bool {
+        savedIDs.contains(id)
+    }
+
+    func toggleFavorite(_ species: Species) {
+        toggleCancellable = toggleFavoriteUseCase(species)
+            .receive(on: DispatchQueue.main)
+            .sink(receiveCompletion: { _ in }, receiveValue: { _ in })
     }
 
     private func apply(_ outcome: SearchOutcome) {
