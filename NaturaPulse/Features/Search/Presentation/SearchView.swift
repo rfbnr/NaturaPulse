@@ -77,6 +77,11 @@ struct SearchView: View {
                     }
                     .buttonStyle(PressableCardStyle())
                     .accessibilityLabel(item.commonName ?? item.scientificName)
+                    .accessibilityAction(named: presenter.isSaved(item.id) ? "Remove from Field Guide" : "Add to Field Guide") {
+                        let wasSaved = presenter.isSaved(item.id)
+                        presenter.toggleFavorite(item)
+                        Haptics.favoriteToggle(wasSaved: wasSaved)
+                    }
                 }
             }
             .padding(AppSpacing.md)

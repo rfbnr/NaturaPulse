@@ -63,6 +63,10 @@ struct FieldGuideView: View {
                 }
                 .buttonStyle(PressableCardStyle())
                 .accessibilityLabel(item.commonName ?? item.scientificName)
+                .accessibilityAction(named: "Remove from Field Guide") {
+                    presenter.remove(id: item.id)
+                    Haptics.impactLight()
+                }
                 .listRowSeparator(.hidden)
                 .listRowBackground(AppColor.background)
                 .swipeActions {
