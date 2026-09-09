@@ -7,8 +7,8 @@
 
 import SwiftUI
 
-/// A placeholder loading state made of redacted card shapes, shown while
-/// content is being fetched.
+/// A placeholder loading state made of shimmering skeleton cards that
+/// approximate the real species card silhouette.
 struct LoadingStateView: View {
     private let cardCount = 4
 
@@ -20,13 +20,25 @@ struct LoadingStateView: View {
         }
         .padding(AppSpacing.md)
         .redacted(reason: .placeholder)
+        .shimmer()
         .accessibilityLabel("Loading content")
     }
 
     private var placeholderCard: some View {
-        RoundedRectangle(cornerRadius: AppSpacing.sm)
-            .fill(AppColor.surface)
-            .frame(height: AppSpacing.xl * 2)
+        VStack(alignment: .leading, spacing: AppSpacing.sm) {
+            RoundedRectangle(cornerRadius: AppSpacing.sm)
+                .fill(AppColor.surface)
+                .frame(height: 140)
+            RoundedRectangle(cornerRadius: AppSpacing.xs)
+                .fill(AppColor.surface)
+                .frame(width: 180, height: 16)
+            RoundedRectangle(cornerRadius: AppSpacing.xs)
+                .fill(AppColor.surface)
+                .frame(width: 110, height: 12)
+        }
+        .padding(AppSpacing.md)
+        .background(AppColor.surface)
+        .clipShape(RoundedRectangle(cornerRadius: AppSpacing.md))
     }
 }
 
