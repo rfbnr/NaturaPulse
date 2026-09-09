@@ -33,13 +33,19 @@ struct WeatherContextCardView: View {
         metrics.joined(separator: " · ")
     }
 
+    private var temperatureSpoken: String {
+        guard let celsius = weather.temperatureCelsius else { return "" }
+        return "\(Int(celsius.rounded())) degrees Celsius"
+    }
+
     var body: some View {
         VStack(alignment: .leading, spacing: AppSpacing.xs) {
             if let temperatureText {
                 Text(temperatureText)
                     .font(AppTypography.title())
                     .foregroundStyle(AppColor.primaryText)
-                    .accessibilityLabel("Temperature \(temperatureText)")
+                    .accessibilityLabel("Temperature")
+                    .accessibilityValue(temperatureSpoken)
             }
 
             if !metrics.isEmpty {

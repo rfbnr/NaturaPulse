@@ -52,15 +52,23 @@ struct FieldGuideView: View {
                 Button {
                     presenter.select(species: item)
                 } label: {
-                    SpeciesCardView(species: item)
+                    SpeciesCardView(
+                        species: item,
+                        isSaved: true,
+                        onToggleFavorite: {
+                            presenter.remove(id: item.id)
+                            Haptics.impactLight()
+                        }
+                    )
                 }
-                .buttonStyle(.plain)
+                .buttonStyle(PressableCardStyle())
                 .accessibilityLabel(item.commonName ?? item.scientificName)
                 .listRowSeparator(.hidden)
                 .listRowBackground(AppColor.background)
                 .swipeActions {
                     Button(role: .destructive) {
                         presenter.remove(id: item.id)
+                        Haptics.impactLight()
                     } label: {
                         Label("Remove", systemImage: "trash")
                     }
