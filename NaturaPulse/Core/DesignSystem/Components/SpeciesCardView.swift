@@ -50,6 +50,7 @@ struct SpeciesCardView: View {
                     Text(recordsLabel)
                         .font(AppTypography.caption())
                         .foregroundStyle(AppColor.secondaryText)
+                        .contentTransition(.numericText())
                 }
                 .accessibilityElement(children: .combine)
 

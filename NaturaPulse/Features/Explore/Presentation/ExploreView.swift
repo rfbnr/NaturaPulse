@@ -122,6 +122,8 @@ struct ExploreView: View {
                     Text("\(species.count)")
                         .font(AppTypography.caption())
                         .foregroundStyle(AppColor.secondaryText)
+                        .contentTransition(.numericText())
+                        .animation(.default, value: species.count)
                         .accessibilityLabel("\(species.count) species found")
                 }
             }
@@ -181,7 +183,7 @@ struct ExploreView: View {
                         }
                     )
                 }
-                .buttonStyle(.plain)
+                .buttonStyle(PressableCardStyle())
                 .accessibilityLabel(item.commonName ?? item.scientificName)
             }
         }

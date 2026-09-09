@@ -41,9 +41,12 @@ struct SpeciesDetailView: View {
         .toolbar {
             ToolbarItem(placement: .topBarTrailing) {
                 Button {
+                    let wasSaved = presenter.isSaved
                     presenter.toggleFavorite()
+                    Haptics.favoriteToggle(wasSaved: wasSaved)
                 } label: {
                     Image(systemName: presenter.isSaved ? "heart.fill" : "heart")
+                        .symbolEffect(.bounce, value: presenter.isSaved)
                 }
                 .tint(presenter.isSaved ? AppColor.accent : nil)
                 .accessibilityLabel(presenter.isSaved ? "Remove from Field Guide" : "Add to Field Guide")

@@ -75,7 +75,7 @@ struct SearchView: View {
                             }
                         )
                     }
-                    .buttonStyle(.plain)
+                    .buttonStyle(PressableCardStyle())
                     .accessibilityLabel(item.commonName ?? item.scientificName)
                 }
             }
