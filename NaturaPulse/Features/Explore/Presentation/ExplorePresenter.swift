@@ -16,30 +16,52 @@ final class ExplorePresenter {
     private(set) var radius: Distance
     private(set) var speciesState: LoadState<[Species]> = .idle
     private(set) var weatherState: LoadState<WeatherContext> = .idle
+    private(set) var savedIDs: Set<Species.ID> = []
     var path: [AppRoute] = []
 
     @ObservationIgnored private let getNearbySpecies: GetNearbySpeciesUseCase
     @ObservationIgnored private let getWeatherContext: GetWeatherContextUseCase
     @ObservationIgnored private let searchLocation: SearchLocationUseCase
+    @ObservationIgnored private let toggleFavoriteUseCase: ToggleFavoriteUseCase
+    @ObservationIgnored private let observeSavedIDs: ObserveSavedSpeciesIDsUseCase
     @ObservationIgnored private var speciesCancellable: AnyCancellable?
     @ObservationIgnored private var weatherCancellable: AnyCancellable?
+    @ObservationIgnored private var savedIDsCancellable: AnyCancellable?
+    @ObservationIgnored private var toggleCancellable: AnyCancellable?
 
     init(
         getNearbySpecies: GetNearbySpeciesUseCase,
         getWeatherContext: GetWeatherContextUseCase,
         searchLocation: SearchLocationUseCase,
+        toggleFavorite: ToggleFavoriteUseCase,
+        observeSavedIDs: ObserveSavedSpeciesIDsUseCase,
         location: Location = .jakarta,
         radius: Distance = .km(10)
     ) {
         self.getNearbySpecies = getNearbySpecies
         self.getWeatherContext = getWeatherContext
         self.searchLocation = searchLocation
+        self.toggleFavoriteUseCase = toggleFavorite
+        self.observeSavedIDs = observeSavedIDs
         self.location = location
         self.radius = radius
     }
 
     func onAppear() {
         if case .idle = speciesState { load() }
+        savedIDsCancellable = observeSavedIDs()
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] ids in self?.savedIDs = ids }
+    }
+
+    func isSaved(_ id: Species.ID) -> Bool {
+        savedIDs.contains(id)
+    }
+
+    func toggleFavorite(_ species: Species) {
+        toggleCancellable = toggleFavoriteUseCase(species)
+            .receive(on: DispatchQueue.main)
+            .sink(receiveCompletion: { _ in }, receiveValue: { _ in })
     }
 
     func refresh() { load() }

@@ -23,14 +23,16 @@ final class ExplorePresenterTests: XCTestCase {
 
     private func makePresenter(
         species: Result<[Species], AppError>,
-        weather: Result<WeatherContext, AppError> = .success(defaultWeather)
+        weather: Result<WeatherContext, AppError> = .success(defaultWeather),
+        fieldGuide: FakeFieldGuideRepository = FakeFieldGuideRepository()
     ) -> ExplorePresenter {
-        makePresenterWithRepositories(species: species, weather: weather).presenter
+        makePresenterWithRepositories(species: species, weather: weather, fieldGuide: fieldGuide).presenter
     }
 
     private func makePresenterWithRepositories(
         species: Result<[Species], AppError>,
-        weather: Result<WeatherContext, AppError> = .success(defaultWeather)
+        weather: Result<WeatherContext, AppError> = .success(defaultWeather),
+        fieldGuide: FakeFieldGuideRepository = FakeFieldGuideRepository()
     ) -> (presenter: ExplorePresenter, speciesRepo: FakeSpeciesRepository) {
         let speciesRepo = FakeSpeciesRepository()
         speciesRepo.nearbyResult = species
@@ -40,7 +42,9 @@ final class ExplorePresenterTests: XCTestCase {
         let presenter = ExplorePresenter(
             getNearbySpecies: GetNearbySpeciesUseCase(repository: speciesRepo),
             getWeatherContext: GetWeatherContextUseCase(repository: weatherRepo),
-            searchLocation: SearchLocationUseCase(repository: locationRepo)
+            searchLocation: SearchLocationUseCase(repository: locationRepo),
+            toggleFavorite: ToggleFavoriteUseCase(repository: fieldGuide),
+            observeSavedIDs: ObserveSavedSpeciesIDsUseCase(repository: fieldGuide)
         )
         return (presenter, speciesRepo)
     }
@@ -140,5 +144,29 @@ final class ExplorePresenterTests: XCTestCase {
         waitForMainQueueFlush()
 
         XCTAssertEqual(presenter.speciesState, .loaded([Species.stub(id: 2)]))
+    }
+
+    func testSavedIDsReflectStreamAndIsSaved() {
+        let fieldGuide = FakeFieldGuideRepository()
+        fieldGuide.savedResult = .success([Species.stub(id: 1)])
+        let presenter = makePresenter(species: .success([Species.stub(id: 1)]), fieldGuide: fieldGuide)
+
+        presenter.onAppear()
+        waitForMainQueueFlush()
+
+        XCTAssertEqual(presenter.savedIDs, [1])
+        XCTAssertTrue(presenter.isSaved(1))
+        XCTAssertFalse(presenter.isSaved(2))
+    }
+
+    func testToggleFavoriteSavesUnsavedSpecies() {
+        let fieldGuide = FakeFieldGuideRepository()
+        fieldGuide.savedFlag = false
+        let presenter = makePresenter(species: .success([Species.stub(id: 1)]), fieldGuide: fieldGuide)
+
+        presenter.toggleFavorite(Species.stub(id: 1))
+        waitForMainQueueFlush()
+
+        XCTAssertEqual(fieldGuide.savedSpeciesArgID, 1)
     }
 }

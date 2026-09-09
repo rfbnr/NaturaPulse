@@ -58,7 +58,9 @@ final class ExploreAssembly: Assembly {
                 ExplorePresenter(
                     getNearbySpecies: r.resolveRequired(GetNearbySpeciesUseCase.self),
                     getWeatherContext: r.resolveRequired(GetWeatherContextUseCase.self),
-                    searchLocation: r.resolveRequired(SearchLocationUseCase.self)
+                    searchLocation: r.resolveRequired(SearchLocationUseCase.self),
+                    toggleFavorite: r.resolveRequired(ToggleFavoriteUseCase.self),
+                    observeSavedIDs: r.resolveRequired(ObserveSavedSpeciesIDsUseCase.self)
                 )
             }
         }
