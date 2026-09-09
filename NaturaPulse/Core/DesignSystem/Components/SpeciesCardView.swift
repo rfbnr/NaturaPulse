@@ -8,10 +8,12 @@
 import SwiftUI
 
 /// A card summarizing one nearby species: image, name, and local record
-/// count. The favorite (♡) button is a visual affordance only in this
-/// increment — it is disabled and does not persist anything.
+/// count. The favorite (♡) button persists via `onToggleFavorite` when the
+/// caller wires it up; otherwise it stays disabled.
 struct SpeciesCardView: View {
     let species: Species
+    var isSaved: Bool = false
+    var onToggleFavorite: (() -> Void)?
 
     private var displayName: String {
         species.commonName ?? species.scientificName
@@ -63,16 +65,20 @@ struct SpeciesCardView: View {
 
     private var favoriteButton: some View {
         Button {
-            // Visual affordance only this increment; favoriting is not
-            // implemented yet and must not persist anything.
+            onToggleFavorite?()
         } label: {
-            Image(systemName: "heart")
+            Image(systemName: isSaved ? "heart.fill" : "heart")
                 .font(.system(size: 18))
-                .foregroundStyle(AppColor.secondaryText)
+                .foregroundStyle(isSaved ? AppColor.accent : AppColor.secondaryText)
+                .symbolEffect(.bounce, value: isSaved)
         }
-        .disabled(true)
-        .accessibilityLabel("Add \(displayName) to favorites")
-        .accessibilityHint("Not available yet")
+        .disabled(onToggleFavorite == nil)
+        .accessibilityLabel(
+            isSaved
+                ? "Remove \(displayName) from Field Guide"
+                : "Add \(displayName) to Field Guide"
+        )
+        .accessibilityHint(onToggleFavorite == nil ? "Not available yet" : "")
     }
 }
 
