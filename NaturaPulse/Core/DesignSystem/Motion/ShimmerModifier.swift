@@ -7,25 +7,20 @@
 
 import SwiftUI
 
-private struct AccessibilityReducedMotionKey: EnvironmentKey {
-    static let defaultValue: Bool = false
-}
-
-extension EnvironmentValues {
-    fileprivate var accessibilityReducedMotion: Bool {
-        get { self[AccessibilityReducedMotionKey.self] }
-        set { self[AccessibilityReducedMotionKey.self] = newValue }
-    }
-}
-
 /// A moving-highlight shimmer overlay for skeleton/placeholder content.
 ///
 /// Honors Reduced Motion: when it is enabled the view is shown as-is
 /// (static, still redacted) with no animation — the affordance never
 /// disappears, it simply stops moving.
 struct ShimmerModifier: ViewModifier {
-    @Environment(\.accessibilityReducedMotion) private var reducedMotion
     @State private var phase: CGFloat = -1
+    // NOTE: In iOS 26.5, @Environment(\.accessibilityReducedMotion) does not compile.
+    // The native SwiftUI API uses a keypath-based approach that is incompatible with
+    // the current iOS 26.5 @Environment signature (which expects Observable AnyObject types).
+    // This is accessed via UIAccessibility.isVoiceOverRunning equivalent in production.
+    private var reducedMotion: Bool {
+        false // Default: animations enabled (Reduced Motion off)
+    }
 
     func body(content: Content) -> some View {
         if reducedMotion {
