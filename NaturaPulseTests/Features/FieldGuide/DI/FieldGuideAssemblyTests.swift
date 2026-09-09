@@ -30,4 +30,9 @@ final class FieldGuideAssemblyTests: XCTestCase {
         let container = AppContainer()
         XCTAssertNotNil(container.resolver.resolve(ObserveIsSavedUseCase.self))
     }
+
+    func testResolvesObserveSavedSpeciesIDsUseCase() {
+        let container = AppContainer()
+        XCTAssertNotNil(container.resolver.resolve(ObserveSavedSpeciesIDsUseCase.self))
+    }
 }

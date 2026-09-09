@@ -38,6 +38,10 @@ final class FieldGuideAssembly: Assembly {
             ObserveIsSavedUseCase(repository: r.resolveRequired(FieldGuideRepository.self))
         }
 
+        container.register(ObserveSavedSpeciesIDsUseCase.self) { r in
+            ObserveSavedSpeciesIDsUseCase(repository: r.resolveRequired(FieldGuideRepository.self))
+        }
+
         container.register(FieldGuidePresenter.self) { r in
             MainActor.assumeIsolated {
                 FieldGuidePresenter(
