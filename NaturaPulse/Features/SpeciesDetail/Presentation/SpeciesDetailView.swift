@@ -34,6 +34,7 @@ struct SpeciesDetailView: View {
         .background(AppColor.background)
         .navigationTitle(displayName)
         .onAppear { presenter.onAppear() }
+        .toolbarVisibility(.hidden, for: .tabBar)
         .toolbar {
             ToolbarItem(placement: .topBarTrailing) {
                 Button {

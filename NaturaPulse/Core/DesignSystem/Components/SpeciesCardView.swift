@@ -20,11 +20,6 @@ struct SpeciesCardView: View {
         species.commonName != nil
     }
 
-    private var recordsLabel: String {
-        let count = species.localObservationCount
-        return count == 1 ? "1 local record" : "\(count) local records"
-    }
-
     var body: some View {
         VStack(alignment: .leading, spacing: AppSpacing.sm) {
             SpeciesImageView(url: species.image?.url)
@@ -43,11 +38,6 @@ struct SpeciesCardView: View {
                             .italic()
                             .foregroundStyle(AppColor.secondaryText)
                     }
-
-                    Text(recordsLabel)
-                        .font(AppTypography.caption())
-                        .foregroundStyle(AppColor.secondaryText)
-                        .contentTransition(.numericText())
                 }
                 .accessibilityElement(children: .combine)
 
