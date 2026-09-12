@@ -59,7 +59,7 @@ enum SpeciesMapper {
         guard let media = dto.media else { return nil }
         
         let candidates = media.compactMap { item -> (item: GBIFMediaDTO, url: URL)? in
-            guard let identifier = item.identifier, let url = URL(string: identifier) else { return nil }
+            guard let identifier = item.identifier, let url = httpsUpgraded(identifier) else { return nil }
             return (item, url)
         }
         
@@ -72,6 +72,21 @@ enum SpeciesMapper {
             license: match.item.license,
             sourceURL: match.item.references.flatMap(URL.init(string:))
         )
+    }
+
+    /// GBIF media identifiers are sometimes served over cleartext `http`,
+    /// which App Transport Security blocks (Kingfisher then shows the
+    /// placeholder). Upgrade the scheme to `https` best-effort: hosts that
+    /// support TLS now load; `http`-only hosts fail the same way they would
+    /// have under ATS, so this never regresses the visual result.
+    private static func httpsUpgraded(_ identifier: String) -> URL? {
+        guard let url = URL(string: identifier) else { return nil }
+        guard url.scheme?.lowercased() == "http",
+              var components = URLComponents(url: url, resolvingAgainstBaseURL: false) else {
+            return url
+        }
+        components.scheme = "https"
+        return components.url ?? url
     }
 
     private static func source(

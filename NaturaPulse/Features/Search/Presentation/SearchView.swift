@@ -40,7 +40,9 @@ struct SearchView: View {
                 resultsList(previous)
                     .opacity(0.6)
             } else {
-                LoadingStateView()
+                ScrollView {
+                    LoadingStateView()
+                }
             }
         case .loaded(let species):
             resultsList(species)

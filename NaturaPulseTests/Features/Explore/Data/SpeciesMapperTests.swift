@@ -212,6 +212,28 @@ final class SpeciesMapperTests: XCTestCase {
         XCTAssertNil(species.first?.image)
     }
 
+    func testUpgradesCleartextHTTPImageURLToHTTPS() {
+        let occurrence = occWithMedia(
+            key: 1,
+            speciesKey: 100,
+            media: [
+                media(type: "StillImage", identifier: "http://biodiversity.bt/img.jpg")
+        ])
+        let species = SpeciesMapper.map([occurrence])
+        XCTAssertEqual(species.first?.image?.url.absoluteString, "https://biodiversity.bt/img.jpg")
+    }
+
+    func testLeavesHTTPSImageURLUnchanged() {
+        let occurrence = occWithMedia(
+            key: 1,
+            speciesKey: 100,
+            media: [
+                media(type: "StillImage", identifier: "https://biodiversity.bt/img.jpg")
+        ])
+        let species = SpeciesMapper.map([occurrence])
+        XCTAssertEqual(species.first?.image?.url.absoluteString, "https://biodiversity.bt/img.jpg")
+    }
+
     func testMapsCoordinateFromRepresentativeOccurrence() {
         let occ = GBIFOccurrenceDTO(
             key: 1,
