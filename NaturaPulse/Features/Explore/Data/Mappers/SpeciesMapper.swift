@@ -74,11 +74,6 @@ enum SpeciesMapper {
         )
     }
 
-    /// GBIF media identifiers are sometimes served over cleartext `http`,
-    /// which App Transport Security blocks (Kingfisher then shows the
-    /// placeholder). Upgrade the scheme to `https` best-effort: hosts that
-    /// support TLS now load; `http`-only hosts fail the same way they would
-    /// have under ATS, so this never regresses the visual result.
     private static func httpsUpgraded(_ identifier: String) -> URL? {
         guard let url = URL(string: identifier) else { return nil }
         guard url.scheme?.lowercased() == "http",
