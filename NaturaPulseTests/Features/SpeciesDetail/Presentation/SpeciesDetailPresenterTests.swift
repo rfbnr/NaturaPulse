@@ -13,8 +13,18 @@ import XCTest
 final class SpeciesDetailPresenterTests: XCTestCase {
     private func makePresenter(
         species: Species,
-        profile: Result<SpeciesProfile, AppError> = .success(SpeciesProfile(summary: "About.", summarySource: "src")),
-        weather: Result<WeatherContext, AppError> = .success(WeatherContext(temperatureCelsius: 28, relativeHumidity: 60, precipitation: 0, weatherCode: 0, pm25: 20, capturedAt: Date())),
+        profile: Result<SpeciesProfile, AppError> = .success(
+            SpeciesProfile(summary: "About.", summarySource: "src")
+        ),
+        weather: Result<WeatherContext, AppError> = .success(
+            WeatherContext(
+                temperatureCelsius: 28,
+                relativeHumidity: 60,
+                precipitation: 0,
+                weatherCode: 0,
+                pm25: 20, capturedAt: Date()
+            )
+        ),
         fieldGuideRepo: FakeFieldGuideRepository = FakeFieldGuideRepository()
     ) -> SpeciesDetailPresenter {
         let speciesRepo = FakeSpeciesRepository()
@@ -42,10 +52,17 @@ final class SpeciesDetailPresenterTests: XCTestCase {
     }
 
     func testOnAppearLoadsProfile() {
-        let presenter = makePresenter(species: Species.stub(id: 1, coordinate: Coordinate(latitude: -6.2, longitude: 106.8)))
+        let presenter = makePresenter(
+            species: Species.stub(
+                id: 1,
+                coordinate: Coordinate(latitude: -6.2, longitude: 106.8)
+            )
+        )
         presenter.onAppear()
         settle()
-        XCTAssertEqual(presenter.profileState, .loaded(SpeciesProfile(summary: "About.", summarySource: "src")))
+        XCTAssertEqual(
+            presenter.profileState, .loaded(SpeciesProfile(summary: "About.", summarySource: "src"))
+        )
         if case .loaded = presenter.weatherState {} else { XCTFail("expected weather loaded") }
     }
 
@@ -67,10 +84,21 @@ final class SpeciesDetailPresenterTests: XCTestCase {
         let speciesRepo = FakeSpeciesRepository()
         speciesRepo.profileResult = .failure(.server)
         let weatherRepo = FakeWeatherRepository()
-        weatherRepo.result = .success(WeatherContext(temperatureCelsius: 28, relativeHumidity: 60, precipitation: 0, weatherCode: 0, pm25: 20, capturedAt: Date()))
+        weatherRepo.result = .success(
+            WeatherContext(
+                temperatureCelsius: 28,
+                relativeHumidity: 60,
+                precipitation: 0,
+                weatherCode: 0,
+                pm25: 20, capturedAt: Date()
+            )
+        )
         let fieldGuideRepo = FakeFieldGuideRepository()
         let presenter = SpeciesDetailPresenter(
-            species: Species.stub(id: 1, coordinate: Coordinate(latitude: -6.2, longitude: 106.8)),
+            species: Species.stub(
+                id: 1,
+                coordinate: Coordinate(latitude: -6.2, longitude: 106.8)
+            ),
             getSpeciesProfile: GetSpeciesProfileUseCase(repository: speciesRepo),
             getWeatherContext: GetWeatherContextUseCase(repository: weatherRepo),
             toggleFavorite: ToggleFavoriteUseCase(repository: fieldGuideRepo),
@@ -82,18 +110,20 @@ final class SpeciesDetailPresenterTests: XCTestCase {
         if case .loaded = presenter.weatherState {} else { XCTFail("expected weather loaded") }
         XCTAssertEqual(weatherRepo.contextCallCount, 1)
 
-        // Profile now succeeds; retry must re-run profile only, NOT weather.
         speciesRepo.profileResult = .success(SpeciesProfile(summary: "About.", summarySource: "src"))
         presenter.retry()
         settle()
         XCTAssertEqual(presenter.profileState, .loaded(SpeciesProfile(summary: "About.", summarySource: "src")))
-        XCTAssertEqual(weatherRepo.contextCallCount, 1) // weather was NOT re-run
+        XCTAssertEqual(weatherRepo.contextCallCount, 1)
     }
 
     func testToggleFavoriteCallsUseCase() {
         let fieldGuideRepo = FakeFieldGuideRepository()
         fieldGuideRepo.savedFlag = false
-        let presenter = makePresenter(species: Species.stub(id: 1), fieldGuideRepo: fieldGuideRepo)
+        let presenter = makePresenter(
+            species: Species.stub(id: 1),
+            fieldGuideRepo: fieldGuideRepo
+        )
 
         presenter.toggleFavorite()
         settle()
@@ -105,7 +135,10 @@ final class SpeciesDetailPresenterTests: XCTestCase {
     func testIsSavedReflectsObservedStream() {
         let fieldGuideRepo = FakeFieldGuideRepository()
         fieldGuideRepo.savedFlag = true
-        let presenter = makePresenter(species: Species.stub(id: 1), fieldGuideRepo: fieldGuideRepo)
+        let presenter = makePresenter(
+            species: Species.stub(id: 1),
+            fieldGuideRepo: fieldGuideRepo
+        )
 
         presenter.onAppear()
         settle()

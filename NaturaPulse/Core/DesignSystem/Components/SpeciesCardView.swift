@@ -7,9 +7,6 @@
 
 import SwiftUI
 
-/// A card summarizing one nearby species: image, name, and local record
-/// count. The favorite (♡) button persists via `onToggleFavorite` when the
-/// caller wires it up; otherwise it stays disabled.
 struct SpeciesCardView: View {
     let species: Species
     var isSaved: Bool = false

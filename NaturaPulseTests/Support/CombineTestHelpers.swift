@@ -10,7 +10,6 @@ import Combine
 @testable import NaturaPulse
 
 extension XCTestCase {
-    /// Awaits a single value (or failure) from a publisher whose Failure is AppError-like.
     func awaitPublisher<P: Publisher>(
         _ publisher: P,
         timeout: TimeInterval = 2,

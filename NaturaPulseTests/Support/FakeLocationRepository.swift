@@ -11,7 +11,9 @@ import Combine
 final class FakeLocationRepository: LocationRepository {
     var result: Result<[Location], AppError> = .success([])
 
-    func searchLocations(query: String) -> AnyPublisher<[Location], AppError> {
+    func searchLocations(
+        query: String
+    ) -> AnyPublisher<[Location], AppError> {
         result.publisher.eraseToAnyPublisher()
     }
 }

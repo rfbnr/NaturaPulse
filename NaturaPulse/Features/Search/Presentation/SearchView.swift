@@ -9,8 +9,6 @@ import Combine
 import Swinject
 import SwiftUI
 
-/// The Search tab: a search field over species by name, with results
-/// navigating to the species detail screen.
 struct SearchView: View {
     @State var presenter: SearchPresenter
     @Environment(\.resolver) private var resolver
@@ -100,8 +98,6 @@ struct SearchView: View {
     }
 }
 
-/// Composition-root helper for resolving a required dependency from the
-/// environment's resolver without a force-unwrap.
 private extension Resolver {
     func resolveRequired<Service>(_ serviceType: Service.Type) -> Service {
         guard let resolved = resolve(serviceType) else {
@@ -112,25 +108,33 @@ private extension Resolver {
 }
 
 #if DEBUG
-/// In-memory fake used only to drive Xcode previews. Not shipped production
-/// code and never wired into the app's dependency graph.
 private struct PreviewSpeciesRepository: SpeciesRepository {
     let species: [Species]
     var error: AppError?
 
-    func getNearbySpecies(at location: Location, radius: Distance) -> AnyPublisher<[Species], AppError> {
+    func getNearbySpecies(
+        at location: Location,
+        radius: Distance
+    ) -> AnyPublisher<[Species], AppError> {
         Just(species).setFailureType(to: AppError.self).eraseToAnyPublisher()
     }
 
-    func searchSpecies(query: String) -> AnyPublisher<[Species], AppError> {
+    func searchSpecies(
+        query: String
+    ) -> AnyPublisher<[Species], AppError> {
         if let error {
             return Fail(error: error).eraseToAnyPublisher()
         }
+        
         return Just(species).setFailureType(to: AppError.self).eraseToAnyPublisher()
     }
 
-    func getSpeciesProfile(id: Species.ID) -> AnyPublisher<SpeciesProfile, AppError> {
-        Just(SpeciesProfile(summary: nil, summarySource: nil)).setFailureType(to: AppError.self).eraseToAnyPublisher()
+    func getSpeciesProfile(
+        id: Species.ID
+    ) -> AnyPublisher<SpeciesProfile, AppError> {
+        Just(
+            SpeciesProfile(summary: nil, summarySource: nil)
+        ).setFailureType(to: AppError.self).eraseToAnyPublisher()
     }
 }
 
@@ -138,7 +142,9 @@ private struct PreviewFieldGuideRepository: FieldGuideRepository {
     func savedSpecies() -> AnyPublisher<[Species], AppError> {
         Just([]).setFailureType(to: AppError.self).eraseToAnyPublisher()
     }
-    func isSaved(_ id: Species.ID) -> AnyPublisher<Bool, Never> { Just(false).eraseToAnyPublisher() }
+    func isSaved(
+        _ id: Species.ID
+    ) -> AnyPublisher<Bool, Never> { Just(false).eraseToAnyPublisher() }
     func save(_ species: Species) -> AnyPublisher<Void, AppError> {
         Just(()).setFailureType(to: AppError.self).eraseToAnyPublisher()
     }
@@ -148,20 +154,24 @@ private struct PreviewFieldGuideRepository: FieldGuideRepository {
 }
 
 private extension SearchPresenter {
-    /// Builds a presenter for previews. Passing `query` seeds `query` after
-    /// construction so the debounced search pipeline runs and the preview
-    /// settles into `.loaded`/`.empty`/`.failed` shortly after appearing;
-    /// omit it to preview the initial `.idle` state.
-    static func preview(query: String = "", species: [Species], error: AppError? = nil) -> SearchPresenter {
+    static func preview(
+        query: String = "",
+        species: [Species],
+        error: AppError? = nil
+    ) -> SearchPresenter {
         let fieldGuide = PreviewFieldGuideRepository()
         let presenter = SearchPresenter(
-            searchSpecies: SearchSpeciesUseCase(repository: PreviewSpeciesRepository(species: species, error: error)),
+            searchSpecies: SearchSpeciesUseCase(
+                repository: PreviewSpeciesRepository(species: species, error: error)
+            ),
             toggleFavorite: ToggleFavoriteUseCase(repository: fieldGuide),
             observeSavedIDs: ObserveSavedSpeciesIDsUseCase(repository: fieldGuide)
         )
+        
         if !query.isEmpty {
             presenter.query = query
         }
+        
         return presenter
     }
 }
@@ -206,14 +216,20 @@ private let previewSpecies: [Species] = [
 }
 
 #Preview("Loaded") {
-    SearchView(presenter: .preview(query: "myna", species: previewSpecies))
+    SearchView(
+        presenter: .preview(query: "myna", species: previewSpecies)
+    )
 }
 
 #Preview("Empty") {
-    SearchView(presenter: .preview(query: "zzz", species: []))
+    SearchView(
+        presenter: .preview(query: "zzz", species: [])
+    )
 }
 
 #Preview("Failed") {
-    SearchView(presenter: .preview(query: "myna", species: [], error: .networkUnavailable))
+    SearchView(
+        presenter: .preview(query: "myna", species: [], error: .networkUnavailable)
+    )
 }
 #endif

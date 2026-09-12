@@ -8,7 +8,11 @@
 import Foundation
 
 enum WeatherContextMapper {
-    static func map(forecast: OpenMeteoForecastDTO, airQuality: OpenMeteoAirQualityDTO?, capturedAt: Date) -> WeatherContext {
+    static func map(
+        forecast: OpenMeteoForecastDTO,
+        airQuality: OpenMeteoAirQualityDTO?,
+        capturedAt: Date
+    ) -> WeatherContext {
         WeatherContext(
             temperatureCelsius: forecast.current.temperature2m,
             relativeHumidity: forecast.current.relativeHumidity2m.map(Double.init),

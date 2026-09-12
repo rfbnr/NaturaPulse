@@ -17,15 +17,31 @@ final class SavedSpeciesMapperTests: XCTestCase {
             sourceURL: URL(string: "https://ref/1")
         )
         let species = Species(
-            id: 100, scientificName: "Spilopelia chinensis", commonName: "Spotted Dove",
-            kingdom: "Animalia", phylum: "Chordata", className: "Aves", order: "Columbiformes",
-            family: "Columbidae", genus: "Spilopelia", description: "About.", image: image,
-            localObservationCount: 5, lastObservedAt: Date(timeIntervalSince1970: 1000),
-            source: ObservationSource(datasetName: "ds", publisher: "pub", referenceURL: URL(string: "https://ref/2")),
+            id: 100,
+            scientificName: "Spilopelia chinensis",
+            commonName: "Spotted Dove",
+            kingdom: "Animalia",
+            phylum: "Chordata",
+            className: "Aves",
+            order: "Columbiformes",
+            family: "Columbidae",
+            genus: "Spilopelia",
+            description: "About.",
+            image: image,
+            localObservationCount: 5,
+            lastObservedAt: Date(timeIntervalSince1970: 1000),
+            source: ObservationSource(
+                datasetName: "ds",
+                publisher: "pub",
+                referenceURL: URL(string: "https://ref/2")
+            ),
             coordinate: Coordinate(latitude: -6.2, longitude: 106.8)
         )
 
-        let object = SavedSpeciesMapper.object(from: species, savedAt: Date(timeIntervalSince1970: 2000))
+        let object = SavedSpeciesMapper.object(
+            from: species,
+            savedAt: Date(timeIntervalSince1970: 2000)
+        )
         let restored = SavedSpeciesMapper.domain(from: object)
 
         XCTAssertEqual(restored, species)

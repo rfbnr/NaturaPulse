@@ -9,9 +9,6 @@ import Foundation
 import RealmSwift
 @testable import NaturaPulse
 
-/// A RealmProvider backed by a per-instance in-memory Realm. Holds one strong
-/// Realm reference so the in-memory store survives across calls, and returns it
-/// (all test access is on the main thread).
 final class InMemoryRealmProvider: RealmProvider {
     private let backing: Realm
 

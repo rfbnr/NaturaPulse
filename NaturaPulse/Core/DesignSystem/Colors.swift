@@ -7,8 +7,6 @@
 
 import SwiftUI
 
-/// Semantic color tokens used across the app. Colors adapt to light/dark
-/// mode via system colors except `accent`, which is a fixed brand green.
 enum AppColor {
     static let background = Color(.systemBackground)
     static let surface = Color(.secondarySystemBackground)

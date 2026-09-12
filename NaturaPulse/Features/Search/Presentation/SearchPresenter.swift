@@ -41,17 +41,14 @@ final class SearchPresenter {
             .removeDuplicates()
             .eraseToAnyPublisher()
 
-        // retrySubject bypasses debounce + removeDuplicates so retry() re-runs the
-        // CURRENT query even when it is textually identical to the last one searched.
         Publishers.Merge(debouncedQueries, retrySubject.eraseToAnyPublisher())
             .map { [searchSpecies] rawQuery -> AnyPublisher<SearchOutcome, Never> in
                 let trimmed = rawQuery.trimmingCharacters(in: .whitespacesAndNewlines)
-                // Re-checked here (in addition to the use case's own guard) so a
-                // sub-2-char query never reaches the network at all and maps to
-                // `.idle` rather than `.empty` — keeps searchCallCount at 0.
+                
                 guard trimmed.count >= 2 else {
                     return Just(SearchOutcome.idle).eraseToAnyPublisher()
                 }
+                
                 return searchSpecies(query: trimmed)
                     .map { SearchOutcome.result($0) }
                     .catch { Just(SearchOutcome.failure($0)) }

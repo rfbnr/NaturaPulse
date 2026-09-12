@@ -9,9 +9,21 @@ import Combine
 import Foundation
 
 protocol GBIFRemoteDataSource {
-    func nearby(latitude: Double, longitude: Double, radiusKm: Int, limit: Int) -> AnyPublisher<GBIFOccurrenceResponseDTO, NetworkError>
-    func search(query: String, limit: Int) -> AnyPublisher<GBIFOccurrenceResponseDTO, NetworkError>
-    func speciesDescriptions(speciesKey: Int) -> AnyPublisher<GBIFDescriptionsResponseDTO, NetworkError>
+    func nearby(
+        latitude: Double,
+        longitude: Double,
+        radiusKm: Int,
+        limit: Int
+    ) -> AnyPublisher<GBIFOccurrenceResponseDTO, NetworkError>
+    
+    func search(
+        query: String,
+        limit: Int
+    ) -> AnyPublisher<GBIFOccurrenceResponseDTO, NetworkError>
+    
+    func speciesDescriptions(
+        speciesKey: Int
+    ) -> AnyPublisher<GBIFDescriptionsResponseDTO, NetworkError>
 }
 
 final class DefaultGBIFRemoteDataSource: GBIFRemoteDataSource {
@@ -26,7 +38,12 @@ final class DefaultGBIFRemoteDataSource: GBIFRemoteDataSource {
         baseURL ?? URL(fileURLWithPath: "/")
     }
 
-    func nearby(latitude: Double, longitude: Double, radiusKm: Int, limit: Int) -> AnyPublisher<GBIFOccurrenceResponseDTO, NetworkError> {
+    func nearby(
+        latitude: Double,
+        longitude: Double,
+        radiusKm: Int,
+        limit: Int
+    ) -> AnyPublisher<GBIFOccurrenceResponseDTO, NetworkError> {
         let endpoint = Endpoint(
             baseURL: base(),
             path: "/v1/occurrence/search",
@@ -36,10 +53,14 @@ final class DefaultGBIFRemoteDataSource: GBIFRemoteDataSource {
                 URLQueryItem(name: "limit", value: "\(limit)")
             ]
         )
+        
         return apiClient.request(endpoint)
     }
 
-    func search(query: String, limit: Int) -> AnyPublisher<GBIFOccurrenceResponseDTO, NetworkError> {
+    func search(
+        query: String,
+        limit: Int
+    ) -> AnyPublisher<GBIFOccurrenceResponseDTO, NetworkError> {
         let endpoint = Endpoint(
             baseURL: base(),
             path: "/v1/occurrence/search",
@@ -49,15 +70,19 @@ final class DefaultGBIFRemoteDataSource: GBIFRemoteDataSource {
                 URLQueryItem(name: "limit", value: "\(limit)")
             ]
         )
+        
         return apiClient.request(endpoint)
     }
 
-    func speciesDescriptions(speciesKey: Int) -> AnyPublisher<GBIFDescriptionsResponseDTO, NetworkError> {
+    func speciesDescriptions(
+        speciesKey: Int
+    ) -> AnyPublisher<GBIFDescriptionsResponseDTO, NetworkError> {
         let endpoint = Endpoint(
             baseURL: base(),
             path: "/v1/species/\(speciesKey)/descriptions",
             queryItems: [URLQueryItem(name: "limit", value: "5")]
         )
+        
         return apiClient.request(endpoint)
     }
 }

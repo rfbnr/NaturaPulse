@@ -14,21 +14,18 @@ final class FakeSpeciesRepository: SpeciesRepository {
     var profileID: Int?
     var profileResult: Result<SpeciesProfile, AppError> = .success(SpeciesProfile(summary: nil, summarySource: nil))
 
-    /// When set, returned in place of `nearbyResult.publisher` — lets a test
-    /// control the timing of a `getNearbySpecies` call (e.g. with a
-    /// `PassthroughSubject`) instead of resolving synchronously.
     var nearbyPublisher: AnyPublisher<[Species], AppError>?
     private(set) var nearbyCallCount = 0
 
     var searchQuery: String?
     var searchCallCount = 0
 
-    /// When set, returned in place of `searchResult.publisher` — lets a test
-    /// control the timing/identity of a `searchSpecies` call per query (e.g.
-    /// with per-query `PassthroughSubject`s) instead of resolving synchronously.
     var searchHandler: ((String) -> AnyPublisher<[Species], AppError>)?
 
-    func getNearbySpecies(at location: Location, radius: Distance) -> AnyPublisher<[Species], AppError> {
+    func getNearbySpecies(
+        at location: Location,
+        radius: Distance
+    ) -> AnyPublisher<[Species], AppError> {
         nearbyCallCount += 1
         if let nearbyPublisher {
             return nearbyPublisher

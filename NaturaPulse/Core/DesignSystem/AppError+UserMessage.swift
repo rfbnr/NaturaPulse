@@ -5,8 +5,6 @@
 //  Created by Ridwan Febnur AR on 07/09/26.
 //
 
-/// A human-readable, non-technical message for surfacing an `AppError`
-/// in the UI (e.g. `ErrorStateView`).
 extension AppError {
     var userMessage: String {
         switch self {

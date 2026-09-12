@@ -43,6 +43,7 @@ final class SpeciesDetailPresenter {
     func onAppear() {
         if case .idle = profileState { loadProfile() }
         if case .idle = weatherState { loadWeather() }
+        
         isSavedCancellable = observeIsSaved(id: species.id)
             .receive(on: DispatchQueue.main)
             .sink { [weak self] saved in
@@ -77,6 +78,7 @@ final class SpeciesDetailPresenter {
             weatherState = .idle
             return
         }
+        
         let location = Location(
             latitude: coordinate.latitude,
             longitude: coordinate.longitude,
@@ -84,6 +86,7 @@ final class SpeciesDetailPresenter {
             country: nil,
             administrativeArea: nil
         )
+        
         weatherState = .loading(previous: nil)
         weatherCancellable = getWeatherContext(location: location)
             .receive(on: DispatchQueue.main)

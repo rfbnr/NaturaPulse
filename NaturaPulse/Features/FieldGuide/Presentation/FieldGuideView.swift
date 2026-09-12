@@ -9,8 +9,6 @@ import Combine
 import Swinject
 import SwiftUI
 
-/// The Field Guide tab: species the user has saved, with swipe-to-delete
-/// and navigation to the species detail screen.
 struct FieldGuideView: View {
     @State var presenter: FieldGuidePresenter
     @Environment(\.resolver) private var resolver
@@ -96,8 +94,6 @@ struct FieldGuideView: View {
     }
 }
 
-/// Composition-root helper for resolving a required dependency from the
-/// environment's resolver without a force-unwrap.
 private extension Resolver {
     func resolveRequired<Service>(_ serviceType: Service.Type) -> Service {
         guard let resolved = resolve(serviceType) else {
@@ -108,8 +104,6 @@ private extension Resolver {
 }
 
 #if DEBUG
-/// In-memory fake used only to drive Xcode previews. Not shipped production
-/// code and never wired into the app's dependency graph.
 private struct PreviewFieldGuideRepository: FieldGuideRepository {
     let species: [Species]
     var error: AppError?
@@ -135,9 +129,12 @@ private struct PreviewFieldGuideRepository: FieldGuideRepository {
 }
 
 private extension FieldGuidePresenter {
-    /// Builds a presenter for previews, backed by an in-memory repository.
-    static func preview(species: [Species], error: AppError? = nil) -> FieldGuidePresenter {
+    static func preview(
+        species: [Species],
+        error: AppError? = nil
+    ) -> FieldGuidePresenter {
         let repository = PreviewFieldGuideRepository(species: species, error: error)
+        
         return FieldGuidePresenter(
             getSavedSpecies: GetSavedSpeciesUseCase(repository: repository),
             removeSavedSpecies: RemoveSavedSpeciesUseCase(repository: repository)
@@ -181,14 +178,20 @@ private let previewSpecies: [Species] = [
 ]
 
 #Preview("Loaded") {
-    FieldGuideView(presenter: .preview(species: previewSpecies))
+    FieldGuideView(
+        presenter: .preview(species: previewSpecies)
+    )
 }
 
 #Preview("Empty") {
-    FieldGuideView(presenter: .preview(species: []))
+    FieldGuideView(
+        presenter: .preview(species: [])
+    )
 }
 
 #Preview("Failed") {
-    FieldGuideView(presenter: .preview(species: [], error: .persistence))
+    FieldGuideView(
+        presenter: .preview(species: [], error: .persistence)
+    )
 }
 #endif

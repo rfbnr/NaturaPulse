@@ -14,7 +14,9 @@ struct GetWeatherContextUseCase {
         self.repository = repository
     }
 
-    func callAsFunction(location: Location) -> AnyPublisher<WeatherContext, AppError> {
+    func callAsFunction(
+        location: Location
+    ) -> AnyPublisher<WeatherContext, AppError> {
         repository.context(at: location)
     }
 }

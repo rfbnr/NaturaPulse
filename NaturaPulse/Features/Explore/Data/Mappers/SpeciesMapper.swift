@@ -8,10 +8,12 @@
 import Foundation
 
 enum SpeciesMapper {
-    static func map(_ dtos: [GBIFOccurrenceDTO]) -> [Species] {
-        // Group occurrences into unique species, preserving first-seen order.
+    static func map(
+        _ dtos: [GBIFOccurrenceDTO]
+    ) -> [Species] {
         var order: [Int] = []
         var groups: [Int: [GBIFOccurrenceDTO]] = [:]
+        
         for dto in dtos {
             let groupKey = dto.speciesKey ?? dto.taxonKey ?? dto.key
             if groups[groupKey] == nil { order.append(groupKey) }
@@ -20,6 +22,7 @@ enum SpeciesMapper {
 
         return order.compactMap { groupKey in
             guard let occurrences = groups[groupKey], let representative = occurrences.first else { return nil }
+            
             let withImage = occurrences.first { usableImage(from: $0) != nil }
             let imageSource = withImage ?? representative
             let lastObserved = occurrences
@@ -29,6 +32,7 @@ enum SpeciesMapper {
                 guard let lat = representative.decimalLatitude, let lon = representative.decimalLongitude else { return nil }
                 return Coordinate(latitude: lat, longitude: lon)
             }()
+            
             return Species(
                 id: groupKey,
                 scientificName: representative.scientificName ?? "Unknown species",
@@ -49,15 +53,19 @@ enum SpeciesMapper {
         }
     }
 
-    private static func usableImage(from dto: GBIFOccurrenceDTO) -> SpeciesImage? {
+    private static func usableImage(
+        from dto: GBIFOccurrenceDTO
+    ) -> SpeciesImage? {
         guard let media = dto.media else { return nil }
+        
         let candidates = media.compactMap { item -> (item: GBIFMediaDTO, url: URL)? in
             guard let identifier = item.identifier, let url = URL(string: identifier) else { return nil }
             return (item, url)
         }
-        // Prefer an explicitly StillImage-typed item; tolerate a nil/other type as fallback.
+        
         let preferred = candidates.first { $0.item.type == "StillImage" } ?? candidates.first
         guard let match = preferred else { return nil }
+        
         return SpeciesImage(
             url: match.url,
             creator: match.item.creator,
@@ -66,8 +74,11 @@ enum SpeciesMapper {
         )
     }
 
-    private static func source(from dto: GBIFOccurrenceDTO) -> ObservationSource? {
+    private static func source(
+        from dto: GBIFOccurrenceDTO
+    ) -> ObservationSource? {
         guard dto.datasetName != nil else { return nil }
+        
         return ObservationSource(datasetName: dto.datasetName, publisher: nil, referenceURL: nil)
     }
 }

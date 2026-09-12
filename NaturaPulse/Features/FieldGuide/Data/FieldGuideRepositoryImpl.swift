@@ -21,13 +21,8 @@ final class FieldGuideRepositoryImpl: FieldGuideRepository {
         do {
             let realm = try realmProvider.realm()
             let results = realm.objects(SavedSpeciesObject.self).sorted(byKeyPath: "savedAt", ascending: false)
-            // NOTE: RealmSwift's `collectionPublisher` does not deliver notifications reliably in the
-            // linked Realm build, so we bridge the raw NotificationToken API into a CurrentValueSubject.
-            // The subject is seeded synchronously with the current snapshot (so the first emission is
-            // available immediately, without waiting on the notification run loop), and is subsequently
-            // updated whenever Realm reports a change. Only value types (`[Species]`) ever leave this
-            // method — the thread-confined `Results`/`Object` stay inside the observation closure.
             let subject = CurrentValueSubject<[Species], AppError>(results.map(SavedSpeciesMapper.domain(from:)))
+            
             var token: NotificationToken?
             token = results.observe { change in
                 switch change {
@@ -36,9 +31,6 @@ final class FieldGuideRepositoryImpl: FieldGuideRepository {
                 case let .update(collection, _, _, _):
                     subject.send(collection.map(SavedSpeciesMapper.domain(from:)))
                 case .error:
-                    // The stream is terminating via completion (not cancellation), so
-                    // `handleEvents(receiveCancel:)` below will not fire — invalidate here
-                    // to avoid leaking the NotificationToken and its captured subject.
                     token?.invalidate()
                     subject.send(completion: .failure(.persistence))
                 }
@@ -56,8 +48,6 @@ final class FieldGuideRepositoryImpl: FieldGuideRepository {
         do {
             let realm = try realmProvider.realm()
             let results = realm.objects(SavedSpeciesObject.self)
-            // See `savedSpecies()` for why we bridge the raw NotificationToken API here instead of
-            // using `collectionPublisher`.
             let subject = CurrentValueSubject<Bool, Never>(results.contains { $0.id == id })
             let token = results.observe { change in
                 switch change {
@@ -82,7 +72,10 @@ final class FieldGuideRepositoryImpl: FieldGuideRepository {
         do {
             let realm = try realmProvider.realm()
             try realm.write {
-                realm.add(SavedSpeciesMapper.object(from: species, savedAt: Date()), update: .modified)
+                realm.add(
+                    SavedSpeciesMapper.object(from: species, savedAt: Date()),
+                    update: .modified
+                )
             }
             return Just(()).setFailureType(to: AppError.self).eraseToAnyPublisher()
         } catch {

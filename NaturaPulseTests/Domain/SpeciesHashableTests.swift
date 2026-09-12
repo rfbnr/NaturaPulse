@@ -22,12 +22,20 @@ final class SpeciesHashableTests: XCTestCase {
     }
 
     func testCoordinateStored() {
-        let species = Species.stub(id: 1, coordinate: Coordinate(latitude: -6.2, longitude: 106.8))
-        XCTAssertEqual(species.coordinate, Coordinate(latitude: -6.2, longitude: 106.8))
+        let species = Species.stub(
+            id: 1,
+            coordinate: Coordinate(latitude: -6.2, longitude: 106.8)
+        )
+        XCTAssertEqual(
+            species.coordinate,
+            Coordinate(latitude: -6.2, longitude: 106.8)
+        )
     }
 
     func testSpeciesProfileEquatable() {
-        XCTAssertEqual(SpeciesProfile(summary: "s", summarySource: "src"),
-                       SpeciesProfile(summary: "s", summarySource: "src"))
+        XCTAssertEqual(
+            SpeciesProfile(summary: "s", summarySource: "src"),
+            SpeciesProfile(summary: "s", summarySource: "src")
+        )
     }
 }

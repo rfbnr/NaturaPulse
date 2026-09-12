@@ -15,11 +15,15 @@ struct SearchLocationUseCase {
         self.repository = repository
     }
 
-    func callAsFunction(query: String) -> AnyPublisher<[Location], AppError> {
+    func callAsFunction(
+        query: String
+    ) -> AnyPublisher<[Location], AppError> {
         let trimmed = query.trimmingCharacters(in: .whitespacesAndNewlines)
+        
         guard trimmed.count >= 2 else {
             return Just([]).setFailureType(to: AppError.self).eraseToAnyPublisher()
         }
+        
         return repository.searchLocations(query: trimmed)
     }
 }

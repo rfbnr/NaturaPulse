@@ -15,11 +15,15 @@ struct SearchSpeciesUseCase {
         self.repository = repository
     }
 
-    func callAsFunction(query: String) -> AnyPublisher<[Species], AppError> {
+    func callAsFunction(
+        query: String
+    ) -> AnyPublisher<[Species], AppError> {
         let trimmed = query.trimmingCharacters(in: .whitespacesAndNewlines)
+        
         guard trimmed.count >= 2 else {
             return Just([]).setFailureType(to: AppError.self).eraseToAnyPublisher()
         }
+        
         return repository.searchSpecies(query: trimmed)
     }
 }

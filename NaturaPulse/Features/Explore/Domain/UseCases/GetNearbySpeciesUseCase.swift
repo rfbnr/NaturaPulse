@@ -14,7 +14,10 @@ struct GetNearbySpeciesUseCase {
         self.repository = repository
     }
 
-    func callAsFunction(location: Location, radius: Distance) -> AnyPublisher<[Species], AppError> {
+    func callAsFunction(
+        location: Location,
+        radius: Distance
+    ) -> AnyPublisher<[Species], AppError> {
         repository.getNearbySpecies(at: location, radius: radius)
     }
 }

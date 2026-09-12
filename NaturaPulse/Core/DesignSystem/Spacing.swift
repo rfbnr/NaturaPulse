@@ -7,8 +7,6 @@
 
 import CoreGraphics
 
-/// Semantic spacing tokens on a 4pt scale, used for consistent padding
-/// and layout gaps across the app.
 enum AppSpacing {
     static let xs: CGFloat = 4
     static let sm: CGFloat = 8

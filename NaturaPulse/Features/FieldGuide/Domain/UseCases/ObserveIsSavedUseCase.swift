@@ -14,7 +14,9 @@ struct ObserveIsSavedUseCase {
         self.repository = repository
     }
 
-    func callAsFunction(id: Species.ID) -> AnyPublisher<Bool, Never> {
+    func callAsFunction(
+        id: Species.ID
+    ) -> AnyPublisher<Bool, Never> {
         repository.isSaved(id)
     }
 }

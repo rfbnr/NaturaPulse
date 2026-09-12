@@ -9,7 +9,10 @@ import Foundation
 import RealmSwift
 
 enum SavedSpeciesMapper {
-    static func object(from species: Species, savedAt: Date) -> SavedSpeciesObject {
+    static func object(
+        from species: Species,
+        savedAt: Date
+    ) -> SavedSpeciesObject {
         let object = SavedSpeciesObject()
         object.id = species.id
         object.scientificName = species.scientificName
@@ -36,7 +39,9 @@ enum SavedSpeciesMapper {
         return object
     }
 
-    static func domain(from object: SavedSpeciesObject) -> Species {
+    static func domain(
+        from object: SavedSpeciesObject
+    ) -> Species {
         Species(
             id: object.id,
             scientificName: object.scientificName,
@@ -56,8 +61,11 @@ enum SavedSpeciesMapper {
         )
     }
 
-    private static func image(from object: SavedSpeciesObject) -> SpeciesImage? {
+    private static func image(
+        from object: SavedSpeciesObject
+    ) -> SpeciesImage? {
         guard let urlString = object.imageURL, let url = URL(string: urlString) else { return nil }
+        
         return SpeciesImage(
             url: url,
             creator: object.imageCreator,
@@ -66,15 +74,23 @@ enum SavedSpeciesMapper {
         )
     }
 
-    private static func coordinate(from object: SavedSpeciesObject) -> Coordinate? {
+    private static func coordinate(
+        from object: SavedSpeciesObject
+    ) -> Coordinate? {
         guard let latitude = object.latitude, let longitude = object.longitude else { return nil }
+        
         return Coordinate(latitude: latitude, longitude: longitude)
     }
 
-    private static func source(from object: SavedSpeciesObject) -> ObservationSource? {
-        if object.sourceDatasetName == nil, object.sourcePublisher == nil, object.sourceReferenceURL == nil {
+    private static func source(
+        from object: SavedSpeciesObject
+    ) -> ObservationSource? {
+        if object.sourceDatasetName == nil,
+           object.sourcePublisher == nil,
+           object.sourceReferenceURL == nil {
             return nil
         }
+        
         return ObservationSource(
             datasetName: object.sourceDatasetName,
             publisher: object.sourcePublisher,

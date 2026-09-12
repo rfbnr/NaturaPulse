@@ -10,34 +10,85 @@ import XCTest
 
 final class SpeciesMapperTests: XCTestCase {
     private func occ(
-        key: Int, speciesKey: Int?, name: String = "Sci name", vernacular: String? = nil,
-        eventDate: String? = nil, imageURL: String? = nil, datasetName: String? = nil
+        key: Int,
+        speciesKey: Int?,
+        name: String = "Sci name",
+        vernacular: String? = nil,
+        eventDate: String? = nil,
+        imageURL: String? = nil,
+        datasetName: String? = nil
     ) -> GBIFOccurrenceDTO {
         let media = imageURL.map {
-            [GBIFMediaDTO(
-                type: "StillImage", format: nil, identifier: $0, creator: "c", license: "l",
-                references: nil, publisher: nil, rightsHolder: nil
-            )]
+            [
+                GBIFMediaDTO(
+                    type: "StillImage",
+                    format: nil,
+                    identifier: $0,
+                    creator: "c",
+                    license: "l",
+                    references: nil,
+                    publisher: nil,
+                    rightsHolder: nil
+                )
+            ]
         }
+        
         return GBIFOccurrenceDTO(
-            key: key, speciesKey: speciesKey, taxonKey: speciesKey, scientificName: name, vernacularName: vernacular,
-            kingdom: nil, phylum: nil, className: nil, order: nil, family: nil, genus: nil,
-            eventDate: eventDate, country: nil, datasetName: datasetName, media: media
+            key: key,
+            speciesKey: speciesKey,
+            taxonKey: speciesKey,
+            scientificName: name,
+            vernacularName: vernacular,
+            kingdom: nil,
+            phylum: nil,
+            className: nil,
+            order: nil,
+            family: nil,
+            genus: nil,
+            eventDate: eventDate,
+            country: nil,
+            datasetName: datasetName,
+            media: media
         )
     }
 
-    private func occWithMedia(key: Int, speciesKey: Int?, media: [GBIFMediaDTO]?) -> GBIFOccurrenceDTO {
+    private func occWithMedia(
+        key: Int,
+        speciesKey: Int?,
+        media: [GBIFMediaDTO]?
+    ) -> GBIFOccurrenceDTO {
         GBIFOccurrenceDTO(
-            key: key, speciesKey: speciesKey, taxonKey: speciesKey, scientificName: "Sci name", vernacularName: nil,
-            kingdom: nil, phylum: nil, className: nil, order: nil, family: nil, genus: nil,
-            eventDate: nil, country: nil, datasetName: nil, media: media
+            key: key,
+            speciesKey: speciesKey,
+            taxonKey: speciesKey,
+            scientificName: "Sci name",
+            vernacularName: nil,
+            kingdom: nil,
+            phylum: nil,
+            className: nil,
+            order: nil,
+            family: nil,
+            genus: nil,
+            eventDate: nil,
+            country: nil,
+            datasetName: nil,
+            media: media
         )
     }
 
-    private func media(type: String?, identifier: String?) -> GBIFMediaDTO {
+    private func media(
+        type: String?,
+        identifier: String?
+    ) -> GBIFMediaDTO {
         GBIFMediaDTO(
-            type: type, format: nil, identifier: identifier, creator: "c", license: "l",
-            references: nil, publisher: nil, rightsHolder: nil
+            type: type,
+            format: nil,
+            identifier: identifier,
+            creator: "c",
+            license: "l",
+            references: nil,
+            publisher: nil,
+            rightsHolder: nil
         )
     }
 
@@ -67,9 +118,21 @@ final class SpeciesMapperTests: XCTestCase {
 
     func testFallsBackToSpeciesKeyThenTaxonThenKeyForGrouping() {
         let noSpeciesKey = GBIFOccurrenceDTO(
-            key: 9, speciesKey: nil, taxonKey: 55, scientificName: "X", vernacularName: nil,
-            kingdom: nil, phylum: nil, className: nil, order: nil, family: nil, genus: nil,
-            eventDate: nil, country: nil, datasetName: nil, media: nil
+            key: 9,
+            speciesKey: nil,
+            taxonKey: 55,
+            scientificName: "X",
+            vernacularName: nil,
+            kingdom: nil,
+            phylum: nil,
+            className: nil,
+            order: nil,
+            family: nil,
+            genus: nil,
+            eventDate: nil,
+            country: nil,
+            datasetName: nil,
+            media: nil
         )
         let species = SpeciesMapper.map([noSpeciesKey])
         XCTAssertEqual(species.first?.id, 55)
@@ -118,17 +181,32 @@ final class SpeciesMapperTests: XCTestCase {
 
     func testGroupsUnderBareKeyWhenSpeciesKeyAndTaxonKeyAreNil() {
         let dto = GBIFOccurrenceDTO(
-            key: 42, speciesKey: nil, taxonKey: nil, scientificName: "X", vernacularName: nil,
-            kingdom: nil, phylum: nil, className: nil, order: nil, family: nil, genus: nil,
-            eventDate: nil, country: nil, datasetName: nil, media: nil
+            key: 42,
+            speciesKey: nil,
+            taxonKey: nil,
+            scientificName: "X",
+            vernacularName: nil,
+            kingdom: nil,
+            phylum: nil,
+            className: nil,
+            order: nil,
+            family: nil,
+            genus: nil,
+            eventDate: nil,
+            country: nil,
+            datasetName: nil,
+            media: nil
         )
         let species = SpeciesMapper.map([dto])
         XCTAssertEqual(species.first?.id, 42)
     }
 
     func testInvalidIdentifierDoesNotCrashAndYieldsNilImage() {
-        let occurrence = occWithMedia(key: 1, speciesKey: 100, media: [
-            media(type: "StillImage", identifier: "")
+        let occurrence = occWithMedia(
+            key: 1,
+            speciesKey: 100,
+            media: [
+                media(type: "StillImage", identifier: "")
         ])
         let species = SpeciesMapper.map([occurrence])
         XCTAssertNil(species.first?.image)
@@ -136,12 +214,28 @@ final class SpeciesMapperTests: XCTestCase {
 
     func testMapsCoordinateFromRepresentativeOccurrence() {
         let occ = GBIFOccurrenceDTO(
-            key: 1, speciesKey: 100, taxonKey: 100, scientificName: "X", vernacularName: nil,
-            kingdom: nil, phylum: nil, className: nil, order: nil, family: nil, genus: nil,
-            eventDate: nil, country: nil, datasetName: nil, media: nil,
-            decimalLatitude: -6.2, decimalLongitude: 106.8
+            key: 1,
+            speciesKey: 100,
+            taxonKey: 100,
+            scientificName: "X",
+            vernacularName: nil,
+            kingdom: nil,
+            phylum: nil,
+            className: nil,
+            order: nil,
+            family: nil,
+            genus: nil,
+            eventDate: nil,
+            country: nil,
+            datasetName: nil,
+            media: nil,
+            decimalLatitude: -6.2,
+            decimalLongitude: 106.8
         )
         let species = SpeciesMapper.map([occ])
-        XCTAssertEqual(species.first?.coordinate, Coordinate(latitude: -6.2, longitude: 106.8))
+        XCTAssertEqual(
+            species.first?.coordinate,
+            Coordinate(latitude: -6.2, longitude: 106.8)
+        )
     }
 }

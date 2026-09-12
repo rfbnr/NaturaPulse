@@ -27,17 +27,22 @@ struct Endpoint {
 
     func urlRequest() throws -> URLRequest {
         let fullURL = baseURL.appendingPathComponent(path)
+        
         guard var components = URLComponents(url: fullURL, resolvingAgainstBaseURL: false) else {
             throw NetworkError.invalidURL
         }
+        
         if !queryItems.isEmpty {
             components.queryItems = queryItems
         }
+        
         guard let url = components.url else {
             throw NetworkError.invalidURL
         }
+        
         var request = URLRequest(url: url)
         request.httpMethod = method.rawValue
+        
         return request
     }
 }

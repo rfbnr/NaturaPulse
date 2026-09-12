@@ -7,8 +7,6 @@
 
 import SwiftUI
 
-/// The About tab: developer identity, a short bio, the technology stack,
-/// and data-source attribution, per PRD §10.5.
 struct AboutView: View {
     private let techStack = ["SwiftUI", "Combine", "Alamofire", "Realm", "Swinject", "Kingfisher", "SwiftLint"]
     private let dataSources = [
@@ -55,6 +53,7 @@ struct AboutView: View {
                                     Text(name)
                                         .font(AppTypography.headline())
                                         .foregroundStyle(AppColor.primaryText)
+                                    
                                     Text(description)
                                         .font(AppTypography.caption())
                                         .foregroundStyle(AppColor.secondaryText)
@@ -91,7 +90,10 @@ struct AboutView: View {
         .padding(.top, AppSpacing.md)
     }
 
-    private func section<Content: View>(title: String, @ViewBuilder content: () -> Content) -> some View {
+    private func section<Content: View>(
+        title: String,
+        @ViewBuilder content: () -> Content
+    ) -> some View {
         VStack(alignment: .leading, spacing: AppSpacing.sm) {
             Text(title)
                 .font(AppTypography.headline())

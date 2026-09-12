@@ -7,7 +7,6 @@
 
 import SwiftUI
 
-/// A generic error state with an icon, message, and a "Retry" button.
 struct ErrorStateView: View {
     let message: String
     let retry: () -> Void
@@ -38,6 +37,9 @@ struct ErrorStateView: View {
 }
 
 #Preview {
-    ErrorStateView(message: "Something went wrong. Please try again.", retry: {})
-        .background(AppColor.background)
+    ErrorStateView(
+        message: "Something went wrong. Please try again.",
+        retry: {}
+    )
+    .background(AppColor.background)
 }

@@ -11,8 +11,11 @@ import XCTest
 
 @MainActor
 final class SearchPresenterTests: XCTestCase {
-    private func makePresenter(_ repo: FakeSpeciesRepository) -> SearchPresenter {
+    private func makePresenter(
+        _ repo: FakeSpeciesRepository
+    ) -> SearchPresenter {
         let fieldGuide = FakeFieldGuideRepository()
+        
         return SearchPresenter(
             searchSpecies: SearchSpeciesUseCase(repository: repo),
             toggleFavorite: ToggleFavoriteUseCase(repository: fieldGuide),
@@ -45,7 +48,7 @@ final class SearchPresenterTests: XCTestCase {
     func testEmptyQueryStaysIdleWithoutNetwork() {
         let repo = FakeSpeciesRepository()
         let presenter = makePresenter(repo)
-        presenter.query = "R"      // 1 char, below min
+        presenter.query = "R"
         waitMillis(120)
         XCTAssertEqual(repo.searchCallCount, 0)
         XCTAssertEqual(presenter.state, .idle)
@@ -67,7 +70,7 @@ final class SearchPresenterTests: XCTestCase {
         presenter.query = "Robin"
         waitMillis(120)
         XCTAssertEqual(presenter.state, .failed(.server))
-        // Pipeline must survive an error: a new query still searches.
+        
         repo.searchResult = .success([Species.stub(id: 2)])
         presenter.query = "Myna"
         waitMillis(120)
@@ -103,7 +106,7 @@ final class SearchPresenterTests: XCTestCase {
         presenter.query = "Robin"
         waitMillis(60)
         XCTAssertEqual(repo.searchCallCount, 1)
-        presenter.query = "Robin"   // identical -> removeDuplicates drops it
+        presenter.query = "Robin"
         waitMillis(60)
         XCTAssertEqual(repo.searchCallCount, 1)
     }
@@ -116,15 +119,15 @@ final class SearchPresenterTests: XCTestCase {
             (query == "aaaa" ? older : newer).eraseToAnyPublisher()
         }
         let presenter = makePresenter(repo)
-        presenter.query = "aaaa"     // starts older (subscribed after debounce, loading)
+        presenter.query = "aaaa"
         waitMillis(60)
-        presenter.query = "bbbb"     // starts newer; switchToLatest cancels older's subscription
+        presenter.query = "bbbb"
         waitMillis(60)
         newer.send([Species.stub(id: 2)])
         newer.send(completion: .finished)
         waitMillis(40)
         XCTAssertEqual(presenter.state, .loaded([Species.stub(id: 2)]))
-        // Stale older result arrives late; its subscription was cancelled, so it must be ignored.
+        
         older.send([Species.stub(id: 1)])
         older.send(completion: .finished)
         waitMillis(40)

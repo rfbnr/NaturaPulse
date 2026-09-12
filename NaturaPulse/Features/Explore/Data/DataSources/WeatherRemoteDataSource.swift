@@ -9,8 +9,15 @@ import Combine
 import Foundation
 
 protocol WeatherRemoteDataSource {
-    func forecast(latitude: Double, longitude: Double) -> AnyPublisher<OpenMeteoForecastDTO, NetworkError>
-    func airQuality(latitude: Double, longitude: Double) -> AnyPublisher<OpenMeteoAirQualityDTO, NetworkError>
+    func forecast(
+        latitude: Double,
+        longitude: Double
+    ) -> AnyPublisher<OpenMeteoForecastDTO, NetworkError>
+    
+    func airQuality(
+        latitude: Double,
+        longitude: Double
+    ) -> AnyPublisher<OpenMeteoAirQualityDTO, NetworkError>
 }
 
 final class DefaultWeatherRemoteDataSource: WeatherRemoteDataSource {
@@ -22,7 +29,10 @@ final class DefaultWeatherRemoteDataSource: WeatherRemoteDataSource {
         self.apiClient = apiClient
     }
 
-    func forecast(latitude: Double, longitude: Double) -> AnyPublisher<OpenMeteoForecastDTO, NetworkError> {
+    func forecast(
+        latitude: Double,
+        longitude: Double
+    ) -> AnyPublisher<OpenMeteoForecastDTO, NetworkError> {
         let endpoint = Endpoint(
             baseURL: forecastBase ?? URL(fileURLWithPath: "/"),
             path: "/v1/forecast",
@@ -32,10 +42,14 @@ final class DefaultWeatherRemoteDataSource: WeatherRemoteDataSource {
                 URLQueryItem(name: "current", value: "temperature_2m,relative_humidity_2m,precipitation,weather_code")
             ]
         )
+        
         return apiClient.request(endpoint)
     }
 
-    func airQuality(latitude: Double, longitude: Double) -> AnyPublisher<OpenMeteoAirQualityDTO, NetworkError> {
+    func airQuality(
+        latitude: Double,
+        longitude: Double
+    ) -> AnyPublisher<OpenMeteoAirQualityDTO, NetworkError> {
         let endpoint = Endpoint(
             baseURL: airQualityBase ?? URL(fileURLWithPath: "/"),
             path: "/v1/air-quality",
@@ -45,6 +59,7 @@ final class DefaultWeatherRemoteDataSource: WeatherRemoteDataSource {
                 URLQueryItem(name: "current", value: "pm2_5")
             ]
         )
+        
         return apiClient.request(endpoint)
     }
 }

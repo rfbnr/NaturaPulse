@@ -7,8 +7,6 @@
 
 import SwiftUI
 
-/// A placeholder loading state made of shimmering skeleton cards that
-/// approximate the real species card silhouette.
 struct LoadingStateView: View {
     private let cardCount = 4
 
@@ -29,9 +27,11 @@ struct LoadingStateView: View {
             RoundedRectangle(cornerRadius: AppSpacing.sm)
                 .fill(AppColor.surface)
                 .frame(height: 140)
+            
             RoundedRectangle(cornerRadius: AppSpacing.xs)
                 .fill(AppColor.surface)
                 .frame(width: 180, height: 16)
+            
             RoundedRectangle(cornerRadius: AppSpacing.xs)
                 .fill(AppColor.surface)
                 .frame(width: 110, height: 12)

@@ -7,8 +7,6 @@
 
 import SwiftUI
 
-/// Semantic typography tokens tied to Dynamic Type text styles so app
-/// text scales with the user's preferred content size.
 enum AppTypography {
     static func title() -> Font {
         .system(.largeTitle, design: .default, weight: .bold)

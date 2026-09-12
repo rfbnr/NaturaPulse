@@ -8,7 +8,9 @@
 import Foundation
 
 enum LocationMapper {
-    static func map(_ dtos: [GeocodingResultDTO]) -> [Location] {
+    static func map(
+        _ dtos: [GeocodingResultDTO]
+    ) -> [Location] {
         dtos.map { dto in
             Location(
                 latitude: dto.latitude,

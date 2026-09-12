@@ -7,9 +7,6 @@
 
 import SwiftUI
 
-/// A generic empty state with an icon, title, message, and an optional
-/// call-to-action button. The button is shown only when both `actionTitle`
-/// and `action` are provided.
 struct EmptyStateView: View {
     let title: String
     let message: String

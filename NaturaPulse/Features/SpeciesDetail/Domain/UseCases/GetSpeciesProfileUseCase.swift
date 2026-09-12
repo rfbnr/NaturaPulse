@@ -14,7 +14,9 @@ struct GetSpeciesProfileUseCase {
         self.repository = repository
     }
 
-    func callAsFunction(id: Species.ID) -> AnyPublisher<SpeciesProfile, AppError> {
+    func callAsFunction(
+        id: Species.ID
+    ) -> AnyPublisher<SpeciesProfile, AppError> {
         repository.getSpeciesProfile(id: id)
     }
 }

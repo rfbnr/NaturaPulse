@@ -36,7 +36,7 @@ final class FieldGuideRepositoryImplTests: XCTestCase {
         _ = try awaitPublisher(repo.save(Species.stub(id: 1)))
         _ = try awaitPublisher(repo.save(Species.stub(id: 2)))
         let result = try awaitPublisher(repo.savedSpecies())
-        XCTAssertEqual(result.map(\.id), [2, 1]) // most recently saved first
+        XCTAssertEqual(result.map(\.id), [2, 1])
     }
 
     func testRemove() throws {
@@ -54,11 +54,6 @@ final class FieldGuideRepositoryImplTests: XCTestCase {
         XCTAssertEqual(try awaitPublisher(repo.isSaved(1)), true)
     }
 
-    /// The headline reactive behavior (PRD §19): `savedSpecies()` is a live stream, not a
-    /// one-shot fetch — a save performed *after* subscribing must push a SECOND emission
-    /// reflecting the new state, without resubscribing. Existing tests above only ever
-    /// inspect the first emission via `awaitPublisher`; this one collects two emissions
-    /// over time with a sink + expectation to prove the re-emission actually happens.
     func testSavedSpeciesReEmitsAfterSave() throws {
         let repo = try makeRepo()
 
@@ -74,11 +69,6 @@ final class FieldGuideRepositoryImplTests: XCTestCase {
                 }
             )
 
-        // `save` performs its Realm write synchronously in the method body (before the
-        // returned publisher is even subscribed to), so calling it — without going through
-        // `awaitPublisher`, which would wait on ALL outstanding expectations including
-        // `secondEmission` and make the explicit `wait(for:)` below fail as "already waited
-        // on" — is enough to trigger the change notification the subscription above observes.
         _ = repo.save(Species.stub(id: 1))
 
         wait(for: [secondEmission], timeout: 5)

@@ -7,10 +7,6 @@
 
 import SwiftUI
 
-/// Shows the current environmental context (temperature, humidity, and
-/// air quality) at the selected location as neutral background
-/// information. This is presented as context only — never as a claim
-/// that weather or air quality causes any observed species behavior.
 struct WeatherContextCardView: View {
     let weather: WeatherContext
 
@@ -20,12 +16,15 @@ struct WeatherContextCardView: View {
 
     private var metrics: [String] {
         var items: [String] = []
+        
         if let humidity = weather.relativeHumidity {
             items.append("Humidity \(Int(humidity.rounded()))%")
         }
+        
         if let pm25 = weather.pm25 {
             items.append("PM2.5 \(Int(pm25.rounded()))")
         }
+        
         return items
     }
 
@@ -35,6 +34,7 @@ struct WeatherContextCardView: View {
 
     private var temperatureSpoken: String {
         guard let celsius = weather.temperatureCelsius else { return "" }
+        
         return "\(Int(celsius.rounded())) degrees Celsius"
     }
 

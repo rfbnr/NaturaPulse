@@ -9,8 +9,6 @@ import Combine
 import Swinject
 import SwiftUI
 
-/// The Explore tab: a greeting, the current location and search radius,
-/// ambient environmental context, and a list of nearby species.
 struct ExploreView: View {
     @State var presenter: ExplorePresenter
     @State private var isLocationPickerPresented = false
@@ -62,8 +60,6 @@ struct ExploreView: View {
         }
     }
 
-    /// The weather value to render: the loaded value, or — while a reload
-    /// is in flight — the previous value so the card doesn't blank out.
     private var displayedWeather: WeatherContext? {
         switch presenter.weatherState {
         case .loaded(let weather):
@@ -132,8 +128,6 @@ struct ExploreView: View {
         }
     }
 
-    /// Whether a species reload is in flight while stale-while-loading
-    /// content (the previous list) is still on screen.
     private var isReloadingSpecies: Bool {
         if case .loading(let previous) = presenter.speciesState {
             return previous != nil
@@ -203,8 +197,6 @@ struct ExploreView: View {
     }
 }
 
-/// Composition-root helper for resolving a required dependency from the
-/// environment's resolver without a force-unwrap.
 private extension Resolver {
     func resolveRequired<Service>(_ serviceType: Service.Type) -> Service {
         guard let resolved = resolve(serviceType) else {
@@ -215,38 +207,49 @@ private extension Resolver {
 }
 
 #if DEBUG
-/// In-memory fakes used only to drive Xcode previews. Not shipped
-/// production code and never wired into the app's dependency graph.
 private struct PreviewSpeciesRepository: SpeciesRepository {
     let species: [Species]
     var error: AppError?
 
-    func getNearbySpecies(at location: Location, radius: Distance) -> AnyPublisher<[Species], AppError> {
+    func getNearbySpecies(
+        at location: Location,
+        radius: Distance
+    ) -> AnyPublisher<[Species], AppError> {
         if let error {
             return Fail(error: error).eraseToAnyPublisher()
         }
         return Just(species).setFailureType(to: AppError.self).eraseToAnyPublisher()
     }
 
-    func searchSpecies(query: String) -> AnyPublisher<[Species], AppError> {
+    func searchSpecies(
+        query: String
+    ) -> AnyPublisher<[Species], AppError> {
         Just(species).setFailureType(to: AppError.self).eraseToAnyPublisher()
     }
 
-    func getSpeciesProfile(id: Species.ID) -> AnyPublisher<SpeciesProfile, AppError> {
-        Just(SpeciesProfile(summary: nil, summarySource: nil)).setFailureType(to: AppError.self).eraseToAnyPublisher()
+    func getSpeciesProfile(
+        id: Species.ID
+    ) -> AnyPublisher<SpeciesProfile, AppError> {
+        Just(
+            SpeciesProfile(summary: nil, summarySource: nil)
+        ).setFailureType(to: AppError.self).eraseToAnyPublisher()
     }
 }
 
 private struct PreviewWeatherRepository: WeatherRepository {
     let context: WeatherContext
 
-    func context(at location: Location) -> AnyPublisher<WeatherContext, AppError> {
+    func context(
+        at location: Location
+    ) -> AnyPublisher<WeatherContext, AppError> {
         Just(context).setFailureType(to: AppError.self).eraseToAnyPublisher()
     }
 }
 
 private struct PreviewLocationRepository: LocationRepository {
-    func searchLocations(query: String) -> AnyPublisher<[Location], AppError> {
+    func searchLocations(
+        query: String
+    ) -> AnyPublisher<[Location], AppError> {
         Just([.jakarta]).setFailureType(to: AppError.self).eraseToAnyPublisher()
     }
 }
@@ -255,23 +258,35 @@ private struct PreviewFieldGuideRepository: FieldGuideRepository {
     func savedSpecies() -> AnyPublisher<[Species], AppError> {
         Just([]).setFailureType(to: AppError.self).eraseToAnyPublisher()
     }
-    func isSaved(_ id: Species.ID) -> AnyPublisher<Bool, Never> { Just(false).eraseToAnyPublisher() }
+    
+    func isSaved(
+        _ id: Species.ID
+    ) -> AnyPublisher<Bool, Never> { Just(false).eraseToAnyPublisher() }
+    
     func save(_ species: Species) -> AnyPublisher<Void, AppError> {
         Just(()).setFailureType(to: AppError.self).eraseToAnyPublisher()
     }
+    
     func remove(id: Species.ID) -> AnyPublisher<Void, AppError> {
         Just(()).setFailureType(to: AppError.self).eraseToAnyPublisher()
     }
 }
 
 private extension ExplorePresenter {
-    static func preview(species: [Species], weather: WeatherContext, error: AppError? = nil) -> ExplorePresenter {
+    static func preview(
+        species: [Species],
+        weather: WeatherContext,
+        error: AppError? = nil
+    ) -> ExplorePresenter {
         let fieldGuide = PreviewFieldGuideRepository()
+        
         return ExplorePresenter(
             getNearbySpecies: GetNearbySpeciesUseCase(
                 repository: PreviewSpeciesRepository(species: species, error: error)
             ),
-            getWeatherContext: GetWeatherContextUseCase(repository: PreviewWeatherRepository(context: weather)),
+            getWeatherContext: GetWeatherContextUseCase(
+                repository: PreviewWeatherRepository(context: weather)
+            ),
             searchLocation: SearchLocationUseCase(repository: PreviewLocationRepository()),
             toggleFavorite: ToggleFavoriteUseCase(repository: fieldGuide),
             observeSavedIDs: ObserveSavedSpeciesIDsUseCase(repository: fieldGuide)
@@ -324,14 +339,20 @@ private let previewWeather = WeatherContext(
 )
 
 #Preview("Loaded") {
-    ExploreView(presenter: .preview(species: previewSpecies, weather: previewWeather))
+    ExploreView(
+        presenter: .preview(species: previewSpecies, weather: previewWeather)
+    )
 }
 
 #Preview("Empty") {
-    ExploreView(presenter: .preview(species: [], weather: previewWeather))
+    ExploreView(
+        presenter: .preview(species: [], weather: previewWeather)
+    )
 }
 
 #Preview("Failed") {
-    ExploreView(presenter: .preview(species: [], weather: previewWeather, error: .networkUnavailable))
+    ExploreView(
+        presenter: .preview(species: [], weather: previewWeather, error: .networkUnavailable)
+    )
 }
 #endif

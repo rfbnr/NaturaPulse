@@ -20,7 +20,10 @@ final class FieldGuidePresenter {
     @ObservationIgnored private var savedCancellable: AnyCancellable?
     @ObservationIgnored private var removeCancellable: AnyCancellable?
 
-    init(getSavedSpecies: GetSavedSpeciesUseCase, removeSavedSpecies: RemoveSavedSpeciesUseCase) {
+    init(
+        getSavedSpecies: GetSavedSpeciesUseCase,
+        removeSavedSpecies: RemoveSavedSpeciesUseCase
+    ) {
         self.getSavedSpecies = getSavedSpecies
         self.removeSavedSpecies = removeSavedSpecies
     }

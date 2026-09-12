@@ -14,7 +14,9 @@ struct RemoveSavedSpeciesUseCase {
         self.repository = repository
     }
 
-    func callAsFunction(id: Species.ID) -> AnyPublisher<Void, AppError> {
+    func callAsFunction(
+        id: Species.ID
+    ) -> AnyPublisher<Void, AppError> {
         repository.remove(id: id)
     }
 }

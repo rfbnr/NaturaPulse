@@ -8,12 +8,6 @@
 import SwiftUI
 import UIKit
 
-/// A moving-highlight shimmer overlay for skeleton/placeholder content.
-///
-/// Honors Reduced Motion via `ReducedMotion.isEnabled`: when it is enabled
-/// the view is shown as-is (static, still redacted) with no animation — the
-/// affordance never disappears, it simply stops moving. Kept in sync with
-/// live changes to the system setting.
 struct ShimmerModifier: ViewModifier {
     @State private var reducedMotion = ReducedMotion.isEnabled
     @State private var phase: CGFloat = -1
@@ -57,8 +51,6 @@ struct ShimmerModifier: ViewModifier {
 }
 
 extension View {
-    /// Applies an animated shimmer highlight (static under Reduced Motion).
-    /// Intended for redacted skeleton content, not real content.
     func shimmer() -> some View {
         modifier(ShimmerModifier())
     }

@@ -24,6 +24,7 @@ final class AlamofireAPIClient: APIClient {
 
     func request<T: Decodable>(_ endpoint: Endpoint) -> AnyPublisher<T, NetworkError> {
         let urlRequest: URLRequest
+        
         do {
             urlRequest = try endpoint.urlRequest()
         } catch {
@@ -41,12 +42,15 @@ final class AlamofireAPIClient: APIClient {
                     if let code = response.response?.statusCode, !(200..<300).contains(code) {
                         throw NetworkError.statusCode(code)
                     }
+                    
                     if afError.isResponseSerializationError {
                         throw NetworkError.decoding
                     }
+                    
                     if afError.isSessionTaskError {
                         throw NetworkError.notConnected
                     }
+                    
                     throw NetworkError.underlying(afError.localizedDescription)
                 }
             }

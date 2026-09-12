@@ -11,6 +11,7 @@ enum GBIFDateParser {
     private static let isoWithZone: ISO8601DateFormatter = {
         let f = ISO8601DateFormatter()
         f.formatOptions = [.withInternetDateTime]
+        
         return f
     }()
 
@@ -19,6 +20,7 @@ enum GBIFDateParser {
         f.locale = Locale(identifier: "en_US_POSIX")
         f.timeZone = TimeZone(identifier: "UTC")
         f.dateFormat = "yyyy-MM-dd'T'HH:mm"
+        
         return f
     }()
 
@@ -27,6 +29,7 @@ enum GBIFDateParser {
         f.locale = Locale(identifier: "en_US_POSIX")
         f.timeZone = TimeZone(identifier: "UTC")
         f.dateFormat = "yyyy-MM-dd'T'HH:mm:ss"
+        
         return f
     }()
 
@@ -35,6 +38,7 @@ enum GBIFDateParser {
         f.locale = Locale(identifier: "en_US_POSIX")
         f.timeZone = TimeZone(identifier: "UTC")
         f.dateFormat = "yyyy-MM-dd"
+        
         return f
     }()
 

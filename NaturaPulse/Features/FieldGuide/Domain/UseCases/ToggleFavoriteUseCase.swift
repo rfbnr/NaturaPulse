@@ -14,7 +14,9 @@ struct ToggleFavoriteUseCase {
         self.repository = repository
     }
 
-    func callAsFunction(_ species: Species) -> AnyPublisher<Void, AppError> {
+    func callAsFunction(
+        _ species: Species
+    ) -> AnyPublisher<Void, AppError> {
         repository.isSaved(species.id)
             .first()
             .setFailureType(to: AppError.self)

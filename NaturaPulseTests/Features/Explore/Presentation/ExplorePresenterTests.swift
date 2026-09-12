@@ -12,7 +12,7 @@ import XCTest
 
 @MainActor
 final class ExplorePresenterTests: XCTestCase {
-    private static let defaultWeather = WeatherContext(
+    private nonisolated static let defaultWeather = WeatherContext(
         temperatureCelsius: 28,
         relativeHumidity: 60,
         precipitation: 0,
@@ -26,7 +26,11 @@ final class ExplorePresenterTests: XCTestCase {
         weather: Result<WeatherContext, AppError> = .success(defaultWeather),
         fieldGuide: FakeFieldGuideRepository = FakeFieldGuideRepository()
     ) -> ExplorePresenter {
-        makePresenterWithRepositories(species: species, weather: weather, fieldGuide: fieldGuide).presenter
+        makePresenterWithRepositories(
+            species: species,
+            weather: weather,
+            fieldGuide: fieldGuide
+        ).presenter
     }
 
     private func makePresenterWithRepositories(
@@ -49,8 +53,6 @@ final class ExplorePresenterTests: XCTestCase {
         return (presenter, speciesRepo)
     }
 
-    /// Waits for a Combine `.receive(on: DispatchQueue.main)` hop to flush
-    /// so state updates from a resolved publisher are visible.
     private func waitForMainQueueFlush() {
         let flushed = expectation(description: "main queue flush")
         DispatchQueue.main.async { flushed.fulfill() }
@@ -118,28 +120,29 @@ final class ExplorePresenterTests: XCTestCase {
         XCTAssertEqual(presenter.location, bandung)
     }
 
-    /// A stale in-flight request (A) must never overwrite a newer request's
-    /// (B) result, even if A's value arrives after B has already loaded.
-    /// The presenter cancels A's subscription when B starts, so a value
-    /// sent on A's subject afterward must simply be dropped.
     func testStaleRequestDoesNotOverwriteNewerResult() {
         let (presenter, speciesRepo) = makePresenterWithRepositories(species: .success([]))
         let subjectA = PassthroughSubject<[Species], AppError>()
         speciesRepo.nearbyPublisher = subjectA.eraseToAnyPublisher()
 
-        presenter.onAppear() // starts request A
+        presenter.onAppear()
 
         let subjectB = PassthroughSubject<[Species], AppError>()
         speciesRepo.nearbyPublisher = subjectB.eraseToAnyPublisher()
-        let bandung = Location(latitude: -6.9, longitude: 107.6, name: "Bandung", country: "Indonesia", administrativeArea: "West Java")
-        presenter.select(location: bandung) // starts request B, cancelling A's subscription
+        let bandung = Location(
+            latitude: -6.9,
+            longitude: 107.6,
+            name: "Bandung",
+            country: "Indonesia",
+            administrativeArea: "West Java"
+        )
+        presenter.select(location: bandung)
 
         subjectB.send([Species.stub(id: 2)])
         subjectB.send(completion: .finished)
         waitForMainQueueFlush()
         XCTAssertEqual(presenter.speciesState, .loaded([Species.stub(id: 2)]))
 
-        // Stale A value arrives after B already resolved — must not land.
         subjectA.send([Species.stub(id: 999)])
         waitForMainQueueFlush()
 
@@ -149,7 +152,10 @@ final class ExplorePresenterTests: XCTestCase {
     func testSavedIDsReflectStreamAndIsSaved() {
         let fieldGuide = FakeFieldGuideRepository()
         fieldGuide.savedResult = .success([Species.stub(id: 1)])
-        let presenter = makePresenter(species: .success([Species.stub(id: 1)]), fieldGuide: fieldGuide)
+        let presenter = makePresenter(
+            species: .success([Species.stub(id: 1)]),
+            fieldGuide: fieldGuide
+        )
 
         presenter.onAppear()
         waitForMainQueueFlush()
@@ -162,7 +168,10 @@ final class ExplorePresenterTests: XCTestCase {
     func testToggleFavoriteSavesUnsavedSpecies() {
         let fieldGuide = FakeFieldGuideRepository()
         fieldGuide.savedFlag = false
-        let presenter = makePresenter(species: .success([Species.stub(id: 1)]), fieldGuide: fieldGuide)
+        let presenter = makePresenter(
+            species: .success([Species.stub(id: 1)]),
+            fieldGuide: fieldGuide
+        )
 
         presenter.toggleFavorite(Species.stub(id: 1))
         waitForMainQueueFlush()

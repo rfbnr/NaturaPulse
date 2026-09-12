@@ -7,9 +7,6 @@
 
 import SwiftUI
 
-/// A compact menu for choosing the search radius used to find nearby
-/// species. Selecting an option updates the presenter, which reloads
-/// species and weather context for the new radius.
 struct RadiusPickerView: View {
     let presenter: ExplorePresenter
 

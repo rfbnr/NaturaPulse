@@ -31,6 +31,7 @@ final class DefaultGeocodingRemoteDataSource: GeocodingRemoteDataSource {
                 URLQueryItem(name: "format", value: "json")
             ]
         )
+        
         return apiClient.request(endpoint)
     }
 }

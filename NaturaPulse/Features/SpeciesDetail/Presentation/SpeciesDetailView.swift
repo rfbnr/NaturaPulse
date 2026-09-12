@@ -8,10 +8,6 @@
 import Combine
 import SwiftUI
 
-/// The full species detail screen: hero image, local sighting stats,
-/// taxonomy, ambient environmental context (neutral background
-/// information — never a causal claim, PRD §10.3), and an on-demand
-/// species description sourced from GBIF.
 struct SpeciesDetailView: View {
     @State var presenter: SpeciesDetailPresenter
 
@@ -54,8 +50,6 @@ struct SpeciesDetailView: View {
         }
     }
 
-    // MARK: - Header
-
     private var header: some View {
         VStack(alignment: .leading, spacing: AppSpacing.xs) {
             Text(displayName)
@@ -70,8 +64,6 @@ struct SpeciesDetailView: View {
             }
         }
     }
-
-    // MARK: - Local sightings
 
     private var recordsLabel: String {
         let count = presenter.species.localObservationCount
@@ -94,8 +86,6 @@ struct SpeciesDetailView: View {
             }
         }
     }
-
-    // MARK: - Taxonomy
 
     private var taxonomyRows: [(label: String, value: String)] {
         let species = presenter.species
@@ -137,8 +127,6 @@ struct SpeciesDetailView: View {
         }
     }
 
-    // MARK: - Environmental context
-
     @ViewBuilder
     private var environmentSection: some View {
         switch presenter.weatherState {
@@ -162,8 +150,6 @@ struct SpeciesDetailView: View {
             }
         }
     }
-
-    // MARK: - About this species
 
     private var aboutSection: some View {
         VStack(alignment: .leading, spacing: AppSpacing.sm) {
@@ -210,8 +196,6 @@ struct SpeciesDetailView: View {
         }
     }
 
-    // MARK: - Source & attribution
-
     private var attributionSection: some View {
         VStack(alignment: .leading, spacing: AppSpacing.xs) {
             Text("Source & attribution")
@@ -239,24 +223,30 @@ struct SpeciesDetailView: View {
 }
 
 #if DEBUG
-/// In-memory fakes used only to drive Xcode previews. Not shipped
-/// production code and never wired into the app's dependency graph.
 private struct PreviewSpeciesRepository: SpeciesRepository {
     let profile: SpeciesProfile
     var profileError: AppError?
 
-    func getNearbySpecies(at location: Location, radius: Distance) -> AnyPublisher<[Species], AppError> {
+    func getNearbySpecies(
+        at location: Location,
+        radius: Distance
+    ) -> AnyPublisher<[Species], AppError> {
         Just([]).setFailureType(to: AppError.self).eraseToAnyPublisher()
     }
 
-    func searchSpecies(query: String) -> AnyPublisher<[Species], AppError> {
+    func searchSpecies(
+        query: String
+    ) -> AnyPublisher<[Species], AppError> {
         Just([]).setFailureType(to: AppError.self).eraseToAnyPublisher()
     }
 
-    func getSpeciesProfile(id: Species.ID) -> AnyPublisher<SpeciesProfile, AppError> {
+    func getSpeciesProfile(
+        id: Species.ID
+    ) -> AnyPublisher<SpeciesProfile, AppError> {
         if let profileError {
             return Fail(error: profileError).eraseToAnyPublisher()
         }
+        
         return Just(profile).setFailureType(to: AppError.self).eraseToAnyPublisher()
     }
 }
@@ -264,7 +254,9 @@ private struct PreviewSpeciesRepository: SpeciesRepository {
 private struct PreviewWeatherRepository: WeatherRepository {
     let weather: WeatherContext
 
-    func context(at location: Location) -> AnyPublisher<WeatherContext, AppError> {
+    func context(
+        at location: Location
+    ) -> AnyPublisher<WeatherContext, AppError> {
         Just(weather).setFailureType(to: AppError.self).eraseToAnyPublisher()
     }
 }
@@ -295,12 +287,18 @@ private extension SpeciesDetailPresenter {
         profileError: AppError? = nil
     ) -> SpeciesDetailPresenter {
         let fieldGuideRepository = PreviewFieldGuideRepository()
+        
         return SpeciesDetailPresenter(
             species: species,
             getSpeciesProfile: GetSpeciesProfileUseCase(
-                repository: PreviewSpeciesRepository(profile: profile, profileError: profileError)
+                repository: PreviewSpeciesRepository(
+                    profile: profile,
+                    profileError: profileError
+                )
             ),
-            getWeatherContext: GetWeatherContextUseCase(repository: PreviewWeatherRepository(weather: weather)),
+            getWeatherContext: GetWeatherContextUseCase(
+                repository: PreviewWeatherRepository(weather: weather)
+            ),
             toggleFavorite: ToggleFavoriteUseCase(repository: fieldGuideRepository),
             observeIsSaved: ObserveIsSavedUseCase(repository: fieldGuideRepository)
         )

@@ -8,10 +8,6 @@
 import Combine
 import SwiftUI
 
-/// A sheet that lets the user search for a place and select it as the
-/// active Explore location. Search is debounced by 300ms so results are
-/// not requested on every keystroke, and picking a result immediately
-/// updates the presenter and dismisses the sheet.
 struct LocationPickerView: View {
     let presenter: ExplorePresenter
 
@@ -59,14 +55,18 @@ struct LocationPickerView: View {
             }
             .listRowSeparator(.hidden)
         } else if results.isEmpty {
-            if query.trimmingCharacters(in: .whitespacesAndNewlines).count >= Self.minimumQueryLength {
+            if query.trimmingCharacters(
+                in: .whitespacesAndNewlines
+            ).count >= Self.minimumQueryLength {
                 Text("No matching places found")
                     .font(AppTypography.body())
                     .foregroundStyle(AppColor.secondaryText)
                     .listRowSeparator(.hidden)
             }
         } else {
-            ForEach(Array(results.enumerated()), id: \.offset) { _, location in
+            ForEach(
+                Array(results.enumerated()), id: \.offset
+            ) { _, location in
                 Button {
                     presenter.select(location: location)
                     dismiss()
@@ -83,6 +83,7 @@ struct LocationPickerView: View {
             Text(location.name)
                 .font(AppTypography.body())
                 .foregroundStyle(AppColor.primaryText)
+            
             if let subtitle = subtitle(for: location) {
                 Text(subtitle)
                     .font(AppTypography.caption())
@@ -93,6 +94,7 @@ struct LocationPickerView: View {
 
     private func subtitle(for location: Location) -> String? {
         let parts = [location.administrativeArea, location.country].compactMap { $0 }
+        
         return parts.isEmpty ? nil : parts.joined(separator: ", ")
     }
 
@@ -102,6 +104,7 @@ struct LocationPickerView: View {
 
     private func search(for query: String) async {
         let trimmed = query.trimmingCharacters(in: .whitespacesAndNewlines)
+        
         guard trimmed.count >= Self.minimumQueryLength else {
             results = []
             searchError = nil
