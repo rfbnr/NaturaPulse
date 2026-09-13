@@ -33,6 +33,11 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		6D70A14F3056F429006A9E1C /* Common */ = {isa = PBXFileReference; lastKnownFileType = wrapper; name = Common; path = Modules/Common; sourceTree = "<group>"; };
+		6D70A1503056F550006A9E1C /* ExploreFeature */ = {isa = PBXFileReference; lastKnownFileType = wrapper; name = ExploreFeature; path = Modules/ExploreFeature; sourceTree = "<group>"; };
+		6D70A1513056F572006A9E1C /* SearchFeature */ = {isa = PBXFileReference; lastKnownFileType = wrapper; name = SearchFeature; path = Modules/SearchFeature; sourceTree = "<group>"; };
+		6D70A1523056F593006A9E1C /* SpeciesDetailFeature */ = {isa = PBXFileReference; lastKnownFileType = wrapper; name = SpeciesDetailFeature; path = Modules/SpeciesDetailFeature; sourceTree = "<group>"; };
+		6D70A1533056F5B4006A9E1C /* FieldGuideFeature */ = {isa = PBXFileReference; lastKnownFileType = wrapper; name = FieldGuideFeature; path = Modules/FieldGuideFeature; sourceTree = "<group>"; };
 		6DC0CB11304F001C006C7F97 /* NaturaPulse.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = NaturaPulse.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		6DC0CB1E304F001E006C7F97 /* NaturaPulseTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = NaturaPulseTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		6DC0CB28304F001E006C7F97 /* NaturaPulseUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = NaturaPulseUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -90,6 +95,11 @@
 		6DC0CB08304F001C006C7F97 = {
 			isa = PBXGroup;
 			children = (
+				6D70A1533056F5B4006A9E1C /* FieldGuideFeature */,
+				6D70A1523056F593006A9E1C /* SpeciesDetailFeature */,
+				6D70A1513056F572006A9E1C /* SearchFeature */,
+				6D70A1503056F550006A9E1C /* ExploreFeature */,
+				6D70A14F3056F429006A9E1C /* Common */,
 				6DC0CB13304F001C006C7F97 /* NaturaPulse */,
 				6DC0CB21304F001E006C7F97 /* NaturaPulseTests */,
 				6DC0CB2B304F001E006C7F97 /* NaturaPulseUITests */,
