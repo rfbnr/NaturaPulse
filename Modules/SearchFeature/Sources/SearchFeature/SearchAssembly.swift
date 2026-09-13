@@ -5,14 +5,13 @@
 //  Created by Ridwan Febnur AR on 07/09/26.
 //
 
+import Common
 import Swinject
 
-final class SearchAssembly: Assembly {
-    func assemble(container: Container) {
-        container.register(SearchSpeciesUseCase.self) { resolver in
-            SearchSpeciesUseCase(repository: resolver.resolveRequired(SpeciesRepository.self))
-        }
+public final class SearchAssembly: Assembly {
+    public init() {}
 
+    public func assemble(container: Container) {
         container.register(SearchPresenter.self) { resolver in
             MainActor.assumeIsolated {
                 SearchPresenter(
@@ -23,16 +22,5 @@ final class SearchAssembly: Assembly {
             }
         }
         .inObjectScope(.transient)
-    }
-}
-
-private extension Resolver {
-    func resolveRequired<Service>(
-        _ serviceType: Service.Type
-    ) -> Service {
-        guard let resolved = resolve(serviceType) else {
-            preconditionFailure("SearchAssembly: failed to resolve \(Service.self). Check assembly registration order.")
-        }
-        return resolved
     }
 }

@@ -6,12 +6,13 @@
 //
 
 import Combine
+import Common
 import Foundation
 import Observation
 
 @Observable
 @MainActor
-final class SearchPresenter {
+public final class SearchPresenter {
     var query: String = "" {
         didSet { querySubject.send(query) }
     }
@@ -26,7 +27,7 @@ final class SearchPresenter {
     @ObservationIgnored private var cancellables = Set<AnyCancellable>()
     @ObservationIgnored private var toggleCancellable: AnyCancellable?
 
-    init(
+    public init(
         searchSpecies: SearchSpeciesUseCase,
         toggleFavorite: ToggleFavoriteUseCase,
         observeSavedIDs: ObserveSavedSpeciesIDsUseCase,

@@ -6,14 +6,20 @@
 //
 
 import Combine
+import Common
+import SpeciesDetailFeature
 import Swinject
 import SwiftUI
 
-struct FieldGuideView: View {
+public struct FieldGuideView: View {
     @State var presenter: FieldGuidePresenter
     @Environment(\.resolver) private var resolver
 
-    var body: some View {
+    public init(presenter: FieldGuidePresenter) {
+        _presenter = State(initialValue: presenter)
+    }
+
+    public var body: some View {
         NavigationStack(path: $presenter.path) {
             content
                 .background(AppColor.background)
@@ -94,14 +100,6 @@ struct FieldGuideView: View {
     }
 }
 
-private extension Resolver {
-    func resolveRequired<Service>(_ serviceType: Service.Type) -> Service {
-        guard let resolved = resolve(serviceType) else {
-            preconditionFailure("FieldGuideView: failed to resolve \(Service.self). Check DI registration.")
-        }
-        return resolved
-    }
-}
 
 #if DEBUG
 private struct PreviewFieldGuideRepository: FieldGuideRepository {

@@ -5,6 +5,8 @@
 //  Created by Ridwan Febnur AR on 07/09/26.
 //
 
+import Common
+
 enum SearchOutcome: Equatable {
     case idle
     case loading

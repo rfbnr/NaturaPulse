@@ -7,7 +7,9 @@
 
 import Combine
 import XCTest
-@testable import NaturaPulse
+@testable import SearchFeature
+import Common
+import CommonTestSupport
 
 @MainActor
 final class SearchPresenterTests: XCTestCase {

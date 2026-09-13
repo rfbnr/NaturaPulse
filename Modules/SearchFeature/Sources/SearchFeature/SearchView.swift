@@ -6,14 +6,20 @@
 //
 
 import Combine
+import Common
+import SpeciesDetailFeature
 import Swinject
 import SwiftUI
 
-struct SearchView: View {
+public struct SearchView: View {
     @State var presenter: SearchPresenter
     @Environment(\.resolver) private var resolver
 
-    var body: some View {
+    public init(presenter: SearchPresenter) {
+        _presenter = State(initialValue: presenter)
+    }
+
+    public var body: some View {
         NavigationStack(path: $presenter.path) {
             content
                 .background(AppColor.background)
@@ -100,14 +106,6 @@ struct SearchView: View {
     }
 }
 
-private extension Resolver {
-    func resolveRequired<Service>(_ serviceType: Service.Type) -> Service {
-        guard let resolved = resolve(serviceType) else {
-            preconditionFailure("SearchView: failed to resolve \(Service.self). Check DI registration.")
-        }
-        return resolved
-    }
-}
 
 #if DEBUG
 private struct PreviewSpeciesRepository: SpeciesRepository {

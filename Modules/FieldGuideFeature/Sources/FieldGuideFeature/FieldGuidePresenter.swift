@@ -6,12 +6,13 @@
 //
 
 import Combine
+import Common
 import Foundation
 import Observation
 
 @Observable
 @MainActor
-final class FieldGuidePresenter {
+public final class FieldGuidePresenter {
     private(set) var state: LoadState<[Species]> = .idle
     var path: [AppRoute] = []
 
@@ -20,7 +21,7 @@ final class FieldGuidePresenter {
     @ObservationIgnored private var savedCancellable: AnyCancellable?
     @ObservationIgnored private var removeCancellable: AnyCancellable?
 
-    init(
+    public init(
         getSavedSpecies: GetSavedSpeciesUseCase,
         removeSavedSpecies: RemoveSavedSpeciesUseCase
     ) {
