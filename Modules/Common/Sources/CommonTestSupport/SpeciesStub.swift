@@ -6,10 +6,10 @@
 //
 
 import Foundation
-@testable import Common
+import Common
 
 extension Species {
-    static func stub(
+    public static func stub(
         id: Int = 1,
         scientificName: String = "Copsychus saularis",
         commonName: String? = "Oriental Magpie Robin",

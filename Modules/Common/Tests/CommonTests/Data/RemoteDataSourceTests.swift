@@ -8,6 +8,7 @@
 import Combine
 import XCTest
 @testable import Common
+import CommonTestSupport
 
 final class RemoteDataSourceTests: XCTestCase {
     func testGBIFNearbyDecodesResponseAndSendsGeoDistanceQuery() throws {

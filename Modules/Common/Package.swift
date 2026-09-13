@@ -11,6 +11,10 @@ let package = Package(
         .library(
             name: "Common",
             targets: ["Common"]
+        ),
+        .library(
+            name: "CommonTestSupport",
+            targets: ["CommonTestSupport"]
         )
     ],
     dependencies: [
@@ -35,10 +39,20 @@ let package = Package(
                 .swiftLanguageMode(.v5)
             ]
         ),
+        .target(
+            name: "CommonTestSupport",
+            dependencies: [
+                "Common"
+            ],
+            swiftSettings: [
+                .swiftLanguageMode(.v5)
+            ]
+        ),
         .testTarget(
             name: "CommonTests",
             dependencies: [
                 "Common",
+                "CommonTestSupport",
                 "Alamofire",
                 .product(name: "RealmSwift", package: "realm-swift")
             ],

@@ -7,10 +7,10 @@
 
 import Combine
 import Foundation
-@testable import Common
+import Common
 
-final class FakeWeatherRepository: WeatherRepository {
-    var result: Result<WeatherContext, AppError> = .success(
+public final class FakeWeatherRepository: WeatherRepository {
+    public var result: Result<WeatherContext, AppError> = .success(
         WeatherContext(
             temperatureCelsius: 28,
             relativeHumidity: 60,
@@ -21,9 +21,11 @@ final class FakeWeatherRepository: WeatherRepository {
         )
     )
 
-    var contextCallCount = 0
+    public var contextCallCount = 0
 
-    func context(at location: Location) -> AnyPublisher<WeatherContext, AppError> {
+    public init() {}
+
+    public func context(at location: Location) -> AnyPublisher<WeatherContext, AppError> {
         contextCallCount += 1
         return result.publisher.eraseToAnyPublisher()
     }

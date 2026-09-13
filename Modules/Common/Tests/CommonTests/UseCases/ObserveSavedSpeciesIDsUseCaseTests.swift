@@ -8,6 +8,7 @@
 import Combine
 import XCTest
 @testable import Common
+import CommonTestSupport
 
 final class ObserveSavedSpeciesIDsUseCaseTests: XCTestCase {
     private var cancellables = Set<AnyCancellable>()

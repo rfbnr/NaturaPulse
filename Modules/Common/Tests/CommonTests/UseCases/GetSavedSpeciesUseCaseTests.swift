@@ -8,6 +8,7 @@
 import XCTest
 import Combine
 @testable import Common
+import CommonTestSupport
 
 final class GetSavedSpeciesUseCaseTests: XCTestCase {
 

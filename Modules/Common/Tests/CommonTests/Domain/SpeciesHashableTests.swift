@@ -7,6 +7,7 @@
 
 import XCTest
 @testable import Common
+import CommonTestSupport
 
 final class SpeciesHashableTests: XCTestCase {
     func testEqualSpeciesHaveEqualHashes() {

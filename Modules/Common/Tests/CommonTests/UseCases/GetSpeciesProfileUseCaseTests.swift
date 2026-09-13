@@ -8,6 +8,7 @@
 import Combine
 import XCTest
 @testable import Common
+import CommonTestSupport
 
 @MainActor
 final class GetSpeciesProfileUseCaseTests: XCTestCase {

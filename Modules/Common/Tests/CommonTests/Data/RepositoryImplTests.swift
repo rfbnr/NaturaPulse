@@ -8,6 +8,7 @@
 import Combine
 import XCTest
 @testable import Common
+import CommonTestSupport
 
 private final class FakeGBIFDataSource: GBIFRemoteDataSource {
     var nearbyResult: Result<GBIFOccurrenceResponseDTO, NetworkError> = .success(

@@ -6,12 +6,14 @@
 //
 
 import Combine
-@testable import Common
+import Common
 
-final class FakeLocationRepository: LocationRepository {
-    var result: Result<[Location], AppError> = .success([])
+public final class FakeLocationRepository: LocationRepository {
+    public var result: Result<[Location], AppError> = .success([])
 
-    func searchLocations(
+    public init() {}
+
+    public func searchLocations(
         query: String
     ) -> AnyPublisher<[Location], AppError> {
         result.publisher.eraseToAnyPublisher()

@@ -8,6 +8,7 @@
 import Combine
 import XCTest
 @testable import Common
+import CommonTestSupport
 
 private final class FakeSpeciesRepo: SpeciesRepository {
     var nearby: Result<[Species], AppError> = .success([])
