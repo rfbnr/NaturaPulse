@@ -6,12 +6,13 @@
 //
 
 import Combine
+import Common
 import Foundation
 import Observation
 
 @Observable
 @MainActor
-final class ExplorePresenter {
+public final class ExplorePresenter {
     private(set) var location: Location
     private(set) var radius: Distance
     private(set) var speciesState: LoadState<[Species]> = .idle
@@ -29,7 +30,7 @@ final class ExplorePresenter {
     @ObservationIgnored private var savedIDsCancellable: AnyCancellable?
     @ObservationIgnored private var toggleCancellable: AnyCancellable?
 
-    init(
+    public init(
         getNearbySpecies: GetNearbySpeciesUseCase,
         getWeatherContext: GetWeatherContextUseCase,
         searchLocation: SearchLocationUseCase,

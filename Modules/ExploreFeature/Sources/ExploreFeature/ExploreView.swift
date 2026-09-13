@@ -6,13 +6,19 @@
 //
 
 import Combine
+import Common
+import SpeciesDetailFeature
 import Swinject
 import SwiftUI
 
-struct ExploreView: View {
+public struct ExploreView: View {
     @State var presenter: ExplorePresenter
     @State private var isLocationPickerPresented = false
     @Environment(\.resolver) private var resolver
+
+    public init(presenter: ExplorePresenter) {
+        _presenter = State(initialValue: presenter)
+    }
 
     private var greeting: String {
         switch Calendar.current.component(.hour, from: .now) {
@@ -23,7 +29,7 @@ struct ExploreView: View {
         }
     }
 
-    var body: some View {
+    public var body: some View {
         NavigationStack(path: $presenter.path) {
             ScrollView {
                 VStack(alignment: .leading, spacing: AppSpacing.lg) {
@@ -194,15 +200,6 @@ struct ExploreView: View {
             return .km(options[options.count - 1])
         }
         return .km(options[index + 1])
-    }
-}
-
-private extension Resolver {
-    func resolveRequired<Service>(_ serviceType: Service.Type) -> Service {
-        guard let resolved = resolve(serviceType) else {
-            preconditionFailure("ExploreView: failed to resolve \(Service.self). Check DI registration.")
-        }
-        return resolved
     }
 }
 

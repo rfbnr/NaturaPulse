@@ -8,7 +8,9 @@
 import Combine
 import Foundation
 import XCTest
-@testable import NaturaPulse
+@testable import ExploreFeature
+import Common
+import CommonTestSupport
 
 @MainActor
 final class ExplorePresenterTests: XCTestCase {
