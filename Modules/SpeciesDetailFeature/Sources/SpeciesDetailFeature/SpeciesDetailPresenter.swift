@@ -6,12 +6,13 @@
 //
 
 import Combine
+import Common
 import Foundation
 import Observation
 
 @Observable
 @MainActor
-final class SpeciesDetailPresenter {
+public final class SpeciesDetailPresenter {
     let species: Species
     private(set) var profileState: LoadState<SpeciesProfile> = .idle
     private(set) var weatherState: LoadState<WeatherContext> = .idle
@@ -26,7 +27,7 @@ final class SpeciesDetailPresenter {
     @ObservationIgnored private var isSavedCancellable: AnyCancellable?
     @ObservationIgnored private var toggleCancellable: AnyCancellable?
 
-    init(
+    public init(
         species: Species,
         getSpeciesProfile: GetSpeciesProfileUseCase,
         getWeatherContext: GetWeatherContextUseCase,

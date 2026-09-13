@@ -6,16 +6,21 @@
 //
 
 import Combine
+import Common
 import SwiftUI
 
-struct SpeciesDetailView: View {
+public struct SpeciesDetailView: View {
     @State var presenter: SpeciesDetailPresenter
+
+    public init(presenter: SpeciesDetailPresenter) {
+        _presenter = State(initialValue: presenter)
+    }
 
     private var displayName: String {
         presenter.species.commonName ?? presenter.species.scientificName
     }
 
-    var body: some View {
+    public var body: some View {
         ScrollView {
             VStack(alignment: .leading, spacing: AppSpacing.lg) {
                 SpeciesImageView(url: presenter.species.image?.url)

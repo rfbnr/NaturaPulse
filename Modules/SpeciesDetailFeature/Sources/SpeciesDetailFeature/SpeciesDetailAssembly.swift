@@ -5,18 +5,13 @@
 //  Created by Ridwan Febnur AR on 07/09/26.
 //
 
+import Common
 import Swinject
 
-final class SpeciesDetailAssembly: Assembly {
-    func assemble(
-        container: Container
-    ) {
-        container.register(GetSpeciesProfileUseCase.self) { resolver in
-            GetSpeciesProfileUseCase(
-                repository: resolver.resolveRequired(SpeciesRepository.self)
-            )
-        }
+public final class SpeciesDetailAssembly: Assembly {
+    public init() {}
 
+    public func assemble(container: Container) {
         container.register(SpeciesDetailPresenterFactory.self) { resolver in
             SpeciesDetailPresenterFactory(
                 getSpeciesProfile: resolver.resolveRequired(GetSpeciesProfileUseCase.self),
@@ -26,16 +21,5 @@ final class SpeciesDetailAssembly: Assembly {
             )
         }
         .inObjectScope(.transient)
-    }
-}
-
-private extension Resolver {
-    func resolveRequired<Service>(
-        _ serviceType: Service.Type
-    ) -> Service {
-        guard let resolved = resolve(serviceType) else {
-            preconditionFailure("SpeciesDetailAssembly: failed to resolve \(Service.self). Check assembly registration order.")
-        }
-        return resolved
     }
 }

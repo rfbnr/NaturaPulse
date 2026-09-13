@@ -7,8 +7,12 @@
 
 import SwiftUI
 
-struct WeatherContextCardView: View {
+public struct WeatherContextCardView: View {
     let weather: WeatherContext
+
+    public init(weather: WeatherContext) {
+        self.weather = weather
+    }
 
     private var temperatureText: String? {
         weather.temperatureCelsius.map { "\(Int($0.rounded()))°" }
@@ -38,7 +42,7 @@ struct WeatherContextCardView: View {
         return "\(Int(celsius.rounded())) degrees Celsius"
     }
 
-    var body: some View {
+    public var body: some View {
         VStack(alignment: .leading, spacing: AppSpacing.xs) {
             if let temperatureText {
                 Text(temperatureText)

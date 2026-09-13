@@ -7,13 +7,15 @@
 
 import XCTest
 import Swinject
-@testable import NaturaPulse
+@testable import SpeciesDetailFeature
+import Common
+import CommonTestSupport
 
 @MainActor
 final class SpeciesDetailAssemblyTests: XCTestCase {
     func testResolvesFactoryAndBuildsPresenter() {
-        let container = AppContainer()
-        let factory = container.resolver.resolve(SpeciesDetailPresenterFactory.self)
+        let assembler = Assembler([CommonAssembly(), SpeciesDetailAssembly()])
+        let factory = assembler.resolver.resolve(SpeciesDetailPresenterFactory.self)
         XCTAssertNotNil(factory)
         let presenter = factory?.make(species: Species.stub(id: 1))
         XCTAssertNotNil(presenter)

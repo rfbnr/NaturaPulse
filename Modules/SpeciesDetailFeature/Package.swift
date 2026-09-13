@@ -1,27 +1,42 @@
 // swift-tools-version: 6.3
-// The swift-tools-version declares the minimum version of Swift required to build this package.
-
 import PackageDescription
 
 let package = Package(
     name: "SpeciesDetailFeature",
+    platforms: [
+        .iOS("26.5")
+    ],
     products: [
-        // Products define the executables and libraries a package produces, making them visible to other packages.
         .library(
             name: "SpeciesDetailFeature",
             targets: ["SpeciesDetailFeature"]
-        ),
+        )
+    ],
+    dependencies: [
+        .package(path: "../Common"),
+        .package(url: "https://github.com/Swinject/Swinject.git", exact: "2.10.0")
     ],
     targets: [
-        // Targets are the basic building blocks of a package, defining a module or a test suite.
-        // Targets can depend on other targets in this package and products from dependencies.
         .target(
-            name: "SpeciesDetailFeature"
+            name: "SpeciesDetailFeature",
+            dependencies: [
+                "Common",
+                "Swinject"
+            ],
+            swiftSettings: [
+                .swiftLanguageMode(.v5)
+            ]
         ),
         .testTarget(
             name: "SpeciesDetailFeatureTests",
-            dependencies: ["SpeciesDetailFeature"]
-        ),
-    ],
-    swiftLanguageModes: [.v6]
+            dependencies: [
+                "SpeciesDetailFeature",
+                "Common",
+                .product(name: "CommonTestSupport", package: "Common")
+            ],
+            swiftSettings: [
+                .swiftLanguageMode(.v5)
+            ]
+        )
+    ]
 )

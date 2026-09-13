@@ -5,15 +5,16 @@
 //  Created by Ridwan Febnur AR on 07/09/26.
 //
 
+import Common
 import Foundation
 
-struct SpeciesDetailPresenterFactory {
+public struct SpeciesDetailPresenterFactory {
     private let getSpeciesProfile: GetSpeciesProfileUseCase
     private let getWeatherContext: GetWeatherContextUseCase
     private let toggleFavorite: ToggleFavoriteUseCase
     private let observeIsSaved: ObserveIsSavedUseCase
 
-    init(
+    public init(
         getSpeciesProfile: GetSpeciesProfileUseCase,
         getWeatherContext: GetWeatherContextUseCase,
         toggleFavorite: ToggleFavoriteUseCase,
@@ -26,7 +27,7 @@ struct SpeciesDetailPresenterFactory {
     }
 
     @MainActor
-    func make(species: Species) -> SpeciesDetailPresenter {
+    public func make(species: Species) -> SpeciesDetailPresenter {
         SpeciesDetailPresenter(
             species: species,
             getSpeciesProfile: getSpeciesProfile,
