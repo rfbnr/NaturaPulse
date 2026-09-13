@@ -9,48 +9,48 @@ import Swinject
 
 final class FieldGuideAssembly: Assembly {
     func assemble(container: Container) {
-        container.register(FieldGuideRepository.self) { r in
+        container.register(FieldGuideRepository.self) { resolver in
             FieldGuideRepositoryImpl(
-                realmProvider: r.resolveRequired(RealmProvider.self)
+                realmProvider: resolver.resolveRequired(RealmProvider.self)
             )
         }
         .inObjectScope(.container)
 
-        container.register(GetSavedSpeciesUseCase.self) { r in
+        container.register(GetSavedSpeciesUseCase.self) { resolver in
             GetSavedSpeciesUseCase(
-                repository: r.resolveRequired(FieldGuideRepository.self)
+                repository: resolver.resolveRequired(FieldGuideRepository.self)
             )
         }
 
-        container.register(ToggleFavoriteUseCase.self) { r in
+        container.register(ToggleFavoriteUseCase.self) { resolver in
             ToggleFavoriteUseCase(
-                repository: r.resolveRequired(FieldGuideRepository.self)
+                repository: resolver.resolveRequired(FieldGuideRepository.self)
             )
         }
 
-        container.register(RemoveSavedSpeciesUseCase.self) { r in
+        container.register(RemoveSavedSpeciesUseCase.self) { resolver in
             RemoveSavedSpeciesUseCase(
-                repository: r.resolveRequired(FieldGuideRepository.self)
+                repository: resolver.resolveRequired(FieldGuideRepository.self)
             )
         }
 
-        container.register(ObserveIsSavedUseCase.self) { r in
+        container.register(ObserveIsSavedUseCase.self) { resolver in
             ObserveIsSavedUseCase(
-                repository: r.resolveRequired(FieldGuideRepository.self)
+                repository: resolver.resolveRequired(FieldGuideRepository.self)
             )
         }
 
-        container.register(ObserveSavedSpeciesIDsUseCase.self) { r in
+        container.register(ObserveSavedSpeciesIDsUseCase.self) { resolver in
             ObserveSavedSpeciesIDsUseCase(
-                repository: r.resolveRequired(FieldGuideRepository.self)
+                repository: resolver.resolveRequired(FieldGuideRepository.self)
             )
         }
 
-        container.register(FieldGuidePresenter.self) { r in
+        container.register(FieldGuidePresenter.self) { resolver in
             MainActor.assumeIsolated {
                 FieldGuidePresenter(
-                    getSavedSpecies: r.resolveRequired(GetSavedSpeciesUseCase.self),
-                    removeSavedSpecies: r.resolveRequired(RemoveSavedSpeciesUseCase.self)
+                    getSavedSpecies: resolver.resolveRequired(GetSavedSpeciesUseCase.self),
+                    removeSavedSpecies: resolver.resolveRequired(RemoveSavedSpeciesUseCase.self)
                 )
             }
         }

@@ -9,16 +9,16 @@ import Swinject
 
 final class SearchAssembly: Assembly {
     func assemble(container: Container) {
-        container.register(SearchSpeciesUseCase.self) { r in
-            SearchSpeciesUseCase(repository: r.resolveRequired(SpeciesRepository.self))
+        container.register(SearchSpeciesUseCase.self) { resolver in
+            SearchSpeciesUseCase(repository: resolver.resolveRequired(SpeciesRepository.self))
         }
 
-        container.register(SearchPresenter.self) { r in
+        container.register(SearchPresenter.self) { resolver in
             MainActor.assumeIsolated {
                 SearchPresenter(
-                    searchSpecies: r.resolveRequired(SearchSpeciesUseCase.self),
-                    toggleFavorite: r.resolveRequired(ToggleFavoriteUseCase.self),
-                    observeSavedIDs: r.resolveRequired(ObserveSavedSpeciesIDsUseCase.self)
+                    searchSpecies: resolver.resolveRequired(SearchSpeciesUseCase.self),
+                    toggleFavorite: resolver.resolveRequired(ToggleFavoriteUseCase.self),
+                    observeSavedIDs: resolver.resolveRequired(ObserveSavedSpeciesIDsUseCase.self)
                 )
             }
         }

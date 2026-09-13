@@ -9,66 +9,66 @@ import Swinject
 
 final class ExploreAssembly: Assembly {
     func assemble(container: Container) {
-        container.register(GBIFRemoteDataSource.self) { r in
+        container.register(GBIFRemoteDataSource.self) { resolver in
             DefaultGBIFRemoteDataSource(
-                apiClient: r.resolveRequired(APIClient.self)
+                apiClient: resolver.resolveRequired(APIClient.self)
             )
         }
 
-        container.register(WeatherRemoteDataSource.self) { r in
+        container.register(WeatherRemoteDataSource.self) { resolver in
             DefaultWeatherRemoteDataSource(
-                apiClient: r.resolveRequired(APIClient.self)
+                apiClient: resolver.resolveRequired(APIClient.self)
             )
         }
 
-        container.register(GeocodingRemoteDataSource.self) { r in
+        container.register(GeocodingRemoteDataSource.self) { resolver in
             DefaultGeocodingRemoteDataSource(
-                apiClient: r.resolveRequired(APIClient.self)
+                apiClient: resolver.resolveRequired(APIClient.self)
             )
         }
 
-        container.register(SpeciesRepository.self) { r in
+        container.register(SpeciesRepository.self) { resolver in
             SpeciesRepositoryImpl(
-                dataSource: r.resolveRequired(GBIFRemoteDataSource.self)
+                dataSource: resolver.resolveRequired(GBIFRemoteDataSource.self)
             )
         }
 
-        container.register(WeatherRepository.self) { r in
+        container.register(WeatherRepository.self) { resolver in
             WeatherRepositoryImpl(
-                dataSource: r.resolveRequired(WeatherRemoteDataSource.self)
+                dataSource: resolver.resolveRequired(WeatherRemoteDataSource.self)
             )
         }
 
-        container.register(LocationRepository.self) { r in
+        container.register(LocationRepository.self) { resolver in
             LocationRepositoryImpl(
-                dataSource: r.resolveRequired(GeocodingRemoteDataSource.self)
+                dataSource: resolver.resolveRequired(GeocodingRemoteDataSource.self)
             )
         }
 
-        container.register(GetNearbySpeciesUseCase.self) { r in
-            GetNearbySpeciesUseCase(repository: r.resolveRequired(SpeciesRepository.self))
+        container.register(GetNearbySpeciesUseCase.self) { resolver in
+            GetNearbySpeciesUseCase(repository: resolver.resolveRequired(SpeciesRepository.self))
         }
 
-        container.register(GetWeatherContextUseCase.self) { r in
+        container.register(GetWeatherContextUseCase.self) { resolver in
             GetWeatherContextUseCase(
-                repository: r.resolveRequired(WeatherRepository.self)
+                repository: resolver.resolveRequired(WeatherRepository.self)
             )
         }
 
-        container.register(SearchLocationUseCase.self) { r in
+        container.register(SearchLocationUseCase.self) { resolver in
             SearchLocationUseCase(
-                repository: r.resolveRequired(LocationRepository.self)
+                repository: resolver.resolveRequired(LocationRepository.self)
             )
         }
 
-        container.register(ExplorePresenter.self) { r in
+        container.register(ExplorePresenter.self) { resolver in
             MainActor.assumeIsolated {
                 ExplorePresenter(
-                    getNearbySpecies: r.resolveRequired(GetNearbySpeciesUseCase.self),
-                    getWeatherContext: r.resolveRequired(GetWeatherContextUseCase.self),
-                    searchLocation: r.resolveRequired(SearchLocationUseCase.self),
-                    toggleFavorite: r.resolveRequired(ToggleFavoriteUseCase.self),
-                    observeSavedIDs: r.resolveRequired(ObserveSavedSpeciesIDsUseCase.self)
+                    getNearbySpecies: resolver.resolveRequired(GetNearbySpeciesUseCase.self),
+                    getWeatherContext: resolver.resolveRequired(GetWeatherContextUseCase.self),
+                    searchLocation: resolver.resolveRequired(SearchLocationUseCase.self),
+                    toggleFavorite: resolver.resolveRequired(ToggleFavoriteUseCase.self),
+                    observeSavedIDs: resolver.resolveRequired(ObserveSavedSpeciesIDsUseCase.self)
                 )
             }
         }

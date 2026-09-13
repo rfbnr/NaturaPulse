@@ -50,7 +50,10 @@ final class DTODecodingTests: XCTestCase {
     }
 
     func testDecodesGeocodingAndToleratesMissingResults() throws {
-        let withResults = try decode(GeocodingResponseDTO.self, #"{"results":[{"name":"Jakarta","latitude":-6.2,"longitude":106.8,"admin1":"Jakarta","country":"Indonesia","country_code":"ID"}]}"#)
+        let json = #"""
+        {"results":[{"name":"Jakarta","latitude":-6.2,"longitude":106.8,"admin1":"Jakarta","country":"Indonesia","country_code":"ID"}]}
+        """#
+        let withResults = try decode(GeocodingResponseDTO.self, json)
         XCTAssertEqual(withResults.results?.first?.name, "Jakarta")
         XCTAssertEqual(withResults.results?.first?.admin1, "Jakarta")
         let empty = try decode(GeocodingResponseDTO.self, #"{"generationtime_ms":0.1}"#)

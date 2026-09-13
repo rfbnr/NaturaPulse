@@ -10,10 +10,10 @@ import XCTest
 
 final class SpeciesHashableTests: XCTestCase {
     func testEqualSpeciesHaveEqualHashes() {
-        let a = Species.stub(id: 1)
-        let b = Species.stub(id: 1)
-        XCTAssertEqual(a, b)
-        XCTAssertEqual(a.hashValue, b.hashValue)
+        let first = Species.stub(id: 1)
+        let second = Species.stub(id: 1)
+        XCTAssertEqual(first, second)
+        XCTAssertEqual(first.hashValue, second.hashValue)
     }
 
     func testSpeciesUsableInSet() {

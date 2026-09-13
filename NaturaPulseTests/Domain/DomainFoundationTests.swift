@@ -12,12 +12,12 @@ final class DomainFoundationTests: XCTestCase {
 
     func testSpeciesEquatableComparesAllFields() {
         let date = Date(timeIntervalSince1970: 0)
-        let a = Species.stub(id: 1, scientificName: "Copsychus saularis", lastObservedAt: date)
-        let b = Species.stub(id: 1, scientificName: "Copsychus saularis", lastObservedAt: date)
-        let c = Species.stub(id: 2, scientificName: "Acridotheres tristis", lastObservedAt: date)
+        let base = Species.stub(id: 1, scientificName: "Copsychus saularis", lastObservedAt: date)
+        let identical = Species.stub(id: 1, scientificName: "Copsychus saularis", lastObservedAt: date)
+        let different = Species.stub(id: 2, scientificName: "Acridotheres tristis", lastObservedAt: date)
 
-        XCTAssertEqual(a, b)
-        XCTAssertNotEqual(a, c)
+        XCTAssertEqual(base, identical)
+        XCTAssertNotEqual(base, different)
     }
 
     func testAppErrorIsEquatable() {

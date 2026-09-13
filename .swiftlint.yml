@@ -35,6 +35,7 @@ analyzer_rules:
 disabled_rules:
   - trailing_whitespace   # handled by Xcode; avoids noise on empty lines
   - todo                  # allow TODO/FIXME during development
+  - static_over_final_class   # false positive on required `override class` members (URLProtocol/XCTestCase)
 
 line_length:
   warning: 140

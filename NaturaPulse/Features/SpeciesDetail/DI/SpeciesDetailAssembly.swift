@@ -11,18 +11,18 @@ final class SpeciesDetailAssembly: Assembly {
     func assemble(
         container: Container
     ) {
-        container.register(GetSpeciesProfileUseCase.self) { r in
+        container.register(GetSpeciesProfileUseCase.self) { resolver in
             GetSpeciesProfileUseCase(
-                repository: r.resolveRequired(SpeciesRepository.self)
+                repository: resolver.resolveRequired(SpeciesRepository.self)
             )
         }
 
-        container.register(SpeciesDetailPresenterFactory.self) { r in
+        container.register(SpeciesDetailPresenterFactory.self) { resolver in
             SpeciesDetailPresenterFactory(
-                getSpeciesProfile: r.resolveRequired(GetSpeciesProfileUseCase.self),
-                getWeatherContext: r.resolveRequired(GetWeatherContextUseCase.self),
-                toggleFavorite: r.resolveRequired(ToggleFavoriteUseCase.self),
-                observeIsSaved: r.resolveRequired(ObserveIsSavedUseCase.self)
+                getSpeciesProfile: resolver.resolveRequired(GetSpeciesProfileUseCase.self),
+                getWeatherContext: resolver.resolveRequired(GetWeatherContextUseCase.self),
+                toggleFavorite: resolver.resolveRequired(ToggleFavoriteUseCase.self),
+                observeIsSaved: resolver.resolveRequired(ObserveIsSavedUseCase.self)
             )
         }
         .inObjectScope(.transient)
