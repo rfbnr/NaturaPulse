@@ -7,7 +7,6 @@
 
 import Foundation
 
-/// Navigation destinations reachable from within the app shell.
 enum AppRoute: Hashable {
     case speciesDetail(Species)
     case locationSearch
