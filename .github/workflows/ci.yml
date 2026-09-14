@@ -14,8 +14,8 @@ jobs:
     name: Build, Test & Coverage
     runs-on: macos-latest
     env:
-      SCHEME: NaturaPulse
       DESTINATION: platform=iOS Simulator,name=iPhone 16
+      DERIVED: ${{ github.workspace }}/DerivedData
     steps:
       - uses: actions/checkout@v4
 
@@ -26,25 +26,33 @@ jobs:
       - name: Cache SwiftPM
         uses: actions/cache@v4
         with:
-          path: ~/Library/Developer/Xcode/DerivedData/**/SourcePackages
-          key: spm-${{ runner.os }}-${{ hashFiles('**/Package.resolved') }}
-          restore-keys: spm-${{ runner.os }}-
+          path: ${{ github.workspace }}/DerivedData/SourcePackages
+          key: spm-${{ hashFiles('**/Package.resolved') }}
+          restore-keys: spm-
 
-      - name: Resolve dependencies
-        run: xcodebuild -scheme "$SCHEME" -resolvePackageDependencies
-
-      - name: Build and test with coverage
+      - name: Build app
         run: |
           set -o pipefail
-          xcodebuild test \
-            -scheme "$SCHEME" \
-            -destination "$DESTINATION" \
-            -enableCodeCoverage YES \
-            -resultBundlePath TestResults.xcresult
+          xcodebuild build -scheme NaturaPulse -destination "$DESTINATION" -derivedDataPath "$DERIVED"
 
-      - name: Code coverage report
+      - name: Test modules with coverage
+        run: |
+          set -o pipefail
+          for MODULE in Common ExploreFeature SearchFeature SpeciesDetailFeature FieldGuideFeature; do
+            SCHEME="$MODULE"
+            if [ "$MODULE" = "Common" ]; then SCHEME="Common-Package"; fi
+            echo "::group::Test $MODULE"
+            ( cd "Modules/$MODULE" && xcodebuild test -scheme "$SCHEME" -destination "$DESTINATION" -derivedDataPath "$DERIVED" -enableCodeCoverage YES -resultBundlePath "$DERIVED/$MODULE.xcresult" )
+            echo "::endgroup::"
+          done
+
+      - name: Coverage report
         if: always()
-        run: xcrun xccov view --report TestResults.xcresult
+        run: |
+          for MODULE in Common ExploreFeature SearchFeature SpeciesDetailFeature FieldGuideFeature; do
+            echo "== Coverage: $MODULE =="
+            xcrun xccov view --report --only-targets "$DERIVED/$MODULE.xcresult" 2>/dev/null || true
+          done
 
   lint:
     name: SwiftLint (code style)
