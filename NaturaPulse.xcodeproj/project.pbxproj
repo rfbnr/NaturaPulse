@@ -7,17 +7,11 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		354A0FB2CDAD2827657225FA /* RealmSwift in Frameworks */ = {isa = PBXBuildFile; productRef = 8F42F787DAE7CD7209CD2F36 /* RealmSwift */; };
 		6D16985D3057915900EE7B65 /* Common in Frameworks */ = {isa = PBXBuildFile; productRef = 6D16985C3057915900EE7B65 /* Common */; };
 		6D16985F3057915900EE7B65 /* ExploreFeature in Frameworks */ = {isa = PBXBuildFile; productRef = 6D16985E3057915900EE7B65 /* ExploreFeature */; };
 		6D1698613057915900EE7B65 /* FieldGuideFeature in Frameworks */ = {isa = PBXBuildFile; productRef = 6D1698603057915900EE7B65 /* FieldGuideFeature */; };
 		6D1698633057915900EE7B65 /* SearchFeature in Frameworks */ = {isa = PBXBuildFile; productRef = 6D1698623057915900EE7B65 /* SearchFeature */; };
 		6D1698653057915900EE7B65 /* SpeciesDetailFeature in Frameworks */ = {isa = PBXBuildFile; productRef = 6D1698643057915900EE7B65 /* SpeciesDetailFeature */; };
-		6DC0CB3F304F0245006C7F97 /* Alamofire in Frameworks */ = {isa = PBXBuildFile; productRef = 6DC0CB3E304F0245006C7F97 /* Alamofire */; };
-		6DC0CB47304F06AA006C7F97 /* RealmSwift in Frameworks */ = {isa = PBXBuildFile; productRef = 6DC0CB46304F06AA006C7F97 /* RealmSwift */; };
-		6DF23C2A304F0A4700A3742B /* Kingfisher in Frameworks */ = {isa = PBXBuildFile; productRef = 6DF23C29304F0A4700A3742B /* Kingfisher */; };
-		6DF23C2C304F0A5400A3742B /* Swinject in Frameworks */ = {isa = PBXBuildFile; productRef = 6DF23C2B304F0A5400A3742B /* Swinject */; };
-		BE615A9499560FA0B192CA64 /* Swinject in Frameworks */ = {isa = PBXBuildFile; productRef = A3B760134D7E327DA7CE5654 /* Swinject */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -73,11 +67,7 @@
 			files = (
 				6D16985D3057915900EE7B65 /* Common in Frameworks */,
 				6D16985F3057915900EE7B65 /* ExploreFeature in Frameworks */,
-				6DF23C2A304F0A4700A3742B /* Kingfisher in Frameworks */,
-				6DC0CB47304F06AA006C7F97 /* RealmSwift in Frameworks */,
 				6D1698613057915900EE7B65 /* FieldGuideFeature in Frameworks */,
-				6DC0CB3F304F0245006C7F97 /* Alamofire in Frameworks */,
-				6DF23C2C304F0A5400A3742B /* Swinject in Frameworks */,
 				6D1698653057915900EE7B65 /* SpeciesDetailFeature in Frameworks */,
 				6D1698633057915900EE7B65 /* SearchFeature in Frameworks */,
 			);
@@ -87,8 +77,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				354A0FB2CDAD2827657225FA /* RealmSwift in Frameworks */,
-				BE615A9499560FA0B192CA64 /* Swinject in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -155,10 +143,6 @@
 			);
 			name = NaturaPulse;
 			packageProductDependencies = (
-				6DC0CB3E304F0245006C7F97 /* Alamofire */,
-				6DC0CB46304F06AA006C7F97 /* RealmSwift */,
-				6DF23C29304F0A4700A3742B /* Kingfisher */,
-				6DF23C2B304F0A5400A3742B /* Swinject */,
 				6D16985C3057915900EE7B65 /* Common */,
 				6D16985E3057915900EE7B65 /* ExploreFeature */,
 				6D1698603057915900EE7B65 /* FieldGuideFeature */,
@@ -187,8 +171,6 @@
 			);
 			name = NaturaPulseTests;
 			packageProductDependencies = (
-				8F42F787DAE7CD7209CD2F36 /* RealmSwift */,
-				A3B760134D7E327DA7CE5654 /* Swinject */,
 			);
 			productName = NaturaPulseTests;
 			productReference = 6DC0CB1E304F001E006C7F97 /* NaturaPulseTests.xctest */;
@@ -250,10 +232,6 @@
 			mainGroup = 6DC0CB08304F001C006C7F97;
 			minimizedProjectReferenceProxies = 1;
 			packageReferences = (
-				6DC0CB3B304F006D006C7F97 /* XCRemoteSwiftPackageReference "Kingfisher" */,
-				6DC0CB3C304F00BC006C7F97 /* XCRemoteSwiftPackageReference "Swinject" */,
-				6DC0CB3D304F0244006C7F97 /* XCRemoteSwiftPackageReference "alamofire" */,
-				6DC0CB45304F06AA006C7F97 /* XCRemoteSwiftPackageReference "realm-swift" */,
 			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = 6DC0CB12304F001C006C7F97 /* Products */;
@@ -637,41 +615,6 @@
 		};
 /* End XCConfigurationList section */
 
-/* Begin XCRemoteSwiftPackageReference section */
-		6DC0CB3B304F006D006C7F97 /* XCRemoteSwiftPackageReference "Kingfisher" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/onevcat/Kingfisher.git";
-			requirement = {
-				kind = upToNextMajorVersion;
-				minimumVersion = 8.12.0;
-			};
-		};
-		6DC0CB3C304F00BC006C7F97 /* XCRemoteSwiftPackageReference "Swinject" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/Swinject/Swinject";
-			requirement = {
-				kind = upToNextMajorVersion;
-				minimumVersion = 2.10.0;
-			};
-		};
-		6DC0CB3D304F0244006C7F97 /* XCRemoteSwiftPackageReference "alamofire" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/alamofire/alamofire";
-			requirement = {
-				kind = upToNextMajorVersion;
-				minimumVersion = 5.12.0;
-			};
-		};
-		6DC0CB45304F06AA006C7F97 /* XCRemoteSwiftPackageReference "realm-swift" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/realm/realm-swift";
-			requirement = {
-				kind = upToNextMajorVersion;
-				minimumVersion = 20.0.5;
-			};
-		};
-/* End XCRemoteSwiftPackageReference section */
-
 /* Begin XCSwiftPackageProductDependency section */
 		6D16985C3057915900EE7B65 /* Common */ = {
 			isa = XCSwiftPackageProductDependency;
@@ -692,36 +635,6 @@
 		6D1698643057915900EE7B65 /* SpeciesDetailFeature */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = SpeciesDetailFeature;
-		};
-		6DC0CB3E304F0245006C7F97 /* Alamofire */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 6DC0CB3D304F0244006C7F97 /* XCRemoteSwiftPackageReference "alamofire" */;
-			productName = Alamofire;
-		};
-		6DC0CB46304F06AA006C7F97 /* RealmSwift */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 6DC0CB45304F06AA006C7F97 /* XCRemoteSwiftPackageReference "realm-swift" */;
-			productName = RealmSwift;
-		};
-		6DF23C29304F0A4700A3742B /* Kingfisher */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 6DC0CB3B304F006D006C7F97 /* XCRemoteSwiftPackageReference "Kingfisher" */;
-			productName = Kingfisher;
-		};
-		6DF23C2B304F0A5400A3742B /* Swinject */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 6DC0CB3C304F00BC006C7F97 /* XCRemoteSwiftPackageReference "Swinject" */;
-			productName = Swinject;
-		};
-		8F42F787DAE7CD7209CD2F36 /* RealmSwift */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 6DC0CB45304F06AA006C7F97 /* XCRemoteSwiftPackageReference "realm-swift" */;
-			productName = RealmSwift;
-		};
-		A3B760134D7E327DA7CE5654 /* Swinject */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 6DC0CB3C304F00BC006C7F97 /* XCRemoteSwiftPackageReference "Swinject" */;
-			productName = Swinject;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};

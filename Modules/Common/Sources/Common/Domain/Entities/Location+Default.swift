@@ -8,7 +8,7 @@
 import Foundation
 
 public extension Location {
-    public static var jakarta: Location {
+    static var jakarta: Location {
         Location(
             latitude: -6.2,
             longitude: 106.8,
