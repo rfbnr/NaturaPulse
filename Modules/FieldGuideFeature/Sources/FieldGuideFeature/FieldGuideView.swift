@@ -7,7 +7,6 @@
 
 import Combine
 import Common
-import SpeciesDetailFeature
 import Swinject
 import SwiftUI
 
@@ -92,8 +91,7 @@ public struct FieldGuideView: View {
     private func destination(for route: AppRoute) -> some View {
         switch route {
         case .speciesDetail(let species):
-            let factory = resolver.resolveRequired(SpeciesDetailPresenterFactory.self)
-            SpeciesDetailView(presenter: factory.make(species: species))
+            resolver.resolveRequired(SpeciesDetailViewProviding.self).makeDetailView(for: species)
         case .locationSearch:
             EmptyView()
         }

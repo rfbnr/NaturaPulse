@@ -21,5 +21,9 @@ public final class SpeciesDetailAssembly: Assembly {
             )
         }
         .inObjectScope(.transient)
+
+        container.register(SpeciesDetailViewProviding.self) { resolver in
+            SpeciesDetailViewProvider(factory: resolver.resolveRequired(SpeciesDetailPresenterFactory.self))
+        }
     }
 }

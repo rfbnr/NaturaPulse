@@ -14,7 +14,6 @@ let package = Package(
     ],
     dependencies: [
         .package(path: "../Common"),
-        .package(path: "../SpeciesDetailFeature"),
         .package(url: "https://github.com/Swinject/Swinject.git", exact: "2.10.0")
     ],
     targets: [
@@ -22,7 +21,6 @@ let package = Package(
             name: "SearchFeature",
             dependencies: [
                 "Common",
-                "SpeciesDetailFeature",
                 "Swinject"
             ],
             swiftSettings: [
