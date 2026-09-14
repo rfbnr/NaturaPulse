@@ -14,10 +14,10 @@ jobs:
     name: Build, Test & Coverage
     runs-on: macos-latest
     env:
-      DESTINATION: platform=iOS Simulator,name=iPhone 16
+      DESTINATION: platform=iOS Simulator,name=iPhone 17
       DERIVED: ${{ github.workspace }}/DerivedData
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
 
       - uses: maxim-lobanov/setup-xcode@v1
         with:
@@ -58,7 +58,7 @@ jobs:
     name: SwiftLint (code style)
     runs-on: macos-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
 
       - name: Install SwiftLint
         run: brew install swiftlint
@@ -70,11 +70,12 @@ jobs:
     name: Vulnerability Scan
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
 
       - uses: actions/setup-go@v5
         with:
           go-version: stable
+          cache: false
 
       - name: Install OSV-Scanner
         run: go install github.com/google/osv-scanner/v2/cmd/osv-scanner@latest
