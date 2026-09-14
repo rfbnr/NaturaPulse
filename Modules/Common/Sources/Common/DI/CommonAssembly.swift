@@ -11,6 +11,13 @@ public final class CommonAssembly: Assembly {
     public init() {}
 
     public func assemble(container: Container) {
+        registerInfrastructure(container)
+        registerDataSources(container)
+        registerRepositories(container)
+        registerUseCases(container)
+    }
+
+    private func registerInfrastructure(_ container: Container) {
         container.register(APIClient.self) { _ in
             AlamofireAPIClient()
         }
@@ -20,7 +27,9 @@ public final class CommonAssembly: Assembly {
             DefaultRealmProvider()
         }
         .inObjectScope(.container)
+    }
 
+    private func registerDataSources(_ container: Container) {
         container.register(GBIFRemoteDataSource.self) { resolver in
             DefaultGBIFRemoteDataSource(apiClient: resolver.resolveRequired(APIClient.self))
         }
@@ -32,7 +41,9 @@ public final class CommonAssembly: Assembly {
         container.register(GeocodingRemoteDataSource.self) { resolver in
             DefaultGeocodingRemoteDataSource(apiClient: resolver.resolveRequired(APIClient.self))
         }
+    }
 
+    private func registerRepositories(_ container: Container) {
         container.register(SpeciesRepository.self) { resolver in
             SpeciesRepositoryImpl(dataSource: resolver.resolveRequired(GBIFRemoteDataSource.self))
         }
@@ -49,7 +60,9 @@ public final class CommonAssembly: Assembly {
             FieldGuideRepositoryImpl(realmProvider: resolver.resolveRequired(RealmProvider.self))
         }
         .inObjectScope(.container)
+    }
 
+    private func registerUseCases(_ container: Container) {
         container.register(GetNearbySpeciesUseCase.self) { resolver in
             GetNearbySpeciesUseCase(repository: resolver.resolveRequired(SpeciesRepository.self))
         }
