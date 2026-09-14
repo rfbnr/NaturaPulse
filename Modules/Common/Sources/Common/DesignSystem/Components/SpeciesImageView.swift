@@ -53,12 +53,12 @@ public struct SpeciesImageView: View {
                 Image(systemName: "leaf.slash")
                     .font(.system(size: 32))
                     .foregroundStyle(AppColor.secondaryText)
-                Text("Photo not available")
+                Text("species.photo_unavailable".localized)
                     .font(AppTypography.caption())
                     .foregroundStyle(AppColor.secondaryText)
             }
         }
         .accessibilityElement()
-        .accessibilityLabel("Photo not available")
+        .accessibilityLabel("species.photo_unavailable".localized)
     }
 }

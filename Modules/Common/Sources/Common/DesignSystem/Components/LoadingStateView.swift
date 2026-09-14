@@ -21,7 +21,7 @@ public struct LoadingStateView: View {
         .padding(AppSpacing.md)
         .redacted(reason: .placeholder)
         .shimmer()
-        .accessibilityLabel("Loading content")
+        .accessibilityLabel("common.loading".localized)
     }
 
     private var placeholderCard: some View {

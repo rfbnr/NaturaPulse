@@ -22,7 +22,7 @@ public struct FieldGuideView: View {
         NavigationStack(path: $presenter.path) {
             content
                 .background(AppColor.background)
-                .navigationTitle("Field Guide")
+                .navigationTitle("fieldguide.title".localized)
                 .onAppear { presenter.onAppear() }
                 .navigationDestination(for: AppRoute.self) { route in
                     destination(for: route)
@@ -39,8 +39,8 @@ public struct FieldGuideView: View {
             speciesList(species)
         case .empty:
             EmptyStateView(
-                title: "Your Field Guide is empty",
-                message: "Save species you discover and they'll appear here.",
+                title: "fieldguide.empty_title".localized,
+                message: "fieldguide.empty_message".localized,
                 actionTitle: nil,
                 action: nil
             )

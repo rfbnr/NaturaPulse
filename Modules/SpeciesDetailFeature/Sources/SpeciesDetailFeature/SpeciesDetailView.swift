@@ -107,7 +107,7 @@ public struct SpeciesDetailView: View {
     private var taxonomySection: some View {
         if !taxonomyRows.isEmpty {
             VStack(alignment: .leading, spacing: AppSpacing.sm) {
-                Text("Taxonomy")
+                Text("detail.taxonomy".localized)
                     .font(AppTypography.headline())
                     .foregroundStyle(AppColor.primaryText)
 
@@ -140,7 +140,7 @@ public struct SpeciesDetailView: View {
             EmptyView()
         case .loading:
             VStack(alignment: .leading, spacing: AppSpacing.sm) {
-                Text("Environmental context")
+                Text("detail.environmental_context".localized)
                     .font(AppTypography.headline())
                     .foregroundStyle(AppColor.primaryText)
                 ProgressView()
@@ -149,7 +149,7 @@ public struct SpeciesDetailView: View {
             }
         case .loaded(let context):
             VStack(alignment: .leading, spacing: AppSpacing.sm) {
-                Text("Environmental context")
+                Text("detail.environmental_context".localized)
                     .font(AppTypography.headline())
                     .foregroundStyle(AppColor.primaryText)
                 WeatherContextCardView(weather: context)
@@ -159,7 +159,7 @@ public struct SpeciesDetailView: View {
 
     private var aboutSection: some View {
         VStack(alignment: .leading, spacing: AppSpacing.sm) {
-            Text("About this species")
+            Text("detail.about".localized)
                 .font(AppTypography.headline())
                 .foregroundStyle(AppColor.primaryText)
 
@@ -204,7 +204,7 @@ public struct SpeciesDetailView: View {
 
     private var attributionSection: some View {
         VStack(alignment: .leading, spacing: AppSpacing.xs) {
-            Text("Source & attribution")
+            Text("detail.source_attribution".localized)
                 .font(AppTypography.headline())
                 .foregroundStyle(AppColor.primaryText)
 

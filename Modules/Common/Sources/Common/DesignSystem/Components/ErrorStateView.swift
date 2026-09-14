@@ -29,12 +29,12 @@ public struct ErrorStateView: View {
                 .multilineTextAlignment(.center)
 
             Button(action: retry) {
-                Text("Retry")
+                Text("common.retry".localized)
                     .font(AppTypography.headline())
             }
             .buttonStyle(.borderedProminent)
             .tint(AppColor.accent)
-            .accessibilityLabel("Retry")
+            .accessibilityLabel("common.retry".localized)
             .padding(.top, AppSpacing.sm)
         }
         .padding(AppSpacing.lg)

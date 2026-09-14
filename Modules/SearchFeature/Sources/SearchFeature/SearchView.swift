@@ -22,8 +22,8 @@ public struct SearchView: View {
         NavigationStack(path: $presenter.path) {
             content
                 .background(AppColor.background)
-                .navigationTitle("Search")
-                .searchable(text: $presenter.query, prompt: "Search species by name")
+                .navigationTitle("search.title".localized)
+                .searchable(text: $presenter.query, prompt: "search.prompt".localized)
                 .navigationDestination(for: AppRoute.self) { route in
                     destination(for: route)
                 }
@@ -35,8 +35,8 @@ public struct SearchView: View {
         switch presenter.state {
         case .idle:
             EmptyStateView(
-                title: "Search species",
-                message: "Type a name to find species",
+                title: "search.idle_title".localized,
+                message: "search.idle_message".localized,
                 actionTitle: nil,
                 action: nil
             )
@@ -53,8 +53,8 @@ public struct SearchView: View {
             resultsList(species)
         case .empty:
             EmptyStateView(
-                title: "No matches",
-                message: "Try a different name",
+                title: "search.empty_title".localized,
+                message: "search.empty_message".localized,
                 actionTitle: nil,
                 action: nil
             )

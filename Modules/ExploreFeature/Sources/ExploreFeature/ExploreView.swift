@@ -107,7 +107,7 @@ public struct ExploreView: View {
     private var speciesSection: some View {
         VStack(alignment: .leading, spacing: AppSpacing.sm) {
             HStack {
-                Text("Nearby species")
+                Text("explore.nearby_species".localized)
                     .font(AppTypography.headline())
                     .foregroundStyle(AppColor.primaryText)
 
@@ -155,9 +155,9 @@ public struct ExploreView: View {
             speciesList(species)
         case .empty:
             EmptyStateView(
-                title: "Your area is quiet",
-                message: "Try a larger radius or a different place",
-                actionTitle: "Change radius",
+                title: "explore.empty_title".localized,
+                message: "explore.empty_message".localized,
+                actionTitle: "explore.change_radius".localized,
                 action: { presenter.select(radius: nextRadius()) }
             )
         case .failed(let error):
