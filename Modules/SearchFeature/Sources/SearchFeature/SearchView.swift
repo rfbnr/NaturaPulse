@@ -104,7 +104,6 @@ public struct SearchView: View {
     }
 }
 
-
 #if DEBUG
 private struct PreviewSpeciesRepository: SpeciesRepository {
     let species: [Species]

@@ -6,6 +6,7 @@ included:
   - NaturaPulse
   - NaturaPulseTests
   - NaturaPulseUITests
+  - Modules
 
 excluded:
   - "**/.build"

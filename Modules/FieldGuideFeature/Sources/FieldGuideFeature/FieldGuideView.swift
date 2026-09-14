@@ -98,7 +98,6 @@ public struct FieldGuideView: View {
     }
 }
 
-
 #if DEBUG
 private struct PreviewFieldGuideRepository: FieldGuideRepository {
     let species: [Species]
