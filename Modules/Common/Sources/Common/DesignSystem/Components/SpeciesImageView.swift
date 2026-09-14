@@ -40,10 +40,17 @@ public struct SpeciesImageView: View {
     private var loadingPlaceholder: some View {
         ZStack {
             AppColor.surface
-            Image(systemName: "leaf")
-                .font(.system(size: 32))
-                .foregroundStyle(AppColor.secondaryText)
+            VStack(spacing: AppSpacing.xs) {
+                Image(systemName: "leaf")
+                    .font(.system(size: 32))
+                    .foregroundStyle(AppColor.secondaryText)
+                Text("species.photo_loading".localized)
+                    .font(AppTypography.caption())
+                    .foregroundStyle(AppColor.secondaryText)
+            }
         }
+        .accessibilityElement()
+        .accessibilityLabel("species.photo_loading".localized)
     }
 
     private var unavailableState: some View {

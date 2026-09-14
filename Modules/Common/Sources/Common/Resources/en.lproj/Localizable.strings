@@ -16,5 +16,6 @@
 "detail.about" = "About this species";
 "detail.source_attribution" = "Source & attribution";
 "species.photo_unavailable" = "Photo not available";
+"species.photo_loading" = "Loading image…";
 "common.retry" = "Retry";
 "common.loading" = "Loading content";

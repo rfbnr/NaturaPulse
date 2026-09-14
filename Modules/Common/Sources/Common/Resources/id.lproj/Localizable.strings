@@ -16,5 +16,6 @@
 "detail.about" = "Tentang spesies ini";
 "detail.source_attribution" = "Sumber & atribusi";
 "species.photo_unavailable" = "Foto tidak tersedia";
+"species.photo_loading" = "Memuat gambar…";
 "common.retry" = "Coba lagi";
 "common.loading" = "Memuat konten";
