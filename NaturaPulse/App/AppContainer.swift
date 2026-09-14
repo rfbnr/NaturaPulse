@@ -5,6 +5,11 @@
 //  Created by Ridwan Febnur AR on 07/09/26.
 //
 
+import Common
+import ExploreFeature
+import FieldGuideFeature
+import SearchFeature
+import SpeciesDetailFeature
 import Swinject
 
 final class AppContainer {
@@ -16,8 +21,7 @@ final class AppContainer {
 
     init() {
         assembler = Assembler([
-            NetworkAssembly(),
-            DatabaseAssembly(),
+            CommonAssembly(),
             AppAssembly(),
             ExploreAssembly(),
             SearchAssembly(),
