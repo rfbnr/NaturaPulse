@@ -179,12 +179,11 @@ Setiap modul punya test target sendiri. Jalankan lewat scheme masing-masing:
 # App (merakit semua modul)
 xcodebuild test -scheme NaturaPulse -destination 'platform=iOS Simulator,name=iPhone 17 Pro'
 
-# Common — 2 produk, pakai scheme Common-Package (dari Modules/Common/)
-xcodebuild test -scheme Common-Package -destination 'platform=iOS Simulator,name=iPhone 17 Pro'
-
 # Tiap modul fitur, dari dir modulnya (mis. Modules/ExploreFeature/)
 xcodebuild test -scheme ExploreFeature -destination 'platform=iOS Simulator,name=iPhone 17 Pro'
 ```
+
+Modul `Common` di-konsumsi secara remote via SPM (`https://github.com/rfbnr/NaturaPulse-Common.git`); test-nya berada di repo tersebut.
 
 - **~112 metode XCTest** tersebar di test target tiap modul, mencakup use case Domain, mapper/repository/data source Data, Presenter, dan assembly DI.
 - Network diuji dengan stub `URLProtocol` (tanpa panggilan live); persistensi memakai Realm in-memory. Fake bersama ada di produk `CommonTestSupport`.

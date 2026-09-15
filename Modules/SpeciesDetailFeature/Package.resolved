@@ -1,5 +1,5 @@
 {
-  "originHash" : "1085da1d85a9d162b889f6466b3ef85e0d518e225624396c98562a38760d79bd",
+  "originHash" : "0edfc0ddc0ece20b1a00e9c85ad8086725cf999eef43f40be9a1b51344a2650c",
   "pins" : [
     {
       "identity" : "alamofire",
@@ -17,6 +17,15 @@
       "state" : {
         "revision" : "be0d257b9bd47a4e6e1265fc8c237411825f107a",
         "version" : "8.12.0"
+      }
+    },
+    {
+      "identity" : "naturapulse-common",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/rfbnr/NaturaPulse-Common.git",
+      "state" : {
+        "revision" : "5d753972a1f47bbaa7e354eec64d2f1a40b4f41e",
+        "version" : "1.0.1"
       }
     },
     {

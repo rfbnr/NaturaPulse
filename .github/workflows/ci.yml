@@ -38,7 +38,7 @@ jobs:
       - name: Test modules with coverage
         run: |
           set -o pipefail
-          for MODULE in Common ExploreFeature SearchFeature SpeciesDetailFeature FieldGuideFeature; do
+          for MODULE in ExploreFeature SearchFeature SpeciesDetailFeature FieldGuideFeature; do
             SCHEME="$MODULE"
             if [ "$MODULE" = "Common" ]; then SCHEME="Common-Package"; fi
             echo "::group::Test $MODULE"
@@ -49,7 +49,7 @@ jobs:
       - name: Coverage report
         if: always()
         run: |
-          for MODULE in Common ExploreFeature SearchFeature SpeciesDetailFeature FieldGuideFeature; do
+          for MODULE in ExploreFeature SearchFeature SpeciesDetailFeature FieldGuideFeature; do
             echo "== Coverage: $MODULE =="
             xcrun xccov view --report --only-targets "$DERIVED/$MODULE.xcresult" 2>/dev/null || true
           done

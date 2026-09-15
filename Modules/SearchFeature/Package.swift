@@ -13,14 +13,14 @@ let package = Package(
         )
     ],
     dependencies: [
-        .package(path: "../Common"),
+        .package(url: "https://github.com/rfbnr/NaturaPulse-Common.git", from: "1.0.0"),
         .package(url: "https://github.com/Swinject/Swinject.git", exact: "2.10.0")
     ],
     targets: [
         .target(
             name: "SearchFeature",
             dependencies: [
-                "Common",
+                .product(name: "Common", package: "NaturaPulse-Common"),
                 "Swinject"
             ],
             swiftSettings: [
@@ -31,8 +31,8 @@ let package = Package(
             name: "SearchFeatureTests",
             dependencies: [
                 "SearchFeature",
-                "Common",
-                .product(name: "CommonTestSupport", package: "Common")
+                .product(name: "Common", package: "NaturaPulse-Common"),
+                .product(name: "CommonTestSupport", package: "NaturaPulse-Common")
             ],
             swiftSettings: [
                 .swiftLanguageMode(.v5)

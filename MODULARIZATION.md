@@ -1,6 +1,6 @@
 # Modularization — NaturaPulse
 
-NaturaPulse dipecah menjadi **Swift Package Manager local packages** di folder `Modules/`. Satu modul basis bersama (`Common`) menyediakan seluruh Domain, Data, infrastruktur inti, design system, generic protocol, dan localization; tiap fitur menjadi modul framework tersendiri yang hanya berisi lapisan Presentation. Aplikasi utama (`NaturaPulse`) adalah composition root yang merakit semuanya.
+NaturaPulse dipecah menjadi **Swift Package Manager packages**. Modul basis bersama (`Common`) dipublish sebagai package terpisah dan dikonsumsi secara **remote** via SPM (`https://github.com/rfbnr/NaturaPulse-Common.git`, `from: "1.0.0"`); ia menyediakan seluruh Domain, Data, infrastruktur inti, design system, generic protocol, dan localization. Tiap fitur menjadi **local package** (di folder `Modules/`) yang hanya berisi lapisan Presentation dan bergantung ke `Common` remote. Aplikasi utama (`NaturaPulse`) adalah composition root yang merakit semuanya.
 
 ## Hubungan antar-modul
 
@@ -45,7 +45,7 @@ graph TD
 
 | Modul | Jenis | Tanggung jawab | Bergantung ke |
 |---|---|---|---|
-| **Common** | Library (SPM) — *dipublish* | Entities, AppError, repository protocols, semua use case, semua Data (GBIF/Open-Meteo/Realm: DTO, data source, mapper, repository impl), Network (APIClient), Database (RealmProvider), DesignSystem (Colors/Typography/Spacing/Components/Motion), `LoadState`, `AppRoute`, generic protocols, localization, `CommonAssembly` | Alamofire, Swinject, RealmSwift, Kingfisher |
+| **Common** | Library (SPM) — *dipublish, dikonsumsi remote* | Entities, AppError, repository protocols, semua use case, semua Data (GBIF/Open-Meteo/Realm: DTO, data source, mapper, repository impl), Network (APIClient), Database (RealmProvider), DesignSystem (Colors/Typography/Spacing/Components/Motion), `LoadState`, `AppRoute`, generic protocols, localization, `CommonAssembly` | Alamofire, Swinject, RealmSwift, Kingfisher |
 | **ExploreFeature** | Library (SPM) | `ExplorePresenter` + `ExploreView` (+ komponen) + `ExploreAssembly` | Common, Swinject |
 | **SearchFeature** | Library (SPM) | `SearchPresenter` + `SearchView` + `SearchAssembly` | Common, Swinject |
 | **SpeciesDetailFeature** | Library (SPM) | `SpeciesDetailPresenter` + `SpeciesDetailView` + factory + `SpeciesDetailViewProvider` + `SpeciesDetailAssembly` | Common, Swinject |
@@ -124,10 +124,10 @@ Modul `Common` memuat string ter-localize (`Common/Resources/{en,id}.lproj/Local
 Tiap package punya test target sendiri. Fake repository bersama ada di produk `CommonTestSupport` sehingga test target fitur bisa memakainya kembali.
 
 ```bash
-# Common (2 produk → skema Common-Package)
-cd Modules/Common && xcodebuild test -scheme Common-Package -destination 'platform=iOS Simulator,name=iPhone 17 Pro'
 # Tiap fitur (jalankan dari dir modulnya)
 cd Modules/ExploreFeature && xcodebuild test -scheme ExploreFeature -destination 'platform=iOS Simulator,name=iPhone 17 Pro'
 # Aplikasi (merakit semua modul)
 xcodebuild test -scheme NaturaPulse -destination 'platform=iOS Simulator,name=iPhone 17 Pro'
 ```
+
+Modul `Common` dipublish sebagai package terpisah dan dikonsumsi secara remote via SPM (`https://github.com/rfbnr/NaturaPulse-Common.git`, `from: "1.0.0"`); test `Common` + `CommonTestSupport` berjalan di repo tersebut.

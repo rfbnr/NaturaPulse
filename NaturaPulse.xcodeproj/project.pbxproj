@@ -32,7 +32,6 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		6D70A14F3056F429006A9E1C /* Common */ = {isa = PBXFileReference; lastKnownFileType = wrapper; name = Common; path = Modules/Common; sourceTree = "<group>"; };
 		6D70A1503056F550006A9E1C /* ExploreFeature */ = {isa = PBXFileReference; lastKnownFileType = wrapper; name = ExploreFeature; path = Modules/ExploreFeature; sourceTree = "<group>"; };
 		6D70A1513056F572006A9E1C /* SearchFeature */ = {isa = PBXFileReference; lastKnownFileType = wrapper; name = SearchFeature; path = Modules/SearchFeature; sourceTree = "<group>"; };
 		6D70A1523056F593006A9E1C /* SpeciesDetailFeature */ = {isa = PBXFileReference; lastKnownFileType = wrapper; name = SpeciesDetailFeature; path = Modules/SpeciesDetailFeature; sourceTree = "<group>"; };
@@ -97,7 +96,6 @@
 				6D70A1523056F593006A9E1C /* SpeciesDetailFeature */,
 				6D70A1513056F572006A9E1C /* SearchFeature */,
 				6D70A1503056F550006A9E1C /* ExploreFeature */,
-				6D70A14F3056F429006A9E1C /* Common */,
 				6DC0CB13304F001C006C7F97 /* NaturaPulse */,
 				6DC0CB21304F001E006C7F97 /* NaturaPulseTests */,
 				6DC0CB2B304F001E006C7F97 /* NaturaPulseUITests */,
@@ -232,6 +230,7 @@
 			mainGroup = 6DC0CB08304F001C006C7F97;
 			minimizedProjectReferenceProxies = 1;
 			packageReferences = (
+				6DC0FFEE0000000000000001 /* XCRemoteSwiftPackageReference "NaturaPulse-Common" */,
 			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = 6DC0CB12304F001C006C7F97 /* Products */;
@@ -618,6 +617,7 @@
 /* Begin XCSwiftPackageProductDependency section */
 		6D16985C3057915900EE7B65 /* Common */ = {
 			isa = XCSwiftPackageProductDependency;
+			package = 6DC0FFEE0000000000000001 /* XCRemoteSwiftPackageReference "NaturaPulse-Common" */;
 			productName = Common;
 		};
 		6D16985E3057915900EE7B65 /* ExploreFeature */ = {
@@ -637,6 +637,17 @@
 			productName = SpeciesDetailFeature;
 		};
 /* End XCSwiftPackageProductDependency section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		6DC0FFEE0000000000000001 /* XCRemoteSwiftPackageReference "NaturaPulse-Common" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/rfbnr/NaturaPulse-Common.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 1.0.0;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
 	};
 	rootObject = 6DC0CB09304F001C006C7F97 /* Project object */;
 }
