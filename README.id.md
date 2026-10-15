@@ -13,11 +13,6 @@
 
 NaturaPulse memadukan data okurensi biodiversitas (GBIF) dengan konteks lingkungan ringan (Open-Meteo). Anda menjelajah spesies yang tercatat di dekat sebuah lokasi, mencari katalog berdasarkan nama, membuka detail spesies beserta catatan lokal, menyimpan spesies ke Field Guide pribadi, dan membuka koleksi tersimpan secara offline. Data cuaca dan kualitas udara ditampilkan **sebagai konteks saja** — bukan klaim sebab-akibat terhadap perilaku spesies.
 
-- **Platform:** iOS 26.5 · SwiftUI · Combine
-- **Arsitektur:** Feature-First Clean Architecture (Presentation / Domain / Data), **dimodularisasi** sebagai Swift Package (modul Common yang dipublish + satu modul per fitur) dengan composition root Swinject
-- **Data:** GBIF (biodiversitas) · Open-Meteo (cuaca, kualitas udara, geocoding)
-- **Persistensi:** Realm · **Gambar:** Kingfisher · **Networking:** Alamofire · **Lint:** SwiftLint
-
 ---
 
 ## Screenshots
@@ -229,7 +224,3 @@ Proyek berjalan bersih pada level error.
 Dirilis di bawah **Lisensi MIT** — lihat berkas [LICENSE](LICENSE).
 
 Data biodiversitas © kontributor GBIF; data lingkungan © Open-Meteo (CC BY 4.0).
-
----
-
-_Dibuat oleh Ridwan Febnur AR sebagai proyek akhir kelas Dicoding iOS Developer Expert._

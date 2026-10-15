@@ -13,10 +13,13 @@ A location-aware iOS app that answers one question: **which species have been re
 
 You explore species recorded near a location, search the catalog by name, open a species detail with local records, save species to a personal Field Guide, and browse that collection offline. Weather and air-quality data are shown **as context only** — not as a causal claim about species behavior.
 
-- **Platform:** iOS 26.5 · SwiftUI · Combine
-- **Architecture:** Feature-First Clean Architecture (Presentation / Domain / Data), **modularized** as Swift Packages (a published Common module plus one local module per feature) with a Swinject composition root
-- **Data:** GBIF (biodiversity) · Open-Meteo (weather, air quality, geocoding)
-- **Persistence:** Realm · **Images:** Kingfisher · **Networking:** Alamofire · **Lint:** SwiftLint
+---
+
+## Screenshots
+
+| Explore                            | Search                           | Detail                           | Field Guide                                | About                          |
+| ---------------------------------- | -------------------------------- | -------------------------------- | ------------------------------------------ | ------------------------------ |
+| ![Explore](Screenshot/explore.png) | ![Search](Screenshot/search.png) | ![Detail](Screenshot/detail.png) | ![Field Guide](Screenshot/field-guide.png) | ![About](Screenshot/about.png) |
 
 ---
 
@@ -27,15 +30,7 @@ You explore species recorded near a location, search the catalog by name, open a
 - **Reactive data flow with Combine.** Search is debounced, deduplicated, and cancelable (latest query wins); Realm changes are bridged to Combine and drive the UI.
 - **Offline-capable Field Guide** backed by Realm, fully browsable without a network connection.
 - **Generic, protocol-oriented domain layer** — `UseCase` / `Repository` / `Mapper` plus a generic `Interactor` wired end to end.
-- **112 XCTest methods** across the modules, and CI on GitHub Actions (build + test + coverage, SwiftLint, dependency vulnerability scan).
-
----
-
-## Screenshots
-
-| Explore                            | Search                           | Detail                           | Field Guide                                | About                          |
-| ---------------------------------- | -------------------------------- | -------------------------------- | ------------------------------------------ | ------------------------------ |
-| ![Explore](Screenshot/explore.png) | ![Search](Screenshot/search.png) | ![Detail](Screenshot/detail.png) | ![Field Guide](Screenshot/field-guide.png) | ![About](Screenshot/about.png) |
+- **112 unit tests** across the modules, and CI on GitHub Actions (build + test + coverage, SwiftLint, dependency vulnerability scan).
 
 ---
 
@@ -240,7 +235,3 @@ The project is clean at the error level.
 Released under the **MIT License** — see [LICENSE](LICENSE).
 
 Biodiversity data © GBIF contributors; environmental data © Open-Meteo (CC BY 4.0).
-
----
-
-_Built by Ridwan Febnur AR as the final project of Dicoding's iOS Developer Expert course._
