@@ -22,23 +22,24 @@ jobs:
         with:
           xcode-version: latest-stable
 
-      - name: Select iOS Simulator
-        run: |
-          UDID=$(xcrun simctl list devices available -j | jq -r '[.devices[][] | select(.isAvailable and (.name | test("iPhone"))) | .udid] | first // empty')
-          if [ -z "$UDID" ]; then
-            echo "No available iPhone simulator on this runner:"
-            xcrun simctl list devices available
-            exit 1
-          fi
-          echo "DESTINATION=platform=iOS Simulator,id=$UDID" >> "$GITHUB_ENV"
-          echo "Using iOS Simulator UDID: $UDID"
-
       - name: Cache SwiftPM
         uses: actions/cache@v4
         with:
           path: ${{ github.workspace }}/DerivedData/SourcePackages
           key: spm-${{ hashFiles('**/Package.resolved') }}
           restore-keys: spm-
+
+      - name: Select iOS Simulator
+        run: |
+          DESTS=$(xcodebuild -showdestinations -scheme NaturaPulse -derivedDataPath "$DERIVED" 2>/dev/null || true)
+          UDID=$(echo "$DESTS" | grep 'platform:iOS Simulator' | grep 'name:iPhone' | grep -v placeholder | head -1 | sed -E 's/.*id:([^,]+),.*/\1/')
+          if [ -z "$UDID" ]; then
+            echo "No compatible iPhone simulator for the NaturaPulse scheme:"
+            echo "$DESTS"
+            exit 1
+          fi
+          echo "DESTINATION=platform=iOS Simulator,id=$UDID" >> "$GITHUB_ENV"
+          echo "Using iOS Simulator: $(echo "$DESTS" | grep "id:$UDID" | head -1)"
 
       - name: Build app
         run: |
